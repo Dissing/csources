@@ -15,22 +15,22 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 #define null 0ul
-typedef struct StrMap StrMap;
-typedef struct StrMap {
-char * * keys;
-u32 * values;
+typedef struct IntMap IntMap;
+typedef struct IntMap {
+u64 * keys;
+u64 * values;
 u64 size;
 u64 load;
-} StrMap;
+} IntMap;
 
 
-StrMap *  strmap_create(u64  size) {
-StrMap * map = malloc(sizeof(StrMap) ) ;
+IntMap *  intmap_create(u64  size) {
+IntMap * map = malloc(sizeof(IntMap) ) ;
 
 map->size = size;
 map->load = 0;
 map->keys = malloc((size* 8)) ;
-map->values = malloc((size* 4)) ;
+map->values = malloc((size* 8)) ;
 u32 i = 0;
 
 while ( (i< size))
@@ -42,19 +42,9 @@ i = (i+ 1);
 return map;
 }
 
-u32  strmap_hash(char *  s) {
-u32 hash = 5381;
-
-i32 c = *s;
-
-while ( (c!= 0))
-{
-hash = (((hash<< 5)+ hash)+ c);
-s = (s+ 1);
-c = *s;
-}
-if ((hash!= null)){
-return hash;
+u64  intmap_hash(u64  k) {
+if ((k!= null)){
+return k;
 }
 else {
 return 1;
@@ -62,8 +52,14 @@ return 1;
 ;
 }
 
-void  strmap_insert(StrMap *  map, char *  key, u32  value) {
-u32 h = (strmap_hash(key) % map->size);
+void  intmap_reset(IntMap *  map) {
+map->load = 0;
+memset(map->keys,0,(sizeof(map->size) * 8)) ;
+memset(map->values,0,(sizeof(map->size) * 8)) ;
+}
+
+void  intmap_insert(IntMap *  map, u64  key, u64  value) {
+u64 h = (intmap_hash(key) % map->size);
 
 if (((map->load+ 1)>= map->size)){
 printf("Hashmap of size %lu is full!\n",map->size) ;
@@ -72,7 +68,7 @@ exit(-1) ;
 ;
 while ( true)
 {
-if (((map->keys[h]!= null)&& !strcmp(map->keys[h],key) )){
+if ((map->keys[h]== key)){
 map->values[h] = value;
 break;
 }
@@ -92,8 +88,8 @@ h = ((h+ 1)% map->size);
 }
 }
 
-u32  strmap_lookup(StrMap *  map, char *  key) {
-u32 h = (strmap_hash(key) % map->size);
+u64  intmap_lookup(IntMap *  map, u64  key) {
+u64 h = (intmap_hash(key) % map->size);
 
 while ( true)
 {
@@ -101,7 +97,7 @@ if ((map->keys[h]== null)){
 return null;
 }
 ;
-if (!strcmp(map->keys[h],key) ){
+if ((map->keys[h]== key)){
 return map->values[h];
 }
 ;
@@ -109,7 +105,7 @@ h = ((h+ 1)% map->size);
 }
 }
 
-void  strmap_destroy(StrMap *  map) {
+void  intmap_destroy(IntMap *  map) {
 free(map->keys) ;
 free(map->values) ;
 free(map) ;

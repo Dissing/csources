@@ -1,6 +1,6 @@
-// Prelude
-#include <stdbool.h>
+//Prelude
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,822 +17,1040 @@ typedef double f64;
 #define null 0ul
 typedef struct ParsingContext ParsingContext;
 typedef struct ParsingContext {
-  u64 current_token;
-  Token *tokens;
-  u64 num_tokens;
+u64 current_token;
+Token * tokens;
+u64 num_tokens;
+SourceMap * source_map;
+Session * sess;
+CompilationUnit unit;
+u32 next_owner;
+u32 current_owner;
 } ParsingContext;
 
-bool is_done_parsing(ParsingContext *ctx) {
-  return (ctx->num_tokens == ctx->current_token);
+
+bool  is_done_parsing(ParsingContext *  ctx) {
+return (ctx->num_tokens== ctx->current_token);
 }
 
-bool accept(ParsingContext *ctx, TokenKind token) {
-  Token tok = ctx->tokens[ctx->current_token];
+bool  accept(ParsingContext *  ctx, TokenKind  token) {
+Token tok = ctx->tokens[ctx->current_token];
 
-  if ((!is_done_parsing(ctx) && (tok.kind == token))) {
-    ctx->current_token = (ctx->current_token + 1);
-    return true;
-  };
-  return false;
+if ((!is_done_parsing(ctx) && (tok.kind== token))){
+ctx->current_token = (ctx->current_token+ 1);
+return true;
+}
+;
+return false;
 }
 
-bool expect(ParsingContext *ctx, TokenKind token) {
-  if (accept(ctx, token)) {
-    return true;
-  } else {
-    Token tok = ctx->tokens[ctx->current_token];
+Token  look_ahead(ParsingContext *  ctx, u64  offset) {
+if ((ctx->current_token== ctx->num_tokens)){
+Token eof_tok ;
 
-    printf("Expected %d but got %d on line %d\n", token, tok.kind,
-           tok.position);
-    abort();
-  };
+eof_tok.kind = EOF;
+return eof_tok;
+}
+else {
+return ctx->tokens[(ctx->current_token+ offset)];
+}
+;
 }
 
-Token look_ahead(ParsingContext *ctx, u64 offset) {
-  if ((ctx->current_token == ctx->num_tokens)) {
-    Token eof_tok;
-
-    eof_tok.kind = EOF;
-    return eof_tok;
-  } else {
-    return ctx->tokens[(ctx->current_token + offset)];
-  };
+Token  consume(ParsingContext *  ctx) {
+ctx->current_token = (ctx->current_token+ 1);
+return ctx->tokens[(ctx->current_token- 1)];
 }
 
-Token consume(ParsingContext *ctx) {
-  ctx->current_token = (ctx->current_token + 1);
-  return ctx->tokens[(ctx->current_token - 1)];
+Token  expect(ParsingContext *  ctx, TokenKind  kind) {
+Token tok = consume(ctx) ;
+
+if ((tok.kind== kind)){
+return tok;
+}
+else {
+emit_error(ctx->source_map,tok.span,"Expect failed!") ;
+abort() ;
+}
+;
 }
 
-AstPath parse_path(ParsingContext *ctx, Token tok) {
-  AstPath path;
-
-  path.segments = malloc((8 * 4));
-  path.num_segments = 0;
-  while (true) {
-    if ((tok.kind != _TokenKind_Identifier)) {
-      printf("Expected identifier in path but got %u on line %u\n", tok.kind,
-             tok.position);
-      abort();
-    };
-    path.num_segments = (path.num_segments + 1);
-    path.segments[(path.num_segments - 1)] = tok.lexeme;
-    if (!accept(ctx, _TokenKind_ColonColon)) {
-      break;
-    };
-    tok = consume(ctx);
-  }
-  return path;
+u32  span_start(ParsingContext *  ctx) {
+return ctx->tokens[ctx->current_token].span.from;
 }
 
-AstType *parse_type(ParsingContext *ctx) {
-  AstTypeNode node;
-
-  AstTypeKind kind;
-
-  Token token = consume(ctx);
-
-  if ((token.kind == _TokenKind_Identifier)) {
-    kind = _AstTypeKind_Path;
-    node.path = token.lexeme;
-  } else {
-    if ((token.kind == _TokenKind_Star)) {
-      kind = _AstTypeKind_Ptr;
-      node.ptr = parse_type(ctx);
-    } else {
-      printf("Expected type but got %d on line %d", token.kind, token.position);
-      abort();
-    };
-  };
-  AstType *type = malloc(sizeof(AstType));
-
-  type->kind = kind;
-  type->node = node;
-  return type;
+u32  span_end(ParsingContext *  ctx) {
+return ctx->tokens[(ctx->current_token- 1)].span.to;
 }
 
-BinaryOperatorKind convert_token_to_binary_operator(TokenKind tok) {
-  if ((tok == _TokenKind_Plus)) {
-    return _BinaryOperatorKind_Addition;
-  } else {
-    if ((tok == _TokenKind_Minus)) {
-      return _BinaryOperatorKind_Subtraction;
-    } else {
-      if ((tok == _TokenKind_Star)) {
-        return _BinaryOperatorKind_Product;
-      } else {
-        if ((tok == _TokenKind_Slash)) {
-          return _BinaryOperatorKind_Division;
-        } else {
-          if ((tok == _TokenKind_Percent)) {
-            return _BinaryOperatorKind_Modulus;
-          } else {
-            if ((tok == _TokenKind_Less)) {
-              return _BinaryOperatorKind_Less;
-            } else {
-              if ((tok == _TokenKind_LessEqual)) {
-                return _BinaryOperatorKind_LessEq;
-              } else {
-                if ((tok == _TokenKind_Greater)) {
-                  return _BinaryOperatorKind_Greater;
-                } else {
-                  if ((tok == _TokenKind_GreaterEqual)) {
-                    return _BinaryOperatorKind_GreaterEq;
-                  } else {
-                    if ((tok == _TokenKind_EqualEqual)) {
-                      return _BinaryOperatorKind_Equality;
-                    } else {
-                      if ((tok == _TokenKind_BangEqual)) {
-                        return _BinaryOperatorKind_NotEq;
-                      } else {
-                        if ((tok == _TokenKind_AndAnd)) {
-                          return _BinaryOperatorKind_And;
-                        } else {
-                          if ((tok == _TokenKind_OrOr)) {
-                            return _BinaryOperatorKind_Or;
-                          } else {
-                            if ((tok == _TokenKind_And)) {
-                              return _BinaryOperatorKind_BAnd;
-                            } else {
-                              if ((tok == _TokenKind_Or)) {
-                                return _BinaryOperatorKind_BOr;
-                              } else {
-                                if ((tok == _TokenKind_Hat)) {
-                                  return _BinaryOperatorKind_Xor;
-                                } else {
-                                  if ((tok == _TokenKind_LessLess)) {
-                                    return _BinaryOperatorKind_LeftShift;
-                                  } else {
-                                    if ((tok == _TokenKind_GreaterGreater)) {
-                                      return _BinaryOperatorKind_RightShift;
-                                    } else {
-                                      return _BinaryOperatorKind_Invalid;
-                                    };
-                                  };
-                                };
-                              };
-                            };
-                          };
-                        };
-                      };
-                    };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
+Ident  parse_identifier(ParsingContext *  ctx) {
+Token tok = consume(ctx) ;
+
+if ((tok.kind!= _TokenKind_Identifier)){
+emit_error(ctx->source_map,tok.span,"Invalid identifier") ;
+}
+;
+Ident ident ;
+
+ident.name = tok.lexeme;
+return ident;
 }
 
-u32 get_binary_operator_precedence(BinaryOperatorKind op) {
-  if ((op == _BinaryOperatorKind_Product)) {
-    return 10;
-  } else {
-    if ((op == _BinaryOperatorKind_Division)) {
-      return 10;
-    } else {
-      if ((op == _BinaryOperatorKind_Modulus)) {
-        return 10;
-      } else {
-        if ((op == _BinaryOperatorKind_Addition)) {
-          return 9;
-        } else {
-          if ((op == _BinaryOperatorKind_Subtraction)) {
-            return 9;
-          } else {
-            if ((op == _BinaryOperatorKind_LeftShift)) {
-              return 8;
-            } else {
-              if ((op == _BinaryOperatorKind_RightShift)) {
-                return 8;
-              } else {
-                if ((op == _BinaryOperatorKind_BAnd)) {
-                  return 7;
-                } else {
-                  if ((op == _BinaryOperatorKind_Xor)) {
-                    return 6;
-                  } else {
-                    if ((op == _BinaryOperatorKind_BOr)) {
-                      return 5;
-                    } else {
-                      if ((op == _BinaryOperatorKind_Less)) {
-                        return 4;
-                      } else {
-                        if ((op == _BinaryOperatorKind_LessEq)) {
-                          return 4;
-                        } else {
-                          if ((op == _BinaryOperatorKind_Greater)) {
-                            return 4;
-                          } else {
-                            if ((op == _BinaryOperatorKind_GreaterEq)) {
-                              return 4;
-                            } else {
-                              if ((op == _BinaryOperatorKind_Equality)) {
-                                return 4;
-                              } else {
-                                if ((op == _BinaryOperatorKind_NotEq)) {
-                                  return 4;
-                                } else {
-                                  if ((op == _BinaryOperatorKind_And)) {
-                                    return 3;
-                                  } else {
-                                    if ((op == _BinaryOperatorKind_Or)) {
-                                      return 2;
-                                    } else {
-                                      return 0;
-                                    };
-                                  };
-                                };
-                              };
-                            };
-                          };
-                        };
-                      };
-                    };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
+Path  parse_path(ParsingContext *  ctx) {
+Path path ;
+
+path.segments = malloc((8* 4)) ;
+path.num_segments = 0;
+while ( true)
+{
+path.segments[path.num_segments] = parse_identifier(ctx) ;
+path.num_segments = (path.num_segments+ 1);
+if (!accept(ctx,_TokenKind_ColonColon) ){
+break;
+}
+;
+}
+return path;
 }
 
-u32 get_current_precedence(ParsingContext *ctx) {
-  if ((ctx->num_tokens <= ctx->current_token)) {
-    return 0;
-  } else {
-    Token tok = ctx->tokens[ctx->current_token];
+Expr *  parse_path_expr(ParsingContext *  ctx) {
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-    u32 op_precedence = get_binary_operator_precedence(
-        convert_token_to_binary_operator(tok.kind));
-
-    if ((op_precedence > 0)) {
-      return op_precedence;
-    } else {
-      if ((tok.kind == _TokenKind_Dot)) {
-        return 13;
-      } else {
-        if (((tok.kind == _TokenKind_LeftBracket) ||
-             (tok.kind == _TokenKind_LeftParen))) {
-          return 12;
-        } else {
-          return 0;
-        };
-      };
-    };
-  };
+expr->kind = _ExprKind_Path;
+expr->node.path = parse_path(ctx) ;
+return expr;
 }
 
-AstExpr *parse_expression(ParsingContext *ctx, u32 precedence);
+Type *  parse_type(ParsingContext *  ctx) {
+TypeKindNode node ;
 
-AstExpr *parse_integer_literal(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+TypeKind kind ;
 
-  expr->kind = _AstExprKind_Literal;
-  expr->node.literal.kind = _LiteralKind_Int;
-  expr->node.literal.value.integer = atoi(tok.lexeme);
-  return expr;
+Token token = consume(ctx) ;
+
+if ((token.kind== _TokenKind_Identifier)){
+kind = _TypeKind_Path;
+node.path = token.lexeme;
+}
+else {
+if ((token.kind== _TokenKind_Star)){
+kind = _TypeKind_Ptr;
+node.ptr = parse_type(ctx) ;
+}
+else {
+emit_error(ctx->source_map,token.span,"Expected type") ;
+}
+;
+}
+;
+Type * type = malloc(sizeof(Type) ) ;
+
+type->kind = kind;
+type->node = node;
+return type;
 }
 
-AstExpr *parse_float_literal(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
-
-  expr->kind = _AstExprKind_Literal;
-  expr->node.literal.kind = _LiteralKind_Float;
-  expr->node.literal.value.floating = atof(tok.lexeme);
-  return expr;
+BinaryOperatorKind  convert_token_to_binary_operator(TokenKind  tok) {
+if ((tok== _TokenKind_Plus)){
+return _BinaryOperatorKind_Addition;
+}
+else {
+if ((tok== _TokenKind_Minus)){
+return _BinaryOperatorKind_Subtraction;
+}
+else {
+if ((tok== _TokenKind_Star)){
+return _BinaryOperatorKind_Product;
+}
+else {
+if ((tok== _TokenKind_Slash)){
+return _BinaryOperatorKind_Division;
+}
+else {
+if ((tok== _TokenKind_Percent)){
+return _BinaryOperatorKind_Modulus;
+}
+else {
+if ((tok== _TokenKind_Less)){
+return _BinaryOperatorKind_Less;
+}
+else {
+if ((tok== _TokenKind_LessEqual)){
+return _BinaryOperatorKind_LessEq;
+}
+else {
+if ((tok== _TokenKind_Greater)){
+return _BinaryOperatorKind_Greater;
+}
+else {
+if ((tok== _TokenKind_GreaterEqual)){
+return _BinaryOperatorKind_GreaterEq;
+}
+else {
+if ((tok== _TokenKind_EqualEqual)){
+return _BinaryOperatorKind_Equality;
+}
+else {
+if ((tok== _TokenKind_BangEqual)){
+return _BinaryOperatorKind_NotEq;
+}
+else {
+if ((tok== _TokenKind_AndAnd)){
+return _BinaryOperatorKind_And;
+}
+else {
+if ((tok== _TokenKind_OrOr)){
+return _BinaryOperatorKind_Or;
+}
+else {
+if ((tok== _TokenKind_And)){
+return _BinaryOperatorKind_BAnd;
+}
+else {
+if ((tok== _TokenKind_Or)){
+return _BinaryOperatorKind_BOr;
+}
+else {
+if ((tok== _TokenKind_Hat)){
+return _BinaryOperatorKind_Xor;
+}
+else {
+if ((tok== _TokenKind_LessLess)){
+return _BinaryOperatorKind_LeftShift;
+}
+else {
+if ((tok== _TokenKind_GreaterGreater)){
+return _BinaryOperatorKind_RightShift;
+}
+else {
+return _BinaryOperatorKind_Invalid;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
 }
 
-AstExpr *parse_char_literal(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
-
-  expr->kind = _AstExprKind_Literal;
-  expr->node.literal.kind = _LiteralKind_Char;
-  u32 len = strlen(tok.lexeme);
-
-  if (((len == 2) && (tok.lexeme[0] == '\\'))) {
-    char c;
-
-    if ((tok.lexeme[1] == 'n')) {
-      c = '\n';
-    } else {
-      if ((tok.lexeme[1] == 't')) {
-        c = '\t';
-      } else {
-        if ((tok.lexeme[1] == 'r')) {
-          c = '\r';
-        } else {
-          if ((tok.lexeme[1] == '\\')) {
-            c = '\\';
-          } else {
-            if ((tok.lexeme[1] == '\'')) {
-              c = '\'';
-            } else {
-              printf("Unknown escape sequence %s on line %u\n", tok.lexeme,
-                     tok.position);
-              abort();
-            };
-          };
-        };
-      };
-    };
-    expr->node.literal.value.ch = c;
-  } else {
-    if ((len == 1)) {
-      expr->node.literal.value.ch = tok.lexeme[0];
-    } else {
-      printf("Unknown char literal %s on line %u\n", tok.lexeme, tok.position);
-      abort();
-    };
-  };
-  return expr;
+u32  get_binary_operator_precedence(BinaryOperatorKind  op) {
+if ((op== _BinaryOperatorKind_Product)){
+return 10;
+}
+else {
+if ((op== _BinaryOperatorKind_Division)){
+return 10;
+}
+else {
+if ((op== _BinaryOperatorKind_Modulus)){
+return 10;
+}
+else {
+if ((op== _BinaryOperatorKind_Addition)){
+return 9;
+}
+else {
+if ((op== _BinaryOperatorKind_Subtraction)){
+return 9;
+}
+else {
+if ((op== _BinaryOperatorKind_LeftShift)){
+return 8;
+}
+else {
+if ((op== _BinaryOperatorKind_RightShift)){
+return 8;
+}
+else {
+if ((op== _BinaryOperatorKind_BAnd)){
+return 7;
+}
+else {
+if ((op== _BinaryOperatorKind_Xor)){
+return 6;
+}
+else {
+if ((op== _BinaryOperatorKind_BOr)){
+return 5;
+}
+else {
+if ((op== _BinaryOperatorKind_Less)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_LessEq)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_Greater)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_GreaterEq)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_Equality)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_NotEq)){
+return 4;
+}
+else {
+if ((op== _BinaryOperatorKind_And)){
+return 3;
+}
+else {
+if ((op== _BinaryOperatorKind_Or)){
+return 2;
+}
+else {
+return 0;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
 }
 
-AstExpr *parse_string_literal(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+u32  get_current_precedence(ParsingContext *  ctx) {
+if ((ctx->num_tokens<= ctx->current_token)){
+return 0;
+}
+else {
+Token tok = ctx->tokens[ctx->current_token];
 
-  expr->kind = _AstExprKind_Literal;
-  expr->node.literal.kind = _LiteralKind_Str;
-  expr->node.literal.value.str = tok.lexeme;
-  return expr;
+u32 op_precedence = get_binary_operator_precedence(convert_token_to_binary_operator(tok.kind) ) ;
+
+if ((op_precedence> 0)){
+return op_precedence;
+}
+else {
+if ((tok.kind== _TokenKind_Dot)){
+return 13;
+}
+else {
+if (((tok.kind== _TokenKind_LeftBracket)|| (tok.kind== _TokenKind_LeftParen))){
+return 12;
+}
+else {
+return 0;
+}
+;
+}
+;
+}
+;
+}
+;
 }
 
-AstExpr *parse_bool_literal(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+Expr *  parse_expression(ParsingContext *  ctx, u32  precedence) ;
 
-  expr->kind = _AstExprKind_Literal;
-  expr->node.literal.kind = _LiteralKind_Bool;
-  expr->node.literal.value.boolean = (tok.kind == _TokenKind_True);
-  return expr;
+Expr *  parse_integer_literal(ParsingContext *  ctx) {
+Token tok = expect(ctx,_TokenKind_Integer) ;
+
+Expr * expr = malloc(sizeof(Expr) ) ;
+
+expr->kind = _ExprKind_Literal;
+expr->node.lit.kind = _LiteralKind_Int;
+Session * sess = ctx->sess;
+
+expr->node.lit.value.integer = atol(get_str(&sess->interner,tok.lexeme) ) ;
+return expr;
 }
 
-AstExpr *parse_identifier(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+Expr *  parse_float_literal(ParsingContext *  ctx) {
+Token tok = expect(ctx,_TokenKind_Float) ;
 
-  expr->kind = _AstExprKind_Identifier;
-  expr->node.identifier = tok.lexeme;
-  return expr;
+Expr * expr = malloc(sizeof(Expr) ) ;
+
+expr->kind = _ExprKind_Literal;
+expr->node.lit.kind = _LiteralKind_Float;
+Session * sess = ctx->sess;
+
+expr->node.lit.value.floating = atof(get_str(&sess->interner,tok.lexeme) ) ;
+return expr;
 }
 
-AstExpr *parse_call(ParsingContext *ctx, AstExpr *left) {
-  AstExpr *result = malloc(sizeof(AstExpr));
+Expr *  parse_char_literal(ParsingContext *  ctx) {
+Token tok = expect(ctx,_TokenKind_Char) ;
 
-  result->kind = _AstExprKind_Call;
-  result->node.call.func = left;
-  result->node.call.args = malloc((8 * 16));
-  result->node.call.num_args = 0;
-  if (!accept(ctx, _TokenKind_RightParen)) {
-    while (true) {
-      AstExpr *expr = parse_expression(ctx, 0);
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-      result->node.call.args[result->node.call.num_args] = expr;
-      result->node.call.num_args = (result->node.call.num_args + 1);
-      if (!accept(ctx, _TokenKind_Comma)) {
-        break;
-      };
-    }
-    expect(ctx, _TokenKind_RightParen);
-  };
-  return result;
+expr->kind = _ExprKind_Literal;
+expr->node.lit.kind = _LiteralKind_Char;
+Session * sess = ctx->sess;
+
+char * s = get_str(&sess->interner,tok.lexeme) ;
+
+u32 len = strlen(s) ;
+
+if (((len== 2)&& (s[0]== '\\'))){
+char c ;
+
+if ((s[1]== 'n')){
+c = '\n';
+}
+else {
+if ((s[1]== 't')){
+c = '\t';
+}
+else {
+if ((s[1]== 'r')){
+c = '\r';
+}
+else {
+if ((s[1]== '\\')){
+c = '\\';
+}
+else {
+if ((s[1]== '\'')){
+c = '\'';
+}
+else {
+emit_error(ctx->source_map,tok.span,"Unknown escape sequence") ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+expr->node.lit.value.ch = c;
+}
+else {
+if ((len== 1)){
+expr->node.lit.value.ch = s[0];
+}
+else {
+emit_error(ctx->source_map,tok.span,"Invalid char literal") ;
+}
+;
+}
+;
+return expr;
 }
 
-AstExpr *parse_prefix_operator(ParsingContext *ctx, Token tok) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+Expr *  parse_string_literal(ParsingContext *  ctx) {
+Token tok = expect(ctx,_TokenKind_String) ;
 
-  expr->kind = _AstExprKind_Unary;
-  if ((tok.kind == _TokenKind_Minus)) {
-    expr->node.unary.operator= _UnaryOperatorKind_Negation;
-  };
-  if ((tok.kind == _TokenKind_Bang)) {
-    expr->node.unary.operator= _UnaryOperatorKind_Complement;
-  };
-  if ((tok.kind == _TokenKind_And)) {
-    expr->node.unary.operator= _UnaryOperatorKind_Refer;
-  };
-  if ((tok.kind == _TokenKind_Star)) {
-    expr->node.unary.operator= _UnaryOperatorKind_Deref;
-  };
-  expr->node.unary.inner = parse_expression(ctx, 11);
-  return expr;
+Expr * expr = malloc(sizeof(Expr) ) ;
+
+expr->kind = _ExprKind_Literal;
+expr->node.lit.kind = _LiteralKind_Str;
+expr->node.lit.value.str = tok.lexeme;
+return expr;
 }
 
-AstExpr *parse_binary_operator(ParsingContext *ctx, AstExpr *left,
-                               BinaryOperatorKind operator) {
-  u32 precedence = get_binary_operator_precedence(operator);
+Expr *  parse_bool_literal(ParsingContext *  ctx) {
+Token tok = consume(ctx) ;
 
-  AstExpr *right = parse_expression(ctx, precedence);
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  AstExpr *expr = malloc(sizeof(AstExpr));
-
-  expr->kind = _AstExprKind_Binary;
-  expr->node.binary.operator= operator;
-  expr->node.binary.left = left;
-  expr->node.binary.right = right;
-  return expr;
+expr->kind = _ExprKind_Literal;
+expr->node.lit.kind = _LiteralKind_Bool;
+expr->node.lit.value.boolean = (tok.kind== _TokenKind_True);
+return expr;
 }
 
-AstExpr *parse_field_access(ParsingContext *ctx, AstExpr *left) {
-  Token field_token = consume(ctx);
+Expr *  parse_call(ParsingContext *  ctx, Expr *  left) {
+Expr * result = malloc(sizeof(Expr) ) ;
 
-  if ((field_token.kind != _TokenKind_Identifier)) {
-    printf("Token %d on line %d is not a valid field\n", field_token.kind,
-           field_token.position);
-    abort();
-  };
-  AstExpr *expr = malloc(sizeof(AstExpr));
+result->kind = _ExprKind_Call;
+result->node.call.func = left;
+result->node.call.args = malloc((8* 16)) ;
+result->node.call.num_args = 0;
+if (!accept(ctx,_TokenKind_RightParen) ){
+while ( true)
+{
+Expr * expr = parse_expression(ctx,0) ;
 
-  expr->kind = _AstExprKind_Field;
-  expr->node.field.field_name = field_token.lexeme;
-  expr->node.field.strct = left;
-  return expr;
+result->node.call.args[result->node.call.num_args] = expr;
+result->node.call.num_args = (result->node.call.num_args+ 1);
+if (!accept(ctx,_TokenKind_Comma) ){
+break;
+}
+;
+}
+expect(ctx,_TokenKind_RightParen) ;
+}
+;
+return result;
 }
 
-AstExpr *parse_indexing(ParsingContext *ctx, AstExpr *left) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
+Expr *  parse_prefix_operator(ParsingContext *  ctx) {
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  expr->kind = _AstExprKind_Indexing;
-  expr->node.index.index = parse_expression(ctx, 0);
-  expr->node.index.array = left;
-  expect(ctx, _TokenKind_RightBracket);
-  return expr;
+expr->kind = _ExprKind_Unary;
+Token tok = consume(ctx) ;
+
+if ((tok.kind== _TokenKind_Minus)){
+expr->node.unary.op = _UnaryOperatorKind_Negation;
+}
+else {
+if ((tok.kind== _TokenKind_Bang)){
+expr->node.unary.op = _UnaryOperatorKind_Complement;
+}
+else {
+if ((tok.kind== _TokenKind_And)){
+expr->node.unary.op = _UnaryOperatorKind_Refer;
+}
+else {
+if ((tok.kind== _TokenKind_Star)){
+expr->node.unary.op = _UnaryOperatorKind_Deref;
+}
+else {
+emit_error(ctx->source_map,tok.span,"Invalid prefix operator") ;
+}
+;
+}
+;
+}
+;
+}
+;
+expr->node.unary.inner = parse_expression(ctx,11) ;
+return expr;
 }
 
-AstExpr *parse_infix_operator(ParsingContext *ctx, AstExpr *left, Token tok) {
-  if ((tok.kind == _TokenKind_LeftParen)) {
-    return parse_call(ctx, left);
-  };
-  if ((tok.kind == _TokenKind_Dot)) {
-    return parse_field_access(ctx, left);
-  };
-  if ((tok.kind == _TokenKind_LeftBracket)) {
-    return parse_indexing(ctx, left);
-  };
-  BinaryOperatorKind op = convert_token_to_binary_operator(tok.kind);
+Expr *  parse_binary_operator(ParsingContext *  ctx, Expr *  left, BinaryOperatorKind  operator) {
+u32 precedence = get_binary_operator_precedence(operator) ;
 
-  if ((op != _BinaryOperatorKind_Invalid)) {
-    return parse_binary_operator(ctx, left, op);
-  } else {
-    printf("Unsupported infix operator: %d on line %d\n", tok.kind,
-           tok.position);
-    abort();
-  };
+Expr * right = parse_expression(ctx,precedence) ;
+
+Expr * expr = malloc(sizeof(Expr) ) ;
+
+expr->kind = _ExprKind_Binary;
+expr->node.binary.op = operator;
+expr->node.binary.left = left;
+expr->node.binary.right = right;
+return expr;
 }
 
-AstBlock *parse_block(ParsingContext *ctx);
+Expr *  parse_field_access(ParsingContext *  ctx, Expr *  left) {
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-AstExpr *parse_if(ParsingContext *ctx) {
-  AstExpr *expr = malloc(sizeof(AstExpr));
-
-  expr->kind = _AstExprKind_Conditional;
-  expr->node.conditional.condition = parse_expression(ctx, 0);
-  expr->node.conditional.then = parse_block(ctx);
-  if (accept(ctx, _TokenKind_Else)) {
-    expr->node.conditional.otherwise = parse_block(ctx);
-  } else {
-    expr->node.conditional.otherwise = null;
-  };
-  return expr;
+expr->kind = _ExprKind_Field;
+expr->node.field.ident = parse_identifier(ctx) ;
+expr->node.field.strct = left;
+return expr;
 }
 
-AstExpr *parse_expression(ParsingContext *ctx, u32 precedence) {
-  Token tok = consume(ctx);
+Expr *  parse_indexing(ParsingContext *  ctx, Expr *  left) {
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  Token next = look_ahead(ctx, 0);
-
-  AstExpr *left;
-
-  if ((tok.kind == _TokenKind_Identifier)) {
-    if ((next.kind == _TokenKind_ColonColon)) {
-      left = malloc(sizeof(AstExpr));
-      left->kind = _AstExprKind_Path;
-      left->node.path = parse_path(ctx, tok);
-    } else {
-      left = parse_identifier(ctx, tok);
-    };
-  } else {
-    if ((tok.kind == _TokenKind_Integer)) {
-      left = parse_integer_literal(ctx, tok);
-    } else {
-      if ((tok.kind == _TokenKind_Char)) {
-        left = parse_char_literal(ctx, tok);
-      } else {
-        if ((tok.kind == _TokenKind_String)) {
-          left = parse_string_literal(ctx, tok);
-        } else {
-          if ((tok.kind == _TokenKind_Float)) {
-            left = parse_float_literal(ctx, tok);
-          } else {
-            if (((tok.kind == _TokenKind_False) ||
-                 (tok.kind == _TokenKind_True))) {
-              left = parse_bool_literal(ctx, tok);
-            } else {
-              if (((((tok.kind == _TokenKind_Minus) ||
-                     (tok.kind == _TokenKind_Bang)) ||
-                    (tok.kind == _TokenKind_And)) ||
-                   (tok.kind == _TokenKind_Star))) {
-                left = parse_prefix_operator(ctx, tok);
-              } else {
-                if ((tok.kind == _TokenKind_If)) {
-                  left = parse_if(ctx);
-                } else {
-                  if ((tok.kind == _TokenKind_LeftParen)) {
-                    left = parse_expression(ctx, 0);
-                    expect(ctx, _TokenKind_RightParen);
-                  } else {
-                    printf("%d is not a valid expression prefix on line %d\n",
-                           tok.kind, tok.position);
-                    abort();
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-  while ((precedence < get_current_precedence(ctx))) {
-    Token next_tok = consume(ctx);
-
-    left = parse_infix_operator(ctx, left, next_tok);
-  }
-  return left;
+expr->kind = _ExprKind_Indexing;
+expr->node.indexing.index = parse_expression(ctx,0) ;
+expr->node.indexing.array = left;
+expect(ctx,_TokenKind_RightBracket) ;
+return expr;
 }
 
-AstStmt *parse_stmt(ParsingContext *ctx);
+Expr *  parse_infix_operator(ParsingContext *  ctx, Expr *  left, Token  tok) {
+if ((tok.kind== _TokenKind_LeftParen)){
+return parse_call(ctx,left) ;
+}
+;
+if ((tok.kind== _TokenKind_Dot)){
+return parse_field_access(ctx,left) ;
+}
+;
+if ((tok.kind== _TokenKind_LeftBracket)){
+return parse_indexing(ctx,left) ;
+}
+;
+BinaryOperatorKind op = convert_token_to_binary_operator(tok.kind) ;
 
-AstBlock *parse_block(ParsingContext *ctx) {
-  AstBlock *block = malloc(sizeof(AstBlock));
-
-  block->stmts = malloc((8 * 128));
-  block->num_stmts = 0;
-  Token next = look_ahead(ctx, 0);
-
-  if ((next.kind == _TokenKind_LeftCurly)) {
-    expect(ctx, _TokenKind_LeftCurly);
-    u32 i = 0;
-
-    while (!accept(ctx, _TokenKind_RightCurly)) {
-      block->stmts[i] = parse_stmt(ctx);
-      block->num_stmts = (block->num_stmts + 1);
-      i = (i + 1);
-    }
-  } else {
-    block->stmts[0] = parse_stmt(ctx);
-    block->num_stmts = 1;
-  };
-  return block;
+if ((op!= _BinaryOperatorKind_Invalid)){
+return parse_binary_operator(ctx,left,op) ;
+}
+else {
+emit_error(ctx->source_map,tok.span,"Unsupported infix operator") ;
+}
+;
+return null;
 }
 
-AstItem *parse_item(ParsingContext *ctx);
+Stmt *  parse_stmt(ParsingContext *  ctx) ;
 
-AstStmt *parse_stmt(ParsingContext *ctx) {
-  AstStmt *stmt = malloc(sizeof(AstStmt));
+Block *  parse_block(ParsingContext *  ctx) {
+Block * block = malloc(sizeof(Block) ) ;
 
-  Token tok = look_ahead(ctx, 0);
+block->stmts = malloc((8* 128)) ;
+block->num_stmts = 0;
+block->span.from = span_start(ctx) ;
+Token next = look_ahead(ctx,0) ;
 
-  if (accept(ctx, _TokenKind_Break)) {
-    stmt->kind = _AstStmtKind_Break;
-  } else {
-    if (accept(ctx, _TokenKind_Continue)) {
-      stmt->kind = _AstStmtKind_Continue;
-    } else {
-      if (accept(ctx, _TokenKind_Return)) {
-        stmt->kind = _AstStmtKind_Return;
-        stmt->node._return = parse_expression(ctx, 0);
-      } else {
-        if (accept(ctx, _TokenKind_Defer)) {
-          stmt->kind = _AstStmtKind_Defer;
-          stmt->node._defer = parse_expression(ctx, 0);
-        } else {
-          if (accept(ctx, _TokenKind_While)) {
-            stmt->kind = _AstStmtKind_While;
-            stmt->node._while.condition = parse_expression(ctx, 0);
-            stmt->node._while.body = parse_block(ctx);
-          } else {
-            if (accept(ctx, _TokenKind_Semicolon)) {
-              stmt->kind = _AstStmtKind_Empty;
-            } else {
-              if (((tok.kind == _TokenKind_Var) ||
-                   (tok.kind == _TokenKind_Val))) {
-                stmt->kind = _AstStmtKind_Item;
-                stmt->node.item = parse_item(ctx);
-              } else {
-                AstExpr *left = parse_expression(ctx, 0);
+if ((next.kind== _TokenKind_LeftCurly)){
+expect(ctx,_TokenKind_LeftCurly) ;
+u32 i = 0;
 
-                Token next = look_ahead(ctx, 0);
-
-                if ((next.kind == _TokenKind_Equal)) {
-                  stmt->kind = _AstStmtKind_Assignment;
-                  stmt->node.assignment.left = left;
-                  expect(ctx, _TokenKind_Equal);
-                  stmt->node.assignment.right = parse_expression(ctx, 0);
-                } else {
-                  stmt->kind = _AstStmtKind_Expr;
-                  stmt->node.expr = left;
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-  accept(ctx, _TokenKind_Semicolon);
-  return stmt;
+while ( !accept(ctx,_TokenKind_RightCurly) )
+{
+block->stmts[i] = parse_stmt(ctx) ;
+block->num_stmts = (block->num_stmts+ 1);
+i = (i+ 1);
+}
+}
+else {
+block->stmts[0] = parse_stmt(ctx) ;
+block->num_stmts = 1;
+}
+;
+block->span.to = span_end(ctx) ;
+return block;
 }
 
-AstItem *parse_variable_decl(ParsingContext *ctx) {
-  AstItem *item = malloc(sizeof(AstItem));
+Expr *  parse_block_expr(ParsingContext *  ctx) {
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  Token keyword = consume(ctx);
-
-  if ((keyword.kind == _TokenKind_Val)) {
-    item->kind = _AstItemKind_Const;
-  } else {
-    if ((keyword.kind == _TokenKind_Var)) {
-      item->kind = _AstItemKind_Variable;
-    } else {
-      abort();
-    };
-  };
-  Token identifier = consume(ctx);
-
-  item->name = identifier.lexeme;
-  expect(ctx, _TokenKind_Colon);
-  item->node.variable.type = parse_type(ctx);
-  if (accept(ctx, _TokenKind_Equal)) {
-    item->node.variable.value = parse_expression(ctx, 0);
-  } else {
-    item->node.variable.value = null;
-  };
-  return item;
+expr->kind = _ExprKind_Block;
+expr->node.block = parse_block(ctx) ;
+return expr;
 }
 
-AstItem *parse_compound_decl(ParsingContext *ctx) {
-  AstItem *item = malloc(sizeof(AstItem));
+Expr *  parse_if(ParsingContext *  ctx) {
+expect(ctx,_TokenKind_If) ;
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  if (accept(ctx, _TokenKind_Struct)) {
-    item->kind = _AstItemKind_Struct;
-  } else {
-    if (accept(ctx, _TokenKind_Union)) {
-      item->kind = _AstItemKind_Union;
-    } else {
-      abort();
-    };
-  };
-  Token identifier = consume(ctx);
-
-  item->name = identifier.lexeme;
-  expect(ctx, _TokenKind_LeftCurly);
-  item->node.compound_type.field_names = malloc((8 * 16));
-  item->node.compound_type.field_types = malloc((8 * 16));
-  item->node.compound_type.num_fields = 0;
-  while (!accept(ctx, _TokenKind_RightCurly)) {
-    Token token = consume(ctx);
-
-    if ((token.kind != _TokenKind_Identifier)) {
-      printf("Expected field identifier on line %d but got %d\n",
-             token.position, token.kind);
-      abort();
-    };
-    item->node.compound_type.field_names[item->node.compound_type.num_fields] =
-        token.lexeme;
-    expect(ctx, _TokenKind_Colon);
-    AstType *type = parse_type(ctx);
-
-    item->node.compound_type.field_types[item->node.compound_type.num_fields] =
-        type;
-    item->node.compound_type.num_fields =
-        (item->node.compound_type.num_fields + 1);
-    expect(ctx, _TokenKind_Comma);
-  }
-  return item;
+expr->kind = _ExprKind_Conditional;
+expr->node.conditional.condition = parse_expression(ctx,0) ;
+expr->node.conditional.then = parse_block_expr(ctx) ;
+if (accept(ctx,_TokenKind_Else) ){
+expr->node.conditional.otherwise = parse_block_expr(ctx) ;
+}
+else {
+expr->node.conditional.otherwise = null;
+}
+;
+return expr;
 }
 
-AstItem *parse_enum_decl(ParsingContext *ctx) {
-  AstItem *item = malloc(sizeof(AstItem));
+Expr *  parse_while(ParsingContext *  ctx) {
+expect(ctx,_TokenKind_While) ;
+Expr * expr = malloc(sizeof(Expr) ) ;
 
-  expect(ctx, _TokenKind_Enum);
-  item->kind = _AstItemKind_Enum;
-  Token identifier = consume(ctx);
-
-  item->name = identifier.lexeme;
-  expect(ctx, _TokenKind_LeftCurly);
-  item->node._enum.field_names = malloc((8 * 128));
-  item->node._enum.num_fields = 0;
-  while (!accept(ctx, _TokenKind_RightCurly)) {
-    Token token = consume(ctx);
-
-    if ((token.kind != _TokenKind_Identifier)) {
-      printf("Expected enum variant identifier on line %d but got %d\n",
-             token.position, token.kind);
-      abort();
-    };
-    item->node._enum.field_names[item->node._enum.num_fields] = token.lexeme;
-    item->node._enum.num_fields = (item->node._enum.num_fields + 1);
-    expect(ctx, _TokenKind_Comma);
-  }
-  return item;
+expr->kind = _ExprKind_While;
+expr->node.whl.condition = parse_expression(ctx,0) ;
+expr->node.whl.body = parse_block_expr(ctx) ;
+return expr;
 }
 
-FunctionSignature parse_signature(ParsingContext *ctx) {
-  FunctionSignature sig;
+Expr *  parse_expression(ParsingContext *  ctx, u32  precedence) {
+Token tok = look_ahead(ctx,0) ;
 
-  sig.parameter_names = malloc((8 * 16));
-  sig.parameter_types = malloc((8 * 16));
-  sig.num_parameters = 0;
-  expect(ctx, _TokenKind_LeftParen);
-  while (!accept(ctx, _TokenKind_RightParen)) {
-    Token name = consume(ctx);
+Span span ;
 
-    if ((name.kind != _TokenKind_Identifier)) {
-      printf("Unexpected token %d in function signature on line %d\n",
-             name.kind, name.position);
-      abort();
-    };
-    expect(ctx, _TokenKind_Colon);
-    AstType *type = parse_type(ctx);
+span.from = span_start(ctx) ;
+Expr * left ;
 
-    sig.parameter_names[sig.num_parameters] = name.lexeme;
-    sig.parameter_types[sig.num_parameters] = type;
-    sig.num_parameters = (sig.num_parameters + 1);
-    accept(ctx, _TokenKind_Comma);
-  }
-  if (accept(ctx, _TokenKind_Arrow)) {
-    sig.output_type = parse_type(ctx);
-  } else {
-    AstType *output_type = malloc(sizeof(AstType));
+if ((tok.kind== _TokenKind_Identifier)){
+left = parse_path_expr(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_Integer)){
+left = parse_integer_literal(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_Char)){
+left = parse_char_literal(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_String)){
+left = parse_string_literal(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_Float)){
+left = parse_float_literal(ctx) ;
+}
+else {
+if (((tok.kind== _TokenKind_False)|| (tok.kind== _TokenKind_True))){
+left = parse_bool_literal(ctx) ;
+}
+else {
+if (((((tok.kind== _TokenKind_Minus)|| (tok.kind== _TokenKind_Bang))|| (tok.kind== _TokenKind_And))|| (tok.kind== _TokenKind_Star))){
+left = parse_prefix_operator(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_If)){
+left = parse_if(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_While)){
+left = parse_while(ctx) ;
+}
+else {
+if ((tok.kind== _TokenKind_LeftParen)){
+expect(ctx,_TokenKind_LeftParen) ;
+left = parse_expression(ctx,0) ;
+expect(ctx,_TokenKind_RightParen) ;
+}
+else {
+if ((tok.kind== _TokenKind_LeftCurly)){
+left = parse_block_expr(ctx) ;
+}
+else {
+emit_error(ctx->source_map,tok.span,"Invalid expression prefix") ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+while ( (precedence< get_current_precedence(ctx) ))
+{
+Token next_tok = consume(ctx) ;
 
-    output_type->kind = _AstTypeKind_Unit;
-    sig.output_type = output_type;
-  };
-  return sig;
+left = parse_infix_operator(ctx,left,next_tok) ;
+}
+span.to = span_end(ctx) ;
+left->span = span;
+return left;
 }
 
-AstItem *parse_function_decl(ParsingContext *ctx) {
-  AstItem *item = malloc(sizeof(AstItem));
+NodeId  parse_item(ParsingContext *  ctx) ;
 
-  expect(ctx, _TokenKind_Fn);
-  Token identifier = consume(ctx);
+Stmt *  parse_stmt(ParsingContext *  ctx) {
+Stmt * stmt = malloc(sizeof(Stmt) ) ;
 
-  item->name = identifier.lexeme;
-  item->kind = _AstItemKind_Function;
-  item->node.function.signature = parse_signature(ctx);
-  if ((look_ahead(ctx, 0).kind == _TokenKind_LeftCurly)) {
-    item->node.function.block = parse_block(ctx);
-  } else {
-    item->node.function.block = null;
-  };
-  return item;
+stmt->span.from = span_start(ctx) ;
+Token tok = look_ahead(ctx,0) ;
+
+if (accept(ctx,_TokenKind_Break) ){
+stmt->kind = _StmtKind_Break;
+}
+else {
+if (accept(ctx,_TokenKind_Continue) ){
+stmt->kind = _StmtKind_Continue;
+}
+else {
+if (accept(ctx,_TokenKind_Return) ){
+stmt->kind = _StmtKind_Return;
+stmt->node._return = parse_expression(ctx,0) ;
+}
+else {
+if (accept(ctx,_TokenKind_Defer) ){
+stmt->kind = _StmtKind_Defer;
+stmt->node._defer = parse_expression(ctx,0) ;
+}
+else {
+if (accept(ctx,_TokenKind_Semicolon) ){
+stmt->kind = _StmtKind_Empty;
+}
+else {
+if (((tok.kind== _TokenKind_Var)|| (tok.kind== _TokenKind_Val))){
+stmt->kind = _StmtKind_Item;
+stmt->node.item = parse_item(ctx) ;
+}
+else {
+Expr * left = parse_expression(ctx,0) ;
+
+Token next = look_ahead(ctx,0) ;
+
+if ((next.kind== _TokenKind_Equal)){
+stmt->kind = _StmtKind_Assignment;
+stmt->node.assignment.left = left;
+expect(ctx,_TokenKind_Equal) ;
+stmt->node.assignment.right = parse_expression(ctx,0) ;
+}
+else {
+stmt->kind = _StmtKind_Expr;
+stmt->node.expr = left;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+accept(ctx,_TokenKind_Semicolon) ;
+stmt->span.to = span_end(ctx) ;
+return stmt;
 }
 
-AstItem *parse_item(ParsingContext *ctx) {
-  Token tok = look_ahead(ctx, 0);
+NodeId  parse_body(ParsingContext *  ctx, NodeId  owner) {
+NodeId id ;
 
-  AstItem *item = malloc(sizeof(AstItem));
+Body * body = unit_create_body(&ctx->unit,owner,&id) ;
 
-  if ((tok.kind == _TokenKind_Fn)) {
-    item = parse_function_decl(ctx);
-  } else {
-    if (((tok.kind == _TokenKind_Struct) || (tok.kind == _TokenKind_Union))) {
-      item = parse_compound_decl(ctx);
-    } else {
-      if ((tok.kind == _TokenKind_Enum)) {
-        item = parse_enum_decl(ctx);
-      } else {
-        if (((tok.kind == _TokenKind_Var) || (tok.kind == _TokenKind_Val))) {
-          item = parse_variable_decl(ctx);
-        } else {
-          printf("Unexpected token %d on top-level on line %u\n", tok.kind,
-                 tok.position);
-          abort();
-        };
-      };
-    };
-  };
-  accept(ctx, _TokenKind_Semicolon);
-  return item;
+body->value = parse_expression(ctx,0) ;
+return id;
 }
 
-AstItem **parse(Token *tokens, u32 num_tokens, u32 *num_items) {
-  AstItem **items = malloc((8 * 2048));
+void  parse_variable_decl(ParsingContext *  ctx, Item *  item) {
+Token keyword = consume(ctx) ;
 
-  *num_items = 0;
-  ParsingContext ctx;
-
-  ctx.current_token = 0;
-  ctx.tokens = tokens;
-  ctx.num_tokens = num_tokens;
-  while (!is_done_parsing(&ctx)) {
-    items[*num_items] = parse_item(&ctx);
-    *num_items = (*num_items + 1);
-  }
-  return items;
+if ((keyword.kind== _TokenKind_Val)){
+item->kind = _ItemKind_Const;
 }
+else {
+if ((keyword.kind== _TokenKind_Var)){
+item->kind = _ItemKind_Variable;
+}
+else {
+abort() ;
+}
+;
+}
+;
+item->ident = parse_identifier(ctx) ;
+expect(ctx,_TokenKind_Colon) ;
+item->node.variable.ty = parse_type(ctx) ;
+if (accept(ctx,_TokenKind_Equal) ){
+item->node.variable.body = parse_body(ctx,item->id) ;
+}
+else {
+item->node.variable.body.owner = null;
+}
+;
+}
+
+void  parse_compound_decl(ParsingContext *  ctx, Item *  item) {
+if (accept(ctx,_TokenKind_Struct) ){
+item->kind = _ItemKind_Struct;
+}
+else {
+if (accept(ctx,_TokenKind_Union) ){
+item->kind = _ItemKind_Union;
+}
+else {
+abort() ;
+}
+;
+}
+;
+item->ident = parse_identifier(ctx) ;
+expect(ctx,_TokenKind_LeftCurly) ;
+item->node.compound.fields = malloc((sizeof(CompoundField) * 16)) ;
+item->node.compound.num_fields = 0;
+while ( !accept(ctx,_TokenKind_RightCurly) )
+{
+Token token = consume(ctx) ;
+
+if ((token.kind!= _TokenKind_Identifier)){
+emit_error(ctx->source_map,token.span,"Expected field identifier") ;
+}
+;
+item->node.compound.fields[item->node.compound.num_fields].ident.name = token.lexeme;
+expect(ctx,_TokenKind_Colon) ;
+Type * type = parse_type(ctx) ;
+
+item->node.compound.fields[item->node.compound.num_fields].ty = type;
+item->node.compound.num_fields = (item->node.compound.num_fields+ 1);
+expect(ctx,_TokenKind_Comma) ;
+}
+}
+
+void  parse_enum_decl(ParsingContext *  ctx, Item *  item) {
+expect(ctx,_TokenKind_Enum) ;
+item->kind = _ItemKind_Enum;
+item->ident = parse_identifier(ctx) ;
+expect(ctx,_TokenKind_LeftCurly) ;
+item->node._enum.variants = malloc((sizeof(EnumVariant) * 128)) ;
+item->node._enum.num_variants = 0;
+while ( !accept(ctx,_TokenKind_RightCurly) )
+{
+item->node._enum.variants[item->node._enum.num_variants].ident = parse_identifier(ctx) ;
+item->node._enum.num_variants = (item->node._enum.num_variants+ 1);
+expect(ctx,_TokenKind_Comma) ;
+}
+}
+
+FunctionHeader  parse_function_header(ParsingContext *  ctx) {
+FunctionHeader header ;
+
+header.parameters = malloc((sizeof(FunctionParameter) * 16)) ;
+header.num_parameters = 0;
+expect(ctx,_TokenKind_LeftParen) ;
+while ( !accept(ctx,_TokenKind_RightParen) )
+{
+header.parameters[header.num_parameters].ident = parse_identifier(ctx) ;
+expect(ctx,_TokenKind_Colon) ;
+Type * type = parse_type(ctx) ;
+
+header.parameters[header.num_parameters].ty = type;
+header.num_parameters = (header.num_parameters+ 1);
+accept(ctx,_TokenKind_Comma) ;
+}
+if (accept(ctx,_TokenKind_Arrow) ){
+header.output = parse_type(ctx) ;
+}
+else {
+Type * output = malloc(sizeof(Type) ) ;
+
+output->kind = _TypeKind_Unit;
+header.output = output;
+}
+;
+return header;
+}
+
+void  parse_function_decl(ParsingContext *  ctx, Item *  item) {
+expect(ctx,_TokenKind_Fn) ;
+item->ident = parse_identifier(ctx) ;
+item->kind = _ItemKind_Function;
+item->node.function.header = parse_function_header(ctx) ;
+if ((look_ahead(ctx,0) .kind== _TokenKind_LeftCurly)){
+item->node.function.body = parse_body(ctx,item->id) ;
+}
+else {
+item->node.function.body.owner = null;
+}
+;
+}
+
+NodeId  parse_item(ParsingContext *  ctx) {
+Token tok = look_ahead(ctx,0) ;
+
+NodeId id ;
+
+Item * item = unit_create_item(&ctx->unit,&id) ;
+
+item->span.from = span_start(ctx) ;
+if ((tok.kind== _TokenKind_Fn)){
+parse_function_decl(ctx,item) ;
+}
+else {
+if (((tok.kind== _TokenKind_Struct)|| (tok.kind== _TokenKind_Union))){
+parse_compound_decl(ctx,item) ;
+}
+else {
+if ((tok.kind== _TokenKind_Enum)){
+parse_enum_decl(ctx,item) ;
+}
+else {
+if (((tok.kind== _TokenKind_Var)|| (tok.kind== _TokenKind_Val))){
+parse_variable_decl(ctx,item) ;
+}
+else {
+emit_error(ctx->source_map,tok.span,"Unexpected token on top-level") ;
+}
+;
+}
+;
+}
+;
+}
+;
+accept(ctx,_TokenKind_Semicolon) ;
+item->span.to = span_end(ctx) ;
+return id;
+}
+
+void  parse_mod_inner(ParsingContext *  ctx, Mod *  module) {
+while ( (!accept(ctx,_TokenKind_RightCurly) && !is_done_parsing(ctx) ))
+{
+module->items[module->num_items] = parse_item(ctx) ;
+module->num_items = (module->num_items+ 1);
+}
+}
+
+CompilationUnit  parse(Session *  sess, Token *  tokens, u32  num_tokens) {
+ParsingContext ctx ;
+
+ctx.current_token = 0;
+ctx.tokens = tokens;
+ctx.num_tokens = num_tokens;
+ctx.source_map = &sess->source;
+ctx.sess = sess;
+ctx.unit.body_map = intmap_create(2048) ;
+ctx.unit.bodies = malloc((sizeof(Body) * 2048)) ;
+ctx.unit.num_bodies = 1;
+ctx.unit.item_map = intmap_create(2048) ;
+ctx.unit.items = malloc((sizeof(Item) * 2048)) ;
+ctx.unit.num_items = 1;
+ctx.unit.module.items = malloc((sizeof(NodeId) * 2048)) ;
+ctx.unit.module.num_items = 0;
+ctx.unit.module.span.from = span_start(&ctx) ;
+parse_mod_inner(&ctx,&ctx.unit.module) ;
+ctx.unit.module.span.to = span_end(&ctx) ;
+return ctx.unit;
+}
+

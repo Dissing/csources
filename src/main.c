@@ -1,6 +1,6 @@
-// Prelude
-#include <stdbool.h>
+//Prelude
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,40 +15,39 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 #define null 0ul
-void load_file_content(char *path, char **ptr, u64 *length) {
-  FILE *fp = fopen(path, "rb");
+void  load_file_content(SourceFile *  file) {
+FILE * fp = fopen(file->name,"rb") ;
 
-  fseek(fp, 0, SEEK_END);
-  *length = ftell(fp);
-  rewind(fp);
-  *ptr = malloc(*length);
-  fread(*ptr, 1, *length, fp);
-  fclose(fp);
+fseek(fp,0,SEEK_END) ;
+file->length = ftell(fp) ;
+rewind(fp) ;
+file->content = malloc(file->length) ;
+fread(file->content,1,file->length,fp) ;
+fclose(fp) ;
 }
 
-int main(int argc, char **argv) {
-  if ((argc != 3)) {
-    printf("Usage: compiler INPUT OUTPUT\n");
-    abort();
-  };
-  char *content;
-
-  u64 length;
-
-  load_file_content(argv[1], &content, &length);
-  Token *tokens;
-
-  u32 num_tokens;
-
-  lex(content, length, &tokens, &num_tokens);
-  u32 num_ast_items;
-
-  AstItem **ast_items = parse(tokens, num_tokens, &num_ast_items);
-
-  u32 num_items;
-
-  Item **items = lower(ast_items, num_ast_items, &num_items);
-
-  generate(items, num_items, argv[2]);
-  return 0;
+int  main(int  argc, char * *  argv) {
+if ((argc!= 3)){
+printf("Usage: compiler INPUT OUTPUT\n") ;
+abort() ;
 }
+;
+Session sess ;
+
+sess.interner = interner_create() ;
+sess.source = source_map_create() ;
+SourceFile * source_file = source_map_new_file(&sess.source,argv[1]) ;
+
+load_file_content(source_file) ;
+Token * tokens ;
+
+u32 num_tokens ;
+
+lex(&sess,source_file,&tokens,&num_tokens) ;
+CompilationUnit unit = parse(&sess,tokens,num_tokens) ;
+
+resolve(&sess,&unit) ;
+generate(&sess,unit,argv[2]) ;
+return 0;
+}
+
