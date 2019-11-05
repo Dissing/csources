@@ -1,6 +1,6 @@
-//Prelude
-#include <stdint.h>
+// Prelude
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,9 +16,9 @@ typedef float f32;
 typedef double f64;
 #define null 0ul
 typedef struct Session Session;
+#line 3 "src/session.z"
 typedef struct Session {
-Interner interner;
-SourceMap source;
+  Interner interner;
+  SourceMap source;
+  char *root_path;
 } Session;
-
-

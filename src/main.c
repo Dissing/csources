@@ -1,6 +1,6 @@
-//Prelude
-#include <stdint.h>
+// Prelude
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,39 +15,43 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 #define null 0ul
-void  load_file_content(SourceFile *  file) {
-FILE * fp = fopen(file->name,"rb") ;
+#line 1 "src/main.z"
+char *basename(char *path);
 
-fseek(fp,0,SEEK_END) ;
-file->length = ftell(fp) ;
-rewind(fp) ;
-file->content = malloc(file->length) ;
-fread(file->content,1,file->length,fp) ;
-fclose(fp) ;
+#line 2 "src/main.z"
+char *dirname(char *path);
+
+#line 4 "src/main.z"
+int main(int argc, char **argv) {
+#line 5 "src/main.z"
+  if ((argc != 3)) {
+#line 6 "src/main.z"
+    printf("Usage: compiler INPUT OUTPUT\n");
+#line 7 "src/main.z"
+    abort();
+  };
+#line 10 "src/main.z"
+#line 10 "src/main.z"
+  Session sess;
+
+#line 13 "src/main.z"
+  sess.interner = interner_create();
+#line 14 "src/main.z"
+  sess.source = source_map_create();
+#line 15 "src/main.z"
+#line 15 "src/main.z"
+  char *root_module = basename(argv[1]);
+
+#line 16 "src/main.z"
+  sess.root_path = dirname(argv[1]);
+#line 18 "src/main.z"
+#line 18 "src/main.z"
+  CompilationUnit unit = parse(&sess, root_module);
+
+#line 20 "src/main.z"
+  resolve(&sess, &unit);
+#line 22 "src/main.z"
+  generate(&sess, unit, argv[2]);
+#line 24 "src/main.z"
+  return 0;
 }
-
-int  main(int  argc, char * *  argv) {
-if ((argc!= 3)){
-printf("Usage: compiler INPUT OUTPUT\n") ;
-abort() ;
-}
-;
-Session sess ;
-
-sess.interner = interner_create() ;
-sess.source = source_map_create() ;
-SourceFile * source_file = source_map_new_file(&sess.source,argv[1]) ;
-
-load_file_content(source_file) ;
-Token * tokens ;
-
-u32 num_tokens ;
-
-lex(&sess,source_file,&tokens,&num_tokens) ;
-CompilationUnit unit = parse(&sess,tokens,num_tokens) ;
-
-resolve(&sess,&unit) ;
-generate(&sess,unit,argv[2]) ;
-return 0;
-}
-

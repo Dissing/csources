@@ -1,6 +1,6 @@
-//Prelude
-#include <stdint.h>
+// Prelude
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,48 +16,70 @@ typedef float f32;
 typedef double f64;
 #define null 0ul
 typedef struct Sid Sid;
+#line 2 "src/interning.z"
 typedef struct Sid {
-u32 x;
+  u32 x;
 } Sid;
 
-
 typedef struct Interner Interner;
+#line 6 "src/interning.z"
 typedef struct Interner {
-StrMap * str_lookup;
-char * * sid_lookup;
-u32 next_sid;
+  StrMap *str_lookup;
+  char **sid_lookup;
+  u32 next_sid;
 } Interner;
 
+#line 12 "src/interning.z"
+Interner interner_create() {
+#line 13 "src/interning.z"
+#line 13 "src/interning.z"
+  Interner interner;
 
-Interner  interner_create() {
-Interner interner ;
-
-interner.str_lookup = strmap_create(2048) ;
-interner.sid_lookup = calloc(8,2048) ;
-interner.next_sid = 1;
-return interner;
+#line 14 "src/interning.z"
+  interner.str_lookup = strmap_create(2048);
+#line 15 "src/interning.z"
+  interner.sid_lookup = calloc(8, 2048);
+#line 16 "src/interning.z"
+  interner.next_sid = 1;
+#line 17 "src/interning.z"
+  return interner;
 }
 
-Sid  intern(Interner *  self, char *  string) {
-Sid sid ;
+#line 21 "src/interning.z"
+Sid intern(Interner *self, char *string) {
+#line 22 "src/interning.z"
+#line 22 "src/interning.z"
+  Sid sid;
 
-sid.x = strmap_lookup(self->str_lookup,string) ;
-if ((sid.x== 0)){
-sid.x = self->next_sid;
-self->next_sid = (self->next_sid+ 1);
-u64 len = (strlen(string) + 1);
+#line 23 "src/interning.z"
+  sid.x = strmap_lookup(self->str_lookup, string);
+#line 24 "src/interning.z"
+  if ((sid.x == 0)) {
+#line 26 "src/interning.z"
+    sid.x = self->next_sid;
+#line 27 "src/interning.z"
+    self->next_sid = (self->next_sid + 1);
+#line 29 "src/interning.z"
+#line 29 "src/interning.z"
+    u64 len = (strlen(string) + 1);
 
-char * copy = malloc(len) ;
+#line 30 "src/interning.z"
+#line 30 "src/interning.z"
+    char *copy = malloc(len);
 
-memcpy(copy,string,len) ;
-self->sid_lookup[sid.x] = copy;
-strmap_insert(self->str_lookup,copy,sid.x) ;
+#line 31 "src/interning.z"
+    memcpy(copy, string, len);
+#line 32 "src/interning.z"
+    self->sid_lookup[sid.x] = copy;
+#line 34 "src/interning.z"
+    strmap_insert(self->str_lookup, copy, sid.x);
+  };
+#line 36 "src/interning.z"
+  return sid;
 }
-;
-return sid;
-}
 
-char *  get_str(Interner *  self, Sid  sid) {
-return self->sid_lookup[sid.x];
+#line 39 "src/interning.z"
+char *get_str(Interner *self, Sid sid) {
+#line 40 "src/interning.z"
+  return self->sid_lookup[sid.x];
 }
-

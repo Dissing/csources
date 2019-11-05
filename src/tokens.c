@@ -1,6 +1,6 @@
-//Prelude
-#include <stdint.h>
+// Prelude
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,74 +15,73 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 #define null 0ul
+#line 3 "src/tokens.z"
 typedef enum TokenKind {
-_TokenKind_Invalid,
-_TokenKind_Identifier,
-_TokenKind_EOF,
-_TokenKind_Break,
-_TokenKind_Const,
-_TokenKind_Continue,
-_TokenKind_Defer,
-_TokenKind_Enum,
-_TokenKind_Else,
-_TokenKind_Fn,
-_TokenKind_For,
-_TokenKind_If,
-_TokenKind_Mod,
-_TokenKind_Return,
-_TokenKind_Static,
-_TokenKind_Struct,
-_TokenKind_Union,
-_TokenKind_Use,
-_TokenKind_Var,
-_TokenKind_Val,
-_TokenKind_While,
-_TokenKind_Plus,
-_TokenKind_Minus,
-_TokenKind_Star,
-_TokenKind_Slash,
-_TokenKind_Percent,
-_TokenKind_LessLess,
-_TokenKind_GreaterGreater,
-_TokenKind_And,
-_TokenKind_AndAnd,
-_TokenKind_Or,
-_TokenKind_OrOr,
-_TokenKind_Hat,
-_TokenKind_Equal,
-_TokenKind_Bang,
-_TokenKind_BangEqual,
-_TokenKind_EqualEqual,
-_TokenKind_Less,
-_TokenKind_Greater,
-_TokenKind_LessEqual,
-_TokenKind_GreaterEqual,
-_TokenKind_LeftParen,
-_TokenKind_RightParen,
-_TokenKind_LeftBracket,
-_TokenKind_RightBracket,
-_TokenKind_LeftCurly,
-_TokenKind_RightCurly,
-_TokenKind_Comma,
-_TokenKind_Dot,
-_TokenKind_Colon,
-_TokenKind_ColonColon,
-_TokenKind_Semicolon,
-_TokenKind_Arrow,
-_TokenKind_Integer,
-_TokenKind_Float,
-_TokenKind_Char,
-_TokenKind_String,
-_TokenKind_True,
-_TokenKind_False,
+  TokenKind_Invalid,
+  TokenKind_Identifier,
+  TokenKind_EOF,
+  TokenKind_Break,
+  TokenKind_Const,
+  TokenKind_Continue,
+  TokenKind_Defer,
+  TokenKind_Enum,
+  TokenKind_Else,
+  TokenKind_Fn,
+  TokenKind_For,
+  TokenKind_If,
+  TokenKind_Mod,
+  TokenKind_Return,
+  TokenKind_Static,
+  TokenKind_Struct,
+  TokenKind_Union,
+  TokenKind_Use,
+  TokenKind_Var,
+  TokenKind_Val,
+  TokenKind_While,
+  TokenKind_Plus,
+  TokenKind_Minus,
+  TokenKind_Star,
+  TokenKind_Slash,
+  TokenKind_Percent,
+  TokenKind_LessLess,
+  TokenKind_GreaterGreater,
+  TokenKind_And,
+  TokenKind_AndAnd,
+  TokenKind_Or,
+  TokenKind_OrOr,
+  TokenKind_Hat,
+  TokenKind_Equal,
+  TokenKind_Bang,
+  TokenKind_BangEqual,
+  TokenKind_EqualEqual,
+  TokenKind_Less,
+  TokenKind_Greater,
+  TokenKind_LessEqual,
+  TokenKind_GreaterEqual,
+  TokenKind_LeftParen,
+  TokenKind_RightParen,
+  TokenKind_LeftBracket,
+  TokenKind_RightBracket,
+  TokenKind_LeftCurly,
+  TokenKind_RightCurly,
+  TokenKind_Comma,
+  TokenKind_Dot,
+  TokenKind_Colon,
+  TokenKind_ColonColon,
+  TokenKind_Semicolon,
+  TokenKind_Arrow,
+  TokenKind_Integer,
+  TokenKind_Float,
+  TokenKind_Char,
+  TokenKind_String,
+  TokenKind_True,
+  TokenKind_False,
 } TokenKind;
 
-
 typedef struct Token Token;
+#line 69 "src/tokens.z"
 typedef struct Token {
-TokenKind kind;
-Span span;
-Sid lexeme;
+  TokenKind kind;
+  Span span;
+  Sid lexeme;
 } Token;
-
-

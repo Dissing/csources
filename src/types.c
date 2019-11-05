@@ -1,6 +1,6 @@
-//Prelude
-#include <stdint.h>
+// Prelude
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,30 +15,29 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 #define null 0ul
+#line 1 "src/types.z"
 typedef enum IntegerSize {
-_IntegerSize_I8,
-_IntegerSize_I16,
-_IntegerSize_I32,
-_IntegerSize_I64,
-_IntegerSize_Int_Arch,
-_IntegerSize_Int_Unspecified,
+  IntegerSize_I8,
+  IntegerSize_I16,
+  IntegerSize_I32,
+  IntegerSize_I64,
+  IntegerSize_Int_Arch,
+  IntegerSize_Int_Unspecified,
 } IntegerSize;
 
-
+#line 10 "src/types.z"
 typedef enum FloatingSize {
-_FloatingSize_F32,
-_FloatingSize_F64,
-_FloatingSize_Float_Unspecified,
+  FloatingSize_F32,
+  FloatingSize_F64,
+  FloatingSize_Float_Unspecified,
 } FloatingSize;
 
-
+#line 16 "src/types.z"
 typedef enum PrimitiveTypeKind {
-_PrimitiveTypeKind_Void,
-_PrimitiveTypeKind_Signed,
-_PrimitiveTypeKind_Unsigned,
-_PrimitiveTypeKind_Floating,
-_PrimitiveTypeKind_Char,
-_PrimitiveTypeKind_Str,
+  PrimitiveTypeKind_Void,
+  PrimitiveTypeKind_Signed,
+  PrimitiveTypeKind_Unsigned,
+  PrimitiveTypeKind_Floating,
+  PrimitiveTypeKind_Char,
+  PrimitiveTypeKind_Str,
 } PrimitiveTypeKind;
-
-
