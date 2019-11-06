@@ -1,9 +1,6 @@
 //Prelude
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
@@ -16,7 +13,6 @@ typedef float f32;
 typedef double f64;
 typedef const char constchar;
 typedef const void constvoid;
-#define null 0ul
 #line 2 "src/cstd.z"
 void*  malloc(u64 size) ;
 
@@ -38,41 +34,68 @@ i32 strcmp(constchar*  lhs, constchar*  rhs) ;
 #line 9 "src/cstd.z"
 u64 strlen(constchar*  str) ;
 
-#line 11 "src/cstd.z"
-f64 atof(constchar*  str) ;
+#line 10 "src/cstd.z"
+char*  strtok(char*  str, constchar*  delim) ;
 
 #line 12 "src/cstd.z"
+f64 atof(constchar*  str) ;
+
+#line 13 "src/cstd.z"
 i64 atol(constchar*  str) ;
 
-#line 14 "src/cstd.z"
+#line 15 "src/cstd.z"
 void  abort() ;
 
-#line 15 "src/cstd.z"
+#line 16 "src/cstd.z"
 void  exit(i32 status) ;
 
-#line 17 "src/cstd.z"
-FILE*  fopen(constchar*  filename, constchar*  mode) ;
-
+typedef struct FILE FILE;
 #line 18 "src/cstd.z"
-i32 fclose(FILE*  stream) ;
-
-#line 19 "src/cstd.z"
-i32 fseek(FILE*  stream, i64 offset, i32 origin) ;
 
 #line 20 "src/cstd.z"
-void  rewind(FILE*  stream) ;
+FILE*  fopen(constchar*  filename, constchar*  mode) ;
 
 #line 21 "src/cstd.z"
-i64 ftell(FILE*  stream) ;
+i32 fclose(FILE*  stream) ;
 
 #line 23 "src/cstd.z"
-i32 printf(constchar*  format, ...) ;
+u64 fread(void*  buffer, u64 size, u64 count, FILE*  stream) ;
 
 #line 24 "src/cstd.z"
+u64 fwrite(constvoid*  buffer, u64 size, u64 count, FILE*  stream) ;
+
+#line 26 "src/cstd.z"
+i32 fseek(FILE*  stream, i64 offset, i32 origin) ;
+
+#line 27 "src/cstd.z"
+void  rewind(FILE*  stream) ;
+
+#line 28 "src/cstd.z"
+i64 ftell(FILE*  stream) ;
+
+#line 30 "src/cstd.z"
+i32 SEEK_SET = 0;
+
+#line 31 "src/cstd.z"
+i32 SEEK_CUR = 1;
+
+#line 32 "src/cstd.z"
+i32 SEEK_END = 2;
+
+#line 34 "src/cstd.z"
+i32 printf(constchar*  format, ...) ;
+
+#line 35 "src/cstd.z"
 i32 fprintf(FILE*  stream, constchar*  format, ...) ;
 
-#line 25 "src/cstd.z"
+#line 36 "src/cstd.z"
 i32 sprintf(char*  buffer, constchar*  format, ...) ;
+
+#line 38 "src/cstd.z"
+void*  null = 0;
+
+#line 39 "src/cstd.z"
+i32 EOF = -1;
 
 
 typedef struct IntMap IntMap;
@@ -109,7 +132,7 @@ while ( (i< size))
 #line 19 "src/intmap.z"
 map->keys[i] = 0;
 #line 20 "src/intmap.z"
-map->values[i] = null;
+map->values[i] = 0;
 #line 21 "src/intmap.z"
 i = (i+ 1);
 }
@@ -121,7 +144,7 @@ return map;
 #line 27 "src/intmap.z"
 u64 intmap_hash(u64 k) {
 #line 28 "src/intmap.z"
-if ((k!= null)){
+if ((k!= 0)){
 #line 28 "src/intmap.z"
 return k;
 }
@@ -168,7 +191,7 @@ break;
 }
 else {
 #line 48 "src/intmap.z"
-if ((map->keys[h]== null)){
+if ((map->keys[h]== 0)){
 #line 49 "src/intmap.z"
 map->keys[h] = key;
 #line 50 "src/intmap.z"
@@ -199,9 +222,9 @@ u64 h = (intmap_hash(key) % map->size);
 while ( true)
 {
 #line 62 "src/intmap.z"
-if ((map->keys[h]== null)){
+if ((map->keys[h]== 0)){
 #line 62 "src/intmap.z"
-return null;
+return 0;
 }
 ;
 #line 63 "src/intmap.z"
@@ -261,7 +284,7 @@ while ( (i< size))
 #line 19 "src/strmap.z"
 map->keys[i] = 0;
 #line 20 "src/strmap.z"
-map->values[i] = null;
+map->values[i] = 0;
 #line 21 "src/strmap.z"
 i = (i+ 1);
 }
@@ -292,7 +315,7 @@ c = *s;
 }
 ;
 #line 35 "src/strmap.z"
-if ((hash!= null)){
+if ((hash!= 0)){
 #line 35 "src/strmap.z"
 return hash;
 }
@@ -321,7 +344,7 @@ exit(-1) ;
 while ( true)
 {
 #line 46 "src/strmap.z"
-if (((map->keys[h]!= null)&& !strcmp(map->keys[h],key) )){
+if (((map->keys[h]!= 0)&& !strcmp(map->keys[h],key) )){
 #line 47 "src/strmap.z"
 map->values[h] = value;
 #line 48 "src/strmap.z"
@@ -329,7 +352,7 @@ break;
 }
 else {
 #line 49 "src/strmap.z"
-if ((map->keys[h]== null)){
+if ((map->keys[h]== 0)){
 #line 50 "src/strmap.z"
 map->keys[h] = key;
 #line 51 "src/strmap.z"
@@ -360,9 +383,9 @@ u32 h = (strmap_hash(key) % map->size);
 while ( true)
 {
 #line 63 "src/strmap.z"
-if ((map->keys[h]== null)){
+if ((map->keys[h]== 0)){
 #line 63 "src/strmap.z"
-return null;
+return 0;
 }
 ;
 #line 64 "src/strmap.z"
@@ -3600,7 +3623,7 @@ item->node.variable.body = parse_body(ctx,item->id) ;
 }
 else {
 #line 520 "src/parser.z"
-item->node.variable.body.owner = null;
+item->node.variable.body.owner = 0;
 }
 ;
 }
@@ -3779,7 +3802,7 @@ item->node.function.body = parse_body(ctx,item->id) ;
 }
 else {
 #line 616 "src/parser.z"
-item->node.function.body.owner = null;
+item->node.function.body.owner = 0;
 }
 ;
 }
@@ -4564,78 +4587,70 @@ fprintf(ctx->out,"#include <stdint.h>\n") ;
 #line 22 "src/codegen.z"
 fprintf(ctx->out,"#include <stdbool.h>\n") ;
 #line 23 "src/codegen.z"
-fprintf(ctx->out,"#include <stdio.h>\n") ;
-#line 24 "src/codegen.z"
-fprintf(ctx->out,"#include <stdlib.h>\n") ;
-#line 25 "src/codegen.z"
-fprintf(ctx->out,"#include <string.h>\n") ;
-#line 26 "src/codegen.z"
 fprintf(ctx->out,"typedef uint8_t u8;\n") ;
-#line 27 "src/codegen.z"
+#line 24 "src/codegen.z"
 fprintf(ctx->out,"typedef uint16_t u16;\n") ;
-#line 28 "src/codegen.z"
+#line 25 "src/codegen.z"
 fprintf(ctx->out,"typedef uint32_t u32;\n") ;
-#line 29 "src/codegen.z"
+#line 26 "src/codegen.z"
 fprintf(ctx->out,"typedef uint64_t u64;\n") ;
-#line 30 "src/codegen.z"
+#line 27 "src/codegen.z"
 fprintf(ctx->out,"typedef int8_t i8;\n") ;
-#line 31 "src/codegen.z"
+#line 28 "src/codegen.z"
 fprintf(ctx->out,"typedef int16_t i16;\n") ;
-#line 32 "src/codegen.z"
+#line 29 "src/codegen.z"
 fprintf(ctx->out,"typedef int32_t i32;\n") ;
-#line 33 "src/codegen.z"
+#line 30 "src/codegen.z"
 fprintf(ctx->out,"typedef int64_t i64;\n") ;
-#line 34 "src/codegen.z"
+#line 31 "src/codegen.z"
 fprintf(ctx->out,"typedef float f32;\n") ;
-#line 35 "src/codegen.z"
+#line 32 "src/codegen.z"
 fprintf(ctx->out,"typedef double f64;\n") ;
-#line 36 "src/codegen.z"
+#line 33 "src/codegen.z"
 fprintf(ctx->out,"typedef const char constchar;\n") ;
-#line 37 "src/codegen.z"
+#line 34 "src/codegen.z"
 fprintf(ctx->out,"typedef const void constvoid;\n") ;
-#line 38 "src/codegen.z"
-fprintf(ctx->out,"#define null 0ul\n") ;
 }
 
-#line 41 "src/codegen.z"
+#line 37 "src/codegen.z"
 void  generate_sid(CodegenContext*  ctx, Sid sid) {
-#line 42 "src/codegen.z"
-#line 42 "src/codegen.z"
+#line 38 "src/codegen.z"
+#line 38 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 43 "src/codegen.z"
+#line 39 "src/codegen.z"
 fprintf(ctx->out,"%s",get_str(&sess->interner,sid) ) ;
 }
 
-#line 46 "src/codegen.z"
+#line 42 "src/codegen.z"
 void  generate_identifier(CodegenContext*  ctx, Ident ident) {
-#line 47 "src/codegen.z"
+#line 43 "src/codegen.z"
 generate_sid(ctx,ident.name) ;
 }
 
-#line 50 "src/codegen.z"
+#line 46 "src/codegen.z"
 void  generate_type(CodegenContext*  ctx, Type*  ty) {
-#line 51 "src/codegen.z"
+#line 47 "src/codegen.z"
 if ((ty->kind== TypeKind_Path)){
-#line 51 "src/codegen.z"
+#line 47 "src/codegen.z"
 generate_sid(ctx,ty->node.path) ;
 }
 else {
-#line 52 "src/codegen.z"
+#line 48 "src/codegen.z"
 if ((ty->kind== TypeKind_Ptr)){
-#line 53 "src/codegen.z"
+#line 49 "src/codegen.z"
 generate_type(ctx,ty->node.ptr) ;
-#line 54 "src/codegen.z"
+#line 50 "src/codegen.z"
 fprintf(ctx->out,"* ") ;
 }
 else {
-#line 56 "src/codegen.z"
+#line 52 "src/codegen.z"
 if ((ty->kind== TypeKind_Unit)){
-#line 57 "src/codegen.z"
+#line 53 "src/codegen.z"
 fprintf(ctx->out,"void ") ;
 }
 else {
-#line 59 "src/codegen.z"
+#line 55 "src/codegen.z"
 abort() ;
 }
 ;
@@ -4645,39 +4660,39 @@ abort() ;
 ;
 }
 
-#line 62 "src/codegen.z"
+#line 58 "src/codegen.z"
 void  generate_char(CodegenContext*  ctx, char c) {
-#line 63 "src/codegen.z"
+#line 59 "src/codegen.z"
 if ((c== '\n')){
-#line 63 "src/codegen.z"
+#line 59 "src/codegen.z"
 fprintf(ctx->out,"'\\n'") ;
 }
 else {
-#line 64 "src/codegen.z"
+#line 60 "src/codegen.z"
 if ((c== '\t')){
-#line 64 "src/codegen.z"
+#line 60 "src/codegen.z"
 fprintf(ctx->out,"'\\t'") ;
 }
 else {
-#line 65 "src/codegen.z"
+#line 61 "src/codegen.z"
 if ((c== '\r')){
-#line 65 "src/codegen.z"
+#line 61 "src/codegen.z"
 fprintf(ctx->out,"'\\r'") ;
 }
 else {
-#line 66 "src/codegen.z"
+#line 62 "src/codegen.z"
 if ((c== '\\')){
-#line 66 "src/codegen.z"
+#line 62 "src/codegen.z"
 fprintf(ctx->out,"'\\\\'") ;
 }
 else {
-#line 67 "src/codegen.z"
+#line 63 "src/codegen.z"
 if ((c== '\'')){
-#line 67 "src/codegen.z"
+#line 63 "src/codegen.z"
 fprintf(ctx->out,"'\\''") ;
 }
 else {
-#line 68 "src/codegen.z"
+#line 64 "src/codegen.z"
 fprintf(ctx->out,"'%c'",c) ;
 }
 ;
@@ -4691,51 +4706,51 @@ fprintf(ctx->out,"'%c'",c) ;
 ;
 }
 
-#line 71 "src/codegen.z"
+#line 67 "src/codegen.z"
 void  generate_literal(CodegenContext*  ctx, Literal lit) {
-#line 72 "src/codegen.z"
+#line 68 "src/codegen.z"
 if ((lit.kind== LiteralKind_Int)){
-#line 72 "src/codegen.z"
+#line 68 "src/codegen.z"
 fprintf(ctx->out,"%ld",lit.value.integer) ;
 }
 else {
-#line 73 "src/codegen.z"
+#line 69 "src/codegen.z"
 if ((lit.kind== LiteralKind_Float)){
-#line 73 "src/codegen.z"
+#line 69 "src/codegen.z"
 fprintf(ctx->out,"%f",lit.value.floating) ;
 }
 else {
-#line 74 "src/codegen.z"
+#line 70 "src/codegen.z"
 if ((lit.kind== LiteralKind_Bool)){
-#line 74 "src/codegen.z"
+#line 70 "src/codegen.z"
 if (lit.value.boolean){
-#line 74 "src/codegen.z"
+#line 70 "src/codegen.z"
 fprintf(ctx->out,"true") ;
 }
 else {
-#line 74 "src/codegen.z"
+#line 70 "src/codegen.z"
 fprintf(ctx->out,"false") ;
 }
 ;
 }
 else {
-#line 75 "src/codegen.z"
+#line 71 "src/codegen.z"
 if ((lit.kind== LiteralKind_Str)){
-#line 76 "src/codegen.z"
-#line 76 "src/codegen.z"
+#line 72 "src/codegen.z"
+#line 72 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 77 "src/codegen.z"
+#line 73 "src/codegen.z"
 fprintf(ctx->out,"\"%s\"",get_str(&sess->interner,lit.value.str) ) ;
 }
 else {
-#line 79 "src/codegen.z"
+#line 75 "src/codegen.z"
 if ((lit.kind== LiteralKind_Char)){
-#line 79 "src/codegen.z"
+#line 75 "src/codegen.z"
 generate_char(ctx,lit.value.ch) ;
 }
 else {
-#line 80 "src/codegen.z"
+#line 76 "src/codegen.z"
 abort() ;
 }
 ;
@@ -4749,39 +4764,39 @@ abort() ;
 ;
 }
 
-#line 83 "src/codegen.z"
+#line 79 "src/codegen.z"
 void  generate_body(CodegenContext*  ctx, Body body) {
-#line 84 "src/codegen.z"
+#line 80 "src/codegen.z"
 generate_expr(ctx,body.value) ;
 }
 
-#line 87 "src/codegen.z"
+#line 83 "src/codegen.z"
 void  generate_unary(CodegenContext*  ctx, UnaryData unary) {
-#line 88 "src/codegen.z"
+#line 84 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Negation)){
-#line 88 "src/codegen.z"
+#line 84 "src/codegen.z"
 fprintf(ctx->out,"-") ;
 }
 else {
-#line 89 "src/codegen.z"
+#line 85 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Complement)){
-#line 89 "src/codegen.z"
+#line 85 "src/codegen.z"
 fprintf(ctx->out,"!") ;
 }
 else {
-#line 90 "src/codegen.z"
+#line 86 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Refer)){
-#line 90 "src/codegen.z"
+#line 86 "src/codegen.z"
 fprintf(ctx->out,"&") ;
 }
 else {
-#line 91 "src/codegen.z"
+#line 87 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Deref)){
-#line 91 "src/codegen.z"
+#line 87 "src/codegen.z"
 fprintf(ctx->out,"*") ;
 }
 else {
-#line 92 "src/codegen.z"
+#line 88 "src/codegen.z"
 abort() ;
 }
 ;
@@ -4791,125 +4806,125 @@ abort() ;
 ;
 }
 ;
-#line 94 "src/codegen.z"
+#line 90 "src/codegen.z"
 generate_expr(ctx,unary.inner) ;
 }
 
-#line 97 "src/codegen.z"
+#line 93 "src/codegen.z"
 void  generate_binary(CodegenContext*  ctx, BinaryData binary) {
-#line 98 "src/codegen.z"
+#line 94 "src/codegen.z"
 fprintf(ctx->out,"(") ;
-#line 99 "src/codegen.z"
+#line 95 "src/codegen.z"
 generate_expr(ctx,binary.left) ;
-#line 100 "src/codegen.z"
+#line 96 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Addition)){
-#line 100 "src/codegen.z"
+#line 96 "src/codegen.z"
 fprintf(ctx->out,"+ ") ;
 }
 else {
-#line 101 "src/codegen.z"
+#line 97 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Subtraction)){
-#line 101 "src/codegen.z"
+#line 97 "src/codegen.z"
 fprintf(ctx->out,"- ") ;
 }
 else {
-#line 102 "src/codegen.z"
+#line 98 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Product)){
-#line 102 "src/codegen.z"
+#line 98 "src/codegen.z"
 fprintf(ctx->out,"* ") ;
 }
 else {
-#line 103 "src/codegen.z"
+#line 99 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Division)){
-#line 103 "src/codegen.z"
+#line 99 "src/codegen.z"
 fprintf(ctx->out,"/ ") ;
 }
 else {
-#line 104 "src/codegen.z"
+#line 100 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Modulus)){
-#line 104 "src/codegen.z"
+#line 100 "src/codegen.z"
 fprintf(ctx->out,"%% ") ;
 }
 else {
-#line 106 "src/codegen.z"
+#line 102 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Less)){
-#line 106 "src/codegen.z"
+#line 102 "src/codegen.z"
 fprintf(ctx->out,"< ") ;
 }
 else {
-#line 107 "src/codegen.z"
+#line 103 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_LessEq)){
-#line 107 "src/codegen.z"
+#line 103 "src/codegen.z"
 fprintf(ctx->out,"<= ") ;
 }
 else {
-#line 108 "src/codegen.z"
+#line 104 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Greater)){
-#line 108 "src/codegen.z"
+#line 104 "src/codegen.z"
 fprintf(ctx->out,"> ") ;
 }
 else {
-#line 109 "src/codegen.z"
+#line 105 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_GreaterEq)){
-#line 109 "src/codegen.z"
+#line 105 "src/codegen.z"
 fprintf(ctx->out,">= ") ;
 }
 else {
-#line 110 "src/codegen.z"
+#line 106 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Equality)){
-#line 110 "src/codegen.z"
+#line 106 "src/codegen.z"
 fprintf(ctx->out,"== ") ;
 }
 else {
-#line 111 "src/codegen.z"
+#line 107 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_NotEq)){
-#line 111 "src/codegen.z"
+#line 107 "src/codegen.z"
 fprintf(ctx->out,"!= ") ;
 }
 else {
-#line 113 "src/codegen.z"
+#line 109 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_BAnd)){
-#line 113 "src/codegen.z"
+#line 109 "src/codegen.z"
 fprintf(ctx->out,"& ") ;
 }
 else {
-#line 114 "src/codegen.z"
+#line 110 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_BOr)){
-#line 114 "src/codegen.z"
+#line 110 "src/codegen.z"
 fprintf(ctx->out,"| ") ;
 }
 else {
-#line 115 "src/codegen.z"
+#line 111 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Xor)){
-#line 115 "src/codegen.z"
+#line 111 "src/codegen.z"
 fprintf(ctx->out,"^ ") ;
 }
 else {
-#line 116 "src/codegen.z"
+#line 112 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_LeftShift)){
-#line 116 "src/codegen.z"
+#line 112 "src/codegen.z"
 fprintf(ctx->out,"<< ") ;
 }
 else {
-#line 117 "src/codegen.z"
+#line 113 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_RightShift)){
-#line 117 "src/codegen.z"
+#line 113 "src/codegen.z"
 fprintf(ctx->out,">> ") ;
 }
 else {
-#line 119 "src/codegen.z"
+#line 115 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_And)){
-#line 119 "src/codegen.z"
+#line 115 "src/codegen.z"
 fprintf(ctx->out,"&& ") ;
 }
 else {
-#line 120 "src/codegen.z"
+#line 116 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Or)){
-#line 120 "src/codegen.z"
+#line 116 "src/codegen.z"
 fprintf(ctx->out,"|| ") ;
 }
 else {
-#line 121 "src/codegen.z"
+#line 117 "src/codegen.z"
 abort() ;
 }
 ;
@@ -4947,223 +4962,223 @@ abort() ;
 ;
 }
 ;
-#line 122 "src/codegen.z"
+#line 118 "src/codegen.z"
 generate_expr(ctx,binary.right) ;
-#line 123 "src/codegen.z"
+#line 119 "src/codegen.z"
 fprintf(ctx->out,")") ;
 }
 
-#line 126 "src/codegen.z"
+#line 122 "src/codegen.z"
 void  generate_call(CodegenContext*  ctx, CallData call) {
-#line 127 "src/codegen.z"
+#line 123 "src/codegen.z"
 generate_expr(ctx,call.func) ;
-#line 129 "src/codegen.z"
+#line 125 "src/codegen.z"
 fprintf(ctx->out,"(") ;
-#line 130 "src/codegen.z"
-#line 130 "src/codegen.z"
+#line 126 "src/codegen.z"
+#line 126 "src/codegen.z"
 u32 i = 0;
 
-#line 131 "src/codegen.z"
+#line 127 "src/codegen.z"
 while ( (i< call.num_args))
 {
-#line 132 "src/codegen.z"
-#line 132 "src/codegen.z"
+#line 128 "src/codegen.z"
+#line 128 "src/codegen.z"
 Expr*  arg = call.args[i];
 
-#line 133 "src/codegen.z"
+#line 129 "src/codegen.z"
 generate_expr(ctx,arg) ;
-#line 134 "src/codegen.z"
+#line 130 "src/codegen.z"
 if ((i< (call.num_args- 1))){
-#line 134 "src/codegen.z"
+#line 130 "src/codegen.z"
 fprintf(ctx->out,",") ;
 }
 ;
-#line 135 "src/codegen.z"
+#line 131 "src/codegen.z"
 i = (i+ 1);
 }
 ;
-#line 137 "src/codegen.z"
+#line 133 "src/codegen.z"
 fprintf(ctx->out,") ") ;
 }
 
-#line 140 "src/codegen.z"
+#line 136 "src/codegen.z"
 void  generate_conditional(CodegenContext*  ctx, ConditionalData cond) {
-#line 141 "src/codegen.z"
+#line 137 "src/codegen.z"
 fprintf(ctx->out,"if (") ;
-#line 142 "src/codegen.z"
+#line 138 "src/codegen.z"
 generate_expr(ctx,cond.condition) ;
-#line 143 "src/codegen.z"
+#line 139 "src/codegen.z"
 fprintf(ctx->out,")") ;
-#line 144 "src/codegen.z"
+#line 140 "src/codegen.z"
 generate_expr(ctx,cond.then) ;
-#line 145 "src/codegen.z"
+#line 141 "src/codegen.z"
 if (cond.otherwise){
-#line 146 "src/codegen.z"
+#line 142 "src/codegen.z"
 fprintf(ctx->out,"else ") ;
-#line 147 "src/codegen.z"
+#line 143 "src/codegen.z"
 generate_expr(ctx,cond.otherwise) ;
 }
 ;
 }
 
-#line 151 "src/codegen.z"
+#line 147 "src/codegen.z"
 void  generate_while(CodegenContext*  ctx, WhileData data) {
-#line 152 "src/codegen.z"
+#line 148 "src/codegen.z"
 fprintf(ctx->out,"while ( ") ;
-#line 153 "src/codegen.z"
+#line 149 "src/codegen.z"
 generate_expr(ctx,data.condition) ;
-#line 154 "src/codegen.z"
+#line 150 "src/codegen.z"
 fprintf(ctx->out,")\n") ;
-#line 155 "src/codegen.z"
+#line 151 "src/codegen.z"
 generate_expr(ctx,data.body) ;
 }
 
-#line 158 "src/codegen.z"
+#line 154 "src/codegen.z"
 void  generate_indexing(CodegenContext*  ctx, IndexingData idx) {
-#line 159 "src/codegen.z"
+#line 155 "src/codegen.z"
 generate_expr(ctx,idx.array) ;
-#line 160 "src/codegen.z"
+#line 156 "src/codegen.z"
 fprintf(ctx->out,"[") ;
-#line 161 "src/codegen.z"
+#line 157 "src/codegen.z"
 generate_expr(ctx,idx.index) ;
-#line 162 "src/codegen.z"
+#line 158 "src/codegen.z"
 fprintf(ctx->out,"]") ;
 }
 
-#line 165 "src/codegen.z"
+#line 161 "src/codegen.z"
 void  generate_field(CodegenContext*  ctx, FieldData field) {
-#line 166 "src/codegen.z"
-#line 166 "src/codegen.z"
+#line 162 "src/codegen.z"
+#line 162 "src/codegen.z"
 Expr*  strct = field.strct;
 
-#line 167 "src/codegen.z"
+#line 163 "src/codegen.z"
 generate_expr(ctx,strct) ;
-#line 169 "src/codegen.z"
-#line 169 "src/codegen.z"
+#line 165 "src/codegen.z"
+#line 165 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 170 "src/codegen.z"
-#line 170 "src/codegen.z"
+#line 166 "src/codegen.z"
+#line 166 "src/codegen.z"
 char*  field_name = get_str(&sess->interner,field.ident.name) ;
 
-#line 172 "src/codegen.z"
-#line 172 "src/codegen.z"
+#line 168 "src/codegen.z"
+#line 168 "src/codegen.z"
 bool is_ptr = false;
 
-#line 173 "src/codegen.z"
-#line 173 "src/codegen.z"
+#line 169 "src/codegen.z"
+#line 169 "src/codegen.z"
 char*  accessor_str ;
 
-#line 174 "src/codegen.z"
+#line 170 "src/codegen.z"
 if ((strct->kind== ExprKind_Path)){
-#line 175 "src/codegen.z"
-#line 175 "src/codegen.z"
+#line 171 "src/codegen.z"
+#line 171 "src/codegen.z"
 char*  strct_name = get_str(&sess->interner,strct->node.path.segments[0].name) ;
 
-#line 176 "src/codegen.z"
+#line 172 "src/codegen.z"
 is_ptr = strmap_lookup(ctx->ident_is_ptr,strct_name) ;
 }
 ;
-#line 179 "src/codegen.z"
+#line 175 "src/codegen.z"
 if (is_ptr){
-#line 179 "src/codegen.z"
+#line 175 "src/codegen.z"
 accessor_str = "->";
 }
 else {
-#line 180 "src/codegen.z"
+#line 176 "src/codegen.z"
 accessor_str = ".";
 }
 ;
-#line 181 "src/codegen.z"
+#line 177 "src/codegen.z"
 fprintf(ctx->out,"%s%s",accessor_str,field_name) ;
 }
 
-#line 184 "src/codegen.z"
+#line 180 "src/codegen.z"
 void  generate_path(CodegenContext*  ctx, Path path) {
-#line 185 "src/codegen.z"
-#line 185 "src/codegen.z"
+#line 181 "src/codegen.z"
+#line 181 "src/codegen.z"
 u32 i = 0;
 
-#line 186 "src/codegen.z"
+#line 182 "src/codegen.z"
 while ( (i< path.num_segments))
 {
-#line 187 "src/codegen.z"
+#line 183 "src/codegen.z"
 generate_identifier(ctx,path.segments[i]) ;
-#line 188 "src/codegen.z"
+#line 184 "src/codegen.z"
 if ((i< (path.num_segments- 1))){
-#line 188 "src/codegen.z"
+#line 184 "src/codegen.z"
 fprintf(ctx->out,"_") ;
 }
 ;
-#line 189 "src/codegen.z"
+#line 185 "src/codegen.z"
 i = (i+ 1);
 }
 ;
 }
 
-#line 193 "src/codegen.z"
+#line 189 "src/codegen.z"
 void  generate_expr(CodegenContext*  ctx, Expr*  expr) {
-#line 194 "src/codegen.z"
+#line 190 "src/codegen.z"
 if ((expr->kind== ExprKind_Unary)){
-#line 194 "src/codegen.z"
+#line 190 "src/codegen.z"
 generate_unary(ctx,expr->node.unary) ;
 }
 else {
-#line 195 "src/codegen.z"
+#line 191 "src/codegen.z"
 if ((expr->kind== ExprKind_Binary)){
-#line 195 "src/codegen.z"
+#line 191 "src/codegen.z"
 generate_binary(ctx,expr->node.binary) ;
 }
 else {
-#line 196 "src/codegen.z"
+#line 192 "src/codegen.z"
 if ((expr->kind== ExprKind_Block)){
-#line 196 "src/codegen.z"
+#line 192 "src/codegen.z"
 generate_block(ctx,expr->node.block) ;
 }
 else {
-#line 197 "src/codegen.z"
+#line 193 "src/codegen.z"
 if ((expr->kind== ExprKind_Call)){
-#line 197 "src/codegen.z"
+#line 193 "src/codegen.z"
 generate_call(ctx,expr->node.call) ;
 }
 else {
-#line 198 "src/codegen.z"
+#line 194 "src/codegen.z"
 if ((expr->kind== ExprKind_Conditional)){
-#line 198 "src/codegen.z"
+#line 194 "src/codegen.z"
 generate_conditional(ctx,expr->node.conditional) ;
 }
 else {
-#line 199 "src/codegen.z"
+#line 195 "src/codegen.z"
 if ((expr->kind== ExprKind_While)){
-#line 199 "src/codegen.z"
+#line 195 "src/codegen.z"
 generate_while(ctx,expr->node.whl) ;
 }
 else {
-#line 200 "src/codegen.z"
+#line 196 "src/codegen.z"
 if ((expr->kind== ExprKind_Indexing)){
-#line 200 "src/codegen.z"
+#line 196 "src/codegen.z"
 generate_indexing(ctx,expr->node.indexing) ;
 }
 else {
-#line 201 "src/codegen.z"
+#line 197 "src/codegen.z"
 if ((expr->kind== ExprKind_Field)){
-#line 201 "src/codegen.z"
+#line 197 "src/codegen.z"
 generate_field(ctx,expr->node.field) ;
 }
 else {
-#line 202 "src/codegen.z"
+#line 198 "src/codegen.z"
 if ((expr->kind== ExprKind_Literal)){
-#line 202 "src/codegen.z"
+#line 198 "src/codegen.z"
 generate_literal(ctx,expr->node.lit) ;
 }
 else {
-#line 203 "src/codegen.z"
+#line 199 "src/codegen.z"
 if ((expr->kind== ExprKind_Path)){
-#line 203 "src/codegen.z"
+#line 199 "src/codegen.z"
 generate_path(ctx,expr->node.path) ;
 }
 else {
-#line 204 "src/codegen.z"
+#line 200 "src/codegen.z"
 abort() ;
 }
 ;
@@ -5187,71 +5202,71 @@ abort() ;
 ;
 }
 
-#line 207 "src/codegen.z"
+#line 203 "src/codegen.z"
 void  generate_assignment(CodegenContext*  ctx, AssignmentData assignment) {
-#line 208 "src/codegen.z"
+#line 204 "src/codegen.z"
 generate_expr(ctx,assignment.left) ;
-#line 209 "src/codegen.z"
+#line 205 "src/codegen.z"
 fprintf(ctx->out," = ") ;
-#line 210 "src/codegen.z"
+#line 206 "src/codegen.z"
 generate_expr(ctx,assignment.right) ;
-#line 211 "src/codegen.z"
+#line 207 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 214 "src/codegen.z"
+#line 210 "src/codegen.z"
 void  generate_return(CodegenContext*  ctx, Expr*  expr) {
-#line 215 "src/codegen.z"
+#line 211 "src/codegen.z"
 fprintf(ctx->out,"return ") ;
-#line 216 "src/codegen.z"
+#line 212 "src/codegen.z"
 generate_expr(ctx,expr) ;
-#line 217 "src/codegen.z"
+#line 213 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 220 "src/codegen.z"
+#line 216 "src/codegen.z"
 void  generate_stmt(CodegenContext*  ctx, Stmt*  stmt) {
-#line 221 "src/codegen.z"
+#line 217 "src/codegen.z"
 emit_line_directive(ctx->out,ctx->source,stmt->span) ;
-#line 222 "src/codegen.z"
+#line 218 "src/codegen.z"
 if ((stmt->kind== StmtKind_Assignment)){
-#line 222 "src/codegen.z"
+#line 218 "src/codegen.z"
 generate_assignment(ctx,stmt->node.assignment) ;
 }
 else {
-#line 223 "src/codegen.z"
+#line 219 "src/codegen.z"
 if ((stmt->kind== StmtKind_Break)){
-#line 223 "src/codegen.z"
+#line 219 "src/codegen.z"
 fprintf(ctx->out,"break;\n") ;
 }
 else {
-#line 224 "src/codegen.z"
+#line 220 "src/codegen.z"
 if ((stmt->kind== StmtKind_Continue)){
-#line 224 "src/codegen.z"
+#line 220 "src/codegen.z"
 fprintf(ctx->out,"continue;\n") ;
 }
 else {
-#line 225 "src/codegen.z"
+#line 221 "src/codegen.z"
 if ((stmt->kind== StmtKind_Expr)){
-#line 225 "src/codegen.z"
+#line 221 "src/codegen.z"
 generate_expr(ctx,stmt->node.expr) ;
-#line 225 "src/codegen.z"
+#line 221 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 else {
-#line 226 "src/codegen.z"
+#line 222 "src/codegen.z"
 if ((stmt->kind== StmtKind_Item)){
-#line 226 "src/codegen.z"
+#line 222 "src/codegen.z"
 generate_item(ctx,unit_get_item(ctx->unit,stmt->node.item) ) ;
 }
 else {
-#line 227 "src/codegen.z"
+#line 223 "src/codegen.z"
 if ((stmt->kind== StmtKind_Return)){
-#line 227 "src/codegen.z"
+#line 223 "src/codegen.z"
 generate_return(ctx,stmt->node._return) ;
 }
 else {
-#line 228 "src/codegen.z"
+#line 224 "src/codegen.z"
 abort() ;
 }
 ;
@@ -5267,284 +5282,284 @@ abort() ;
 ;
 }
 
-#line 231 "src/codegen.z"
+#line 227 "src/codegen.z"
 void  generate_block(CodegenContext*  ctx, Block*  block) {
-#line 232 "src/codegen.z"
+#line 228 "src/codegen.z"
 fprintf(ctx->out,"{\n") ;
-#line 233 "src/codegen.z"
-#line 233 "src/codegen.z"
+#line 229 "src/codegen.z"
+#line 229 "src/codegen.z"
 u32 i = 0;
 
-#line 235 "src/codegen.z"
+#line 231 "src/codegen.z"
 while ( (i< block->num_stmts))
 {
-#line 236 "src/codegen.z"
+#line 232 "src/codegen.z"
 generate_stmt(ctx,block->stmts[i]) ;
-#line 237 "src/codegen.z"
+#line 233 "src/codegen.z"
 i = (i+ 1);
 }
 ;
-#line 239 "src/codegen.z"
+#line 235 "src/codegen.z"
 fprintf(ctx->out,"}\n") ;
 }
 
-#line 242 "src/codegen.z"
+#line 238 "src/codegen.z"
 void  generate_variable(CodegenContext*  ctx, Item*  item) {
-#line 244 "src/codegen.z"
+#line 240 "src/codegen.z"
 emit_line_directive(ctx->out,ctx->source,item->span) ;
-#line 246 "src/codegen.z"
+#line 242 "src/codegen.z"
 generate_type(ctx,item->node.variable.ty) ;
-#line 248 "src/codegen.z"
-#line 248 "src/codegen.z"
+#line 244 "src/codegen.z"
+#line 244 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 249 "src/codegen.z"
-#line 249 "src/codegen.z"
+#line 245 "src/codegen.z"
+#line 245 "src/codegen.z"
 char*  var_name = get_str(&sess->interner,item->ident.name) ;
 
-#line 251 "src/codegen.z"
+#line 247 "src/codegen.z"
 strmap_insert(ctx->ident_is_ptr,var_name,type_is_ptr(item->node.variable.ty) ) ;
-#line 252 "src/codegen.z"
+#line 248 "src/codegen.z"
 fprintf(ctx->out," %s ",var_name) ;
-#line 253 "src/codegen.z"
+#line 249 "src/codegen.z"
 if (item->node.variable.body.local){
-#line 254 "src/codegen.z"
+#line 250 "src/codegen.z"
 fprintf(ctx->out,"= ") ;
-#line 255 "src/codegen.z"
+#line 251 "src/codegen.z"
 generate_body(ctx,unit_get_body(ctx->unit,item->node.variable.body) ) ;
 }
 ;
-#line 257 "src/codegen.z"
+#line 253 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 260 "src/codegen.z"
+#line 256 "src/codegen.z"
 void  generate_function(CodegenContext*  ctx, Item*  item) {
-#line 262 "src/codegen.z"
+#line 258 "src/codegen.z"
 emit_line_directive(ctx->out,ctx->source,item->span) ;
-#line 264 "src/codegen.z"
-#line 264 "src/codegen.z"
+#line 260 "src/codegen.z"
+#line 260 "src/codegen.z"
 FunctionData func = item->node.function;
 
-#line 265 "src/codegen.z"
-#line 265 "src/codegen.z"
+#line 261 "src/codegen.z"
+#line 261 "src/codegen.z"
 FunctionHeader header = func.header;
 
-#line 266 "src/codegen.z"
+#line 262 "src/codegen.z"
 generate_type(ctx,header.output) ;
-#line 268 "src/codegen.z"
-#line 268 "src/codegen.z"
+#line 264 "src/codegen.z"
+#line 264 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 269 "src/codegen.z"
-#line 269 "src/codegen.z"
+#line 265 "src/codegen.z"
+#line 265 "src/codegen.z"
 char*  func_name = get_str(&sess->interner,item->ident.name) ;
 
-#line 271 "src/codegen.z"
+#line 267 "src/codegen.z"
 fprintf(ctx->out," %s(",func_name) ;
-#line 273 "src/codegen.z"
-#line 273 "src/codegen.z"
+#line 269 "src/codegen.z"
+#line 269 "src/codegen.z"
 u32 i = 0;
 
-#line 274 "src/codegen.z"
+#line 270 "src/codegen.z"
 while ( (i< header.num_parameters))
 {
-#line 275 "src/codegen.z"
-#line 275 "src/codegen.z"
+#line 271 "src/codegen.z"
+#line 271 "src/codegen.z"
 Type*  ty = header.parameters[i].ty;
 
-#line 276 "src/codegen.z"
+#line 272 "src/codegen.z"
 if ((ty->kind== TypeKind_Variadic)){
-#line 277 "src/codegen.z"
+#line 273 "src/codegen.z"
 fprintf(ctx->out,"...") ;
-#line 278 "src/codegen.z"
+#line 274 "src/codegen.z"
 break;
 }
 ;
-#line 281 "src/codegen.z"
+#line 277 "src/codegen.z"
 generate_type(ctx,ty) ;
-#line 283 "src/codegen.z"
-#line 283 "src/codegen.z"
+#line 279 "src/codegen.z"
+#line 279 "src/codegen.z"
 char*  param_name = get_str(&sess->interner,header.parameters[i].ident.name) ;
 
-#line 284 "src/codegen.z"
+#line 280 "src/codegen.z"
 strmap_insert(ctx->ident_is_ptr,param_name,type_is_ptr(header.parameters[i].ty) ) ;
-#line 285 "src/codegen.z"
+#line 281 "src/codegen.z"
 fprintf(ctx->out," %s",param_name) ;
-#line 286 "src/codegen.z"
+#line 282 "src/codegen.z"
 if ((i< (header.num_parameters- 1))){
-#line 286 "src/codegen.z"
+#line 282 "src/codegen.z"
 fprintf(ctx->out,", ") ;
 }
 ;
-#line 287 "src/codegen.z"
+#line 283 "src/codegen.z"
 i = (i+ 1);
 }
 ;
-#line 289 "src/codegen.z"
+#line 285 "src/codegen.z"
 fprintf(ctx->out,") ") ;
-#line 290 "src/codegen.z"
+#line 286 "src/codegen.z"
 if (func.body.local){
-#line 290 "src/codegen.z"
+#line 286 "src/codegen.z"
 generate_body(ctx,unit_get_body(ctx->unit,func.body) ) ;
 }
 else {
-#line 291 "src/codegen.z"
+#line 287 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 ;
 }
 
-#line 294 "src/codegen.z"
+#line 290 "src/codegen.z"
 void  generate_enum(CodegenContext*  ctx, Item*  item) {
-#line 296 "src/codegen.z"
-#line 296 "src/codegen.z"
+#line 292 "src/codegen.z"
+#line 292 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 297 "src/codegen.z"
-#line 297 "src/codegen.z"
+#line 293 "src/codegen.z"
+#line 293 "src/codegen.z"
 char*  enum_name = get_str(&sess->interner,item->ident.name) ;
 
-#line 299 "src/codegen.z"
+#line 295 "src/codegen.z"
 emit_line_directive(ctx->out,ctx->source,item->span) ;
-#line 300 "src/codegen.z"
+#line 296 "src/codegen.z"
 fprintf(ctx->out,"typedef enum %s {\n",enum_name) ;
-#line 301 "src/codegen.z"
-#line 301 "src/codegen.z"
+#line 297 "src/codegen.z"
+#line 297 "src/codegen.z"
 u32 i = 0;
 
-#line 303 "src/codegen.z"
-#line 303 "src/codegen.z"
+#line 299 "src/codegen.z"
+#line 299 "src/codegen.z"
 EnumData data = item->node._enum;
 
-#line 305 "src/codegen.z"
+#line 301 "src/codegen.z"
 while ( (i< data.num_variants))
 {
-#line 306 "src/codegen.z"
-#line 306 "src/codegen.z"
+#line 302 "src/codegen.z"
+#line 302 "src/codegen.z"
 char*  variant_name = get_str(&sess->interner,data.variants[i].ident.name) ;
 
-#line 307 "src/codegen.z"
+#line 303 "src/codegen.z"
 fprintf(ctx->out,"%s_%s,\n",enum_name,variant_name) ;
-#line 308 "src/codegen.z"
+#line 304 "src/codegen.z"
 i = (i+ 1);
 }
 ;
-#line 310 "src/codegen.z"
+#line 306 "src/codegen.z"
 fprintf(ctx->out,"} %s;\n\n",enum_name) ;
 }
 
-#line 313 "src/codegen.z"
+#line 309 "src/codegen.z"
 void  generate_compound(CodegenContext*  ctx, Item*  item) {
-#line 315 "src/codegen.z"
-#line 315 "src/codegen.z"
+#line 311 "src/codegen.z"
+#line 311 "src/codegen.z"
 Session*  sess = ctx->sess;
 
-#line 316 "src/codegen.z"
-#line 316 "src/codegen.z"
+#line 312 "src/codegen.z"
+#line 312 "src/codegen.z"
 char*  compound_name = get_str(&sess->interner,item->ident.name) ;
 
-#line 318 "src/codegen.z"
-#line 318 "src/codegen.z"
+#line 314 "src/codegen.z"
+#line 314 "src/codegen.z"
 char*  compound_kind ;
 
-#line 319 "src/codegen.z"
+#line 315 "src/codegen.z"
 if ((item->kind== ItemKind_Struct)){
-#line 319 "src/codegen.z"
+#line 315 "src/codegen.z"
 compound_kind = "struct";
 }
 else {
-#line 320 "src/codegen.z"
+#line 316 "src/codegen.z"
 compound_kind = "union";
 }
 ;
-#line 322 "src/codegen.z"
-#line 322 "src/codegen.z"
+#line 318 "src/codegen.z"
+#line 318 "src/codegen.z"
 CompoundData data = item->node.compound;
 
-#line 324 "src/codegen.z"
+#line 320 "src/codegen.z"
 fprintf(ctx->out,"typedef %s %s %s;\n",compound_kind,compound_name,compound_name) ;
-#line 326 "src/codegen.z"
+#line 322 "src/codegen.z"
 emit_line_directive(ctx->out,ctx->source,item->span) ;
-#line 327 "src/codegen.z"
+#line 323 "src/codegen.z"
 if ((data.num_fields> 0)){
-#line 328 "src/codegen.z"
+#line 324 "src/codegen.z"
 fprintf(ctx->out,"typedef %s %s {\n",compound_kind,compound_name) ;
-#line 329 "src/codegen.z"
-#line 329 "src/codegen.z"
+#line 325 "src/codegen.z"
+#line 325 "src/codegen.z"
 u32 i = 0;
 
-#line 330 "src/codegen.z"
+#line 326 "src/codegen.z"
 while ( (i< data.num_fields))
 {
-#line 331 "src/codegen.z"
+#line 327 "src/codegen.z"
 generate_type(ctx,data.fields[i].ty) ;
-#line 333 "src/codegen.z"
-#line 333 "src/codegen.z"
+#line 329 "src/codegen.z"
+#line 329 "src/codegen.z"
 char*  field_name = get_str(&sess->interner,data.fields[i].ident.name) ;
 
-#line 334 "src/codegen.z"
+#line 330 "src/codegen.z"
 fprintf(ctx->out," %s;\n",field_name) ;
-#line 335 "src/codegen.z"
+#line 331 "src/codegen.z"
 i = (i+ 1);
 }
 ;
-#line 337 "src/codegen.z"
+#line 333 "src/codegen.z"
 fprintf(ctx->out,"} %s;\n\n",compound_name) ;
 }
 ;
 }
 
-#line 341 "src/codegen.z"
+#line 337 "src/codegen.z"
 void  generate_mod(CodegenContext*  ctx, Mod*  module) {
-#line 342 "src/codegen.z"
-#line 342 "src/codegen.z"
+#line 338 "src/codegen.z"
+#line 338 "src/codegen.z"
 u32 i = 0;
 
-#line 343 "src/codegen.z"
+#line 339 "src/codegen.z"
 while ( (i< module->num_items))
 {
-#line 344 "src/codegen.z"
-#line 344 "src/codegen.z"
+#line 340 "src/codegen.z"
+#line 340 "src/codegen.z"
 Item*  item = unit_get_item(ctx->unit,module->items[i]) ;
 
-#line 345 "src/codegen.z"
+#line 341 "src/codegen.z"
 generate_item(ctx,item) ;
-#line 346 "src/codegen.z"
+#line 342 "src/codegen.z"
 i = (i+ 1);
 }
 ;
 }
 
-#line 350 "src/codegen.z"
+#line 346 "src/codegen.z"
 void  generate_item(CodegenContext*  ctx, Item*  item) {
-#line 352 "src/codegen.z"
+#line 348 "src/codegen.z"
 if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
-#line 352 "src/codegen.z"
+#line 348 "src/codegen.z"
 generate_variable(ctx,item) ;
 }
 else {
-#line 353 "src/codegen.z"
+#line 349 "src/codegen.z"
 if ((item->kind== ItemKind_Enum)){
-#line 353 "src/codegen.z"
+#line 349 "src/codegen.z"
 generate_enum(ctx,item) ;
 }
 else {
-#line 354 "src/codegen.z"
+#line 350 "src/codegen.z"
 if ((item->kind== ItemKind_Function)){
-#line 354 "src/codegen.z"
+#line 350 "src/codegen.z"
 generate_function(ctx,item) ;
 }
 else {
-#line 355 "src/codegen.z"
+#line 351 "src/codegen.z"
 if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-#line 355 "src/codegen.z"
+#line 351 "src/codegen.z"
 generate_compound(ctx,item) ;
 }
 else {
-#line 356 "src/codegen.z"
+#line 352 "src/codegen.z"
 if ((item->kind== ItemKind_Mod)){
-#line 356 "src/codegen.z"
+#line 352 "src/codegen.z"
 generate_mod(ctx,&item->node.module) ;
 }
 ;
@@ -5556,29 +5571,29 @@ generate_mod(ctx,&item->node.module) ;
 ;
 }
 ;
-#line 357 "src/codegen.z"
+#line 353 "src/codegen.z"
 fprintf(ctx->out,"\n") ;
 }
 
-#line 360 "src/codegen.z"
+#line 356 "src/codegen.z"
 void  generate(Session*  sess, CompilationUnit unit, char*  output_file) {
-#line 361 "src/codegen.z"
-#line 361 "src/codegen.z"
+#line 357 "src/codegen.z"
+#line 357 "src/codegen.z"
 CodegenContext ctx ;
 
-#line 363 "src/codegen.z"
+#line 359 "src/codegen.z"
 ctx.out = fopen(output_file,"w") ;
-#line 364 "src/codegen.z"
+#line 360 "src/codegen.z"
 ctx.ident_is_ptr = strmap_create(1024) ;
-#line 365 "src/codegen.z"
+#line 361 "src/codegen.z"
 ctx.sess = sess;
-#line 366 "src/codegen.z"
+#line 362 "src/codegen.z"
 ctx.source = &sess->source;
-#line 367 "src/codegen.z"
+#line 363 "src/codegen.z"
 ctx.unit = &unit;
-#line 369 "src/codegen.z"
+#line 365 "src/codegen.z"
 generate_prelude(&ctx) ;
-#line 371 "src/codegen.z"
+#line 367 "src/codegen.z"
 generate_mod(&ctx,&unit.module) ;
 }
 
