@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-gcc -g -Wall src/unity.c -o stage0
+gcc -g -Wall src/main.c -o stage0
