@@ -1850,32 +1850,40 @@ _ZN4main3ast15PrimitiveTyKindE kind;
 typedef enum _ZN4main3ast11BindingKindE {
 BindingKind_Item,
 BindingKind_Variable,
+BindingKind_Parameter,
 BindingKind_PrimitiveType,
 BindingKind_Variant,
 } _ZN4main3ast11BindingKindE;
 
 
 typedef struct _ZN4main3ast4ItemE _ZN4main3ast4ItemE;
-#line 60 "src/ast.z"
-
-typedef struct _ZN4main3ast11EnumVariantE _ZN4main3ast11EnumVariantE;
 #line 61 "src/ast.z"
 
-typedef struct _ZN4main3ast11PrimitiveTyE _ZN4main3ast11PrimitiveTyE;
+typedef struct _ZN4main3ast11EnumVariantE _ZN4main3ast11EnumVariantE;
 #line 62 "src/ast.z"
 
-typedef union _ZN4main3ast11BindingNodeE _ZN4main3ast11BindingNodeE;
+typedef struct _ZN4main3ast17FunctionParameterE _ZN4main3ast17FunctionParameterE;
+#line 63 "src/ast.z"
+
+typedef struct _ZN4main3ast7LetDataE _ZN4main3ast7LetDataE;
 #line 64 "src/ast.z"
+
+typedef struct _ZN4main3ast11PrimitiveTyE _ZN4main3ast11PrimitiveTyE;
+#line 65 "src/ast.z"
+
+typedef union _ZN4main3ast11BindingNodeE _ZN4main3ast11BindingNodeE;
+#line 67 "src/ast.z"
 typedef union _ZN4main3ast11BindingNodeE {
 _ZN4main3ast4ItemE*  item;
-u32 slot;
+_ZN4main3ast7LetDataE*  variable;
+_ZN4main3ast17FunctionParameterE*  parameter;
 _ZN4main3ast11PrimitiveTyE primitive;
 _ZN4main3ast11EnumVariantE*  variant;
 } _ZN4main3ast11BindingNodeE;
 
 
 typedef struct _ZN4main3ast7BindingE _ZN4main3ast7BindingE;
-#line 71 "src/ast.z"
+#line 75 "src/ast.z"
 typedef struct _ZN4main3ast7BindingE {
 _ZN4main3ast11BindingKindE kind;
 _ZN4main3ast11BindingNodeE node;
@@ -1883,7 +1891,7 @@ _ZN4main3ast11BindingNodeE node;
 
 
 typedef struct _ZN4main3ast4PathE _ZN4main3ast4PathE;
-#line 76 "src/ast.z"
+#line 80 "src/ast.z"
 typedef struct _ZN4main3ast4PathE {
 _ZN4main3ast5IdentE*  segments;
 u32 num_segments;
@@ -1893,10 +1901,10 @@ _ZN4main10source_map4SpanE span;
 
 
 typedef struct _ZN4main3ast2TyE _ZN4main3ast2TyE;
-#line 83 "src/ast.z"
+#line 87 "src/ast.z"
 
 typedef struct _ZN4main3ast8FieldDefE _ZN4main3ast8FieldDefE;
-#line 85 "src/ast.z"
+#line 89 "src/ast.z"
 typedef struct _ZN4main3ast8FieldDefE {
 _ZN4main9interning3SidE name;
 _ZN4main3ast2TyE*  ty;
@@ -1904,7 +1912,7 @@ _ZN4main3ast2TyE*  ty;
 
 
 typedef struct _ZN4main3ast11CompoundDefE _ZN4main3ast11CompoundDefE;
-#line 90 "src/ast.z"
+#line 94 "src/ast.z"
 typedef struct _ZN4main3ast11CompoundDefE {
 _ZN4main3ast4PathE path;
 _ZN4main3ast8FieldDefE*  fields;
@@ -1913,7 +1921,7 @@ u32 num_fields;
 
 
 typedef struct _ZN4main3ast7EnumDefE _ZN4main3ast7EnumDefE;
-#line 96 "src/ast.z"
+#line 100 "src/ast.z"
 typedef struct _ZN4main3ast7EnumDefE {
 _ZN4main3ast4PathE path;
 _ZN4main9interning3SidE*  variants;
@@ -1922,7 +1930,7 @@ u32 num_variants;
 
 
 typedef struct _ZN4main3ast5FnDefE _ZN4main3ast5FnDefE;
-#line 102 "src/ast.z"
+#line 106 "src/ast.z"
 typedef struct _ZN4main3ast5FnDefE {
 _ZN4main3ast2TyE* *  parameters;
 u32 num_parameters;
@@ -1930,10 +1938,11 @@ _ZN4main3ast2TyE*  output;
 } _ZN4main3ast5FnDefE;
 
 
-#line 108 "src/ast.z"
+#line 112 "src/ast.z"
 typedef enum _ZN4main3ast6TyKindE {
 TyKind_Void,
 TyKind_ConstVoid,
+TyKind_Variadic,
 TyKind_Bool,
 TyKind_Char,
 TyKind_ConstChar,
@@ -1949,7 +1958,7 @@ TyKind_Union,
 
 
 typedef union _ZN4main3ast10TyKindNodeE _ZN4main3ast10TyKindNodeE;
-#line 124 "src/ast.z"
+#line 129 "src/ast.z"
 typedef union _ZN4main3ast10TyKindNodeE {
 _ZN4main3ast11IntegerSizeE integer;
 _ZN4main3ast12FloatingSizeE floating;
@@ -1961,7 +1970,7 @@ _ZN4main3ast5FnDefE function;
 
 
 typedef struct _ZN4main3ast2TyE _ZN4main3ast2TyE;
-#line 133 "src/ast.z"
+#line 138 "src/ast.z"
 typedef struct _ZN4main3ast2TyE {
 _ZN4main3ast6TyKindE kind;
 _ZN4main3ast10TyKindNodeE node;
@@ -1969,7 +1978,7 @@ _ZN4main3ast10TyKindNodeE node;
 
 
 typedef struct _ZN4main3ast7PatternE _ZN4main3ast7PatternE;
-#line 138 "src/ast.z"
+#line 143 "src/ast.z"
 typedef struct _ZN4main3ast7PatternE {
 _ZN4main3ast5IdentE ident;
 _ZN4main10source_map4SpanE span;
@@ -1977,17 +1986,17 @@ _ZN4main10source_map4SpanE span;
 
 
 typedef struct _ZN4main3ast4ItemE _ZN4main3ast4ItemE;
-#line 143 "src/ast.z"
+#line 148 "src/ast.z"
 
 typedef struct _ZN4main3ast10IndexEntryE _ZN4main3ast10IndexEntryE;
-#line 145 "src/ast.z"
+#line 150 "src/ast.z"
 typedef struct _ZN4main3ast10IndexEntryE {
 _ZN4main3ast4PathE path;
 } _ZN4main3ast10IndexEntryE;
 
 
 typedef struct _ZN4main3ast6ModuleE _ZN4main3ast6ModuleE;
-#line 149 "src/ast.z"
+#line 154 "src/ast.z"
 typedef struct _ZN4main3ast6ModuleE {
 _ZN4main10source_map4SpanE span;
 _ZN4main3ast4ItemE* *  items;
@@ -2000,7 +2009,7 @@ _ZN4main3ast6ModuleE*  parent;
 } _ZN4main3ast6ModuleE;
 
 
-#line 160 "src/ast.z"
+#line 165 "src/ast.z"
 typedef enum _ZN4main3ast11AstTypeKindE {
 AstTypeKind_Void,
 AstTypeKind_Ptr,
@@ -2010,14 +2019,14 @@ AstTypeKind_Variadic,
 
 
 typedef struct _ZN4main3ast12GenericParamE _ZN4main3ast12GenericParamE;
-#line 167 "src/ast.z"
+#line 172 "src/ast.z"
 typedef struct _ZN4main3ast12GenericParamE {
 _ZN4main3ast5IdentE ident;
 } _ZN4main3ast12GenericParamE;
 
 
 typedef struct _ZN4main3ast8GenericsE _ZN4main3ast8GenericsE;
-#line 171 "src/ast.z"
+#line 176 "src/ast.z"
 typedef struct _ZN4main3ast8GenericsE {
 _ZN4main3ast12GenericParamE*  parameters;
 u32 num_parameters;
@@ -2026,7 +2035,7 @@ _ZN4main10source_map4SpanE span;
 
 
 typedef union _ZN4main3ast15AstTypeKindNodeE _ZN4main3ast15AstTypeKindNodeE;
-#line 177 "src/ast.z"
+#line 182 "src/ast.z"
 typedef union _ZN4main3ast15AstTypeKindNodeE {
 _ZN4main3ast4PathE path;
 _ZN4main3ast7AstTypeE*  ptr;
@@ -2034,7 +2043,7 @@ _ZN4main3ast7AstTypeE*  ptr;
 
 
 typedef struct _ZN4main3ast7AstTypeE _ZN4main3ast7AstTypeE;
-#line 182 "src/ast.z"
+#line 187 "src/ast.z"
 typedef struct _ZN4main3ast7AstTypeE {
 _ZN4main3ast11AstTypeKindE kind;
 _ZN4main3ast15AstTypeKindNodeE node;
@@ -2042,7 +2051,7 @@ _ZN4main3ast2TyE*  ty;
 } _ZN4main3ast7AstTypeE;
 
 
-#line 188 "src/ast.z"
+#line 193 "src/ast.z"
 typedef enum _ZN4main3ast11LiteralKindE {
 LiteralKind_Int,
 LiteralKind_Float,
@@ -2053,7 +2062,7 @@ LiteralKind_Str,
 
 
 typedef union _ZN4main3ast12LiteralValueE _ZN4main3ast12LiteralValueE;
-#line 196 "src/ast.z"
+#line 201 "src/ast.z"
 typedef union _ZN4main3ast12LiteralValueE {
 f64 floating;
 u64 integer;
@@ -2064,14 +2073,14 @@ _ZN4main9interning3SidE str;
 
 
 typedef struct _ZN4main3ast7LiteralE _ZN4main3ast7LiteralE;
-#line 204 "src/ast.z"
+#line 209 "src/ast.z"
 typedef struct _ZN4main3ast7LiteralE {
 _ZN4main3ast11LiteralKindE kind;
 _ZN4main3ast12LiteralValueE value;
 } _ZN4main3ast7LiteralE;
 
 
-#line 210 "src/ast.z"
+#line 215 "src/ast.z"
 typedef enum _ZN4main3ast17UnaryOperatorKindE {
 UnaryOperatorKind_Deref,
 UnaryOperatorKind_Refer,
@@ -2080,7 +2089,7 @@ UnaryOperatorKind_Complement,
 } _ZN4main3ast17UnaryOperatorKindE;
 
 
-#line 221 "src/ast.z"
+#line 226 "src/ast.z"
 typedef enum _ZN4main3ast18BinaryOperatorKindE {
 BinaryOperatorKind_Invalid,
 BinaryOperatorKind_Addition,
@@ -2105,7 +2114,7 @@ BinaryOperatorKind_Or,
 
 
 typedef struct _ZN4main3ast10BinaryDataE _ZN4main3ast10BinaryDataE;
-#line 250 "src/ast.z"
+#line 255 "src/ast.z"
 typedef struct _ZN4main3ast10BinaryDataE {
 _ZN4main3ast18BinaryOperatorKindE op;
 _ZN4main3ast4ExprE*  left;
@@ -2114,7 +2123,7 @@ _ZN4main3ast4ExprE*  right;
 
 
 typedef struct _ZN4main3ast8CallDataE _ZN4main3ast8CallDataE;
-#line 256 "src/ast.z"
+#line 261 "src/ast.z"
 typedef struct _ZN4main3ast8CallDataE {
 _ZN4main3ast4ExprE*  func;
 _ZN4main3ast4ExprE* *  args;
@@ -2122,8 +2131,17 @@ u32 num_args;
 } _ZN4main3ast8CallDataE;
 
 
+typedef struct _ZN4main3ast8CastDataE _ZN4main3ast8CastDataE;
+#line 267 "src/ast.z"
+typedef struct _ZN4main3ast8CastDataE {
+_ZN4main3ast4ExprE*  inner;
+_ZN4main3ast7AstTypeE*  ast_ty;
+_ZN4main3ast2TyE*  ty;
+} _ZN4main3ast8CastDataE;
+
+
 typedef struct _ZN4main3ast15ConditionalDataE _ZN4main3ast15ConditionalDataE;
-#line 262 "src/ast.z"
+#line 273 "src/ast.z"
 typedef struct _ZN4main3ast15ConditionalDataE {
 _ZN4main3ast4ExprE*  condition;
 _ZN4main3ast4ExprE*  then;
@@ -2132,7 +2150,7 @@ _ZN4main3ast4ExprE*  otherwise;
 
 
 typedef struct _ZN4main3ast9WhileDataE _ZN4main3ast9WhileDataE;
-#line 268 "src/ast.z"
+#line 279 "src/ast.z"
 typedef struct _ZN4main3ast9WhileDataE {
 _ZN4main3ast4ExprE*  condition;
 _ZN4main3ast4ExprE*  body;
@@ -2140,7 +2158,7 @@ _ZN4main3ast4ExprE*  body;
 
 
 typedef struct _ZN4main3ast12IndexingDataE _ZN4main3ast12IndexingDataE;
-#line 273 "src/ast.z"
+#line 284 "src/ast.z"
 typedef struct _ZN4main3ast12IndexingDataE {
 _ZN4main3ast4ExprE*  array;
 _ZN4main3ast4ExprE*  index;
@@ -2148,7 +2166,7 @@ _ZN4main3ast4ExprE*  index;
 
 
 typedef struct _ZN4main3ast9FieldDataE _ZN4main3ast9FieldDataE;
-#line 278 "src/ast.z"
+#line 289 "src/ast.z"
 typedef struct _ZN4main3ast9FieldDataE {
 _ZN4main3ast4ExprE*  strct;
 _ZN4main3ast5IdentE ident;
@@ -2156,7 +2174,7 @@ _ZN4main3ast5IdentE ident;
 
 
 typedef struct _ZN4main3ast9UnaryDataE _ZN4main3ast9UnaryDataE;
-#line 283 "src/ast.z"
+#line 294 "src/ast.z"
 typedef struct _ZN4main3ast9UnaryDataE {
 _ZN4main3ast17UnaryOperatorKindE op;
 _ZN4main3ast4ExprE*  inner;
@@ -2164,7 +2182,7 @@ _ZN4main3ast4ExprE*  inner;
 
 
 typedef struct _ZN4main3ast14AssignmentDataE _ZN4main3ast14AssignmentDataE;
-#line 288 "src/ast.z"
+#line 299 "src/ast.z"
 typedef struct _ZN4main3ast14AssignmentDataE {
 _ZN4main3ast4ExprE*  left;
 _ZN4main3ast4ExprE*  right;
@@ -2172,19 +2190,21 @@ _ZN4main3ast4ExprE*  right;
 
 
 typedef struct _ZN4main3ast7LetDataE _ZN4main3ast7LetDataE;
-#line 293 "src/ast.z"
+#line 304 "src/ast.z"
 typedef struct _ZN4main3ast7LetDataE {
 _ZN4main3ast7PatternE pat;
 _ZN4main3ast4ExprE*  value;
 _ZN4main3ast7AstTypeE*  ast_ty;
+_ZN4main3ast2TyE*  ty;
 } _ZN4main3ast7LetDataE;
 
 
-#line 299 "src/ast.z"
+#line 311 "src/ast.z"
 typedef enum _ZN4main3ast8ExprKindE {
 ExprKind_Binary,
 ExprKind_Block,
 ExprKind_Call,
+ExprKind_Cast,
 ExprKind_Conditional,
 ExprKind_Field,
 ExprKind_Indexing,
@@ -2203,11 +2223,12 @@ ExprKind_Empty,
 
 
 typedef union _ZN4main3ast12ExprKindNodeE _ZN4main3ast12ExprKindNodeE;
-#line 319 "src/ast.z"
+#line 332 "src/ast.z"
 typedef union _ZN4main3ast12ExprKindNodeE {
 _ZN4main3ast10BinaryDataE binary;
 _ZN4main3ast5BlockE*  block;
 _ZN4main3ast8CallDataE call;
+_ZN4main3ast8CastDataE _cast;
 _ZN4main3ast15ConditionalDataE conditional;
 bool control_flow_is_continue;
 _ZN4main3ast9FieldDataE field;
@@ -2224,7 +2245,7 @@ _ZN4main3ast7LetDataE _let;
 
 
 typedef struct _ZN4main3ast4ExprE _ZN4main3ast4ExprE;
-#line 337 "src/ast.z"
+#line 351 "src/ast.z"
 typedef struct _ZN4main3ast4ExprE {
 _ZN4main10source_map4SpanE span;
 _ZN4main3ast8ExprKindE kind;
@@ -2234,7 +2255,7 @@ _ZN4main3ast2TyE*  ty;
 
 
 typedef struct _ZN4main3ast5BlockE _ZN4main3ast5BlockE;
-#line 344 "src/ast.z"
+#line 358 "src/ast.z"
 typedef struct _ZN4main3ast5BlockE {
 _ZN4main3ast4ExprE* *  exprs;
 u32 num_exprs;
@@ -2242,7 +2263,7 @@ _ZN4main10source_map4SpanE span;
 } _ZN4main3ast5BlockE;
 
 
-#line 350 "src/ast.z"
+#line 364 "src/ast.z"
 typedef enum _ZN4main3ast14VisibilityKindE {
 VisibilityKind_Public,
 VisibilityKind_Private,
@@ -2250,14 +2271,14 @@ VisibilityKind_Private,
 
 
 typedef struct _ZN4main3ast10VisibilityE _ZN4main3ast10VisibilityE;
-#line 355 "src/ast.z"
+#line 369 "src/ast.z"
 typedef struct _ZN4main3ast10VisibilityE {
 _ZN4main3ast14VisibilityKindE kind;
 } _ZN4main3ast10VisibilityE;
 
 
 typedef struct _ZN4main3ast13CompoundFieldE _ZN4main3ast13CompoundFieldE;
-#line 359 "src/ast.z"
+#line 373 "src/ast.z"
 typedef struct _ZN4main3ast13CompoundFieldE {
 _ZN4main3ast5IdentE ident;
 _ZN4main3ast7AstTypeE*  ast_ty;
@@ -2265,49 +2286,54 @@ _ZN4main3ast7AstTypeE*  ast_ty;
 
 
 typedef struct _ZN4main3ast12CompoundDataE _ZN4main3ast12CompoundDataE;
-#line 364 "src/ast.z"
+#line 378 "src/ast.z"
 typedef struct _ZN4main3ast12CompoundDataE {
 _ZN4main3ast13CompoundFieldE*  fields;
 u32 num_fields;
 _ZN4main3ast8GenericsE generics;
+_ZN4main3ast2TyE*  ty;
 } _ZN4main3ast12CompoundDataE;
 
 
 typedef struct _ZN4main3ast11EnumVariantE _ZN4main3ast11EnumVariantE;
-#line 370 "src/ast.z"
+#line 385 "src/ast.z"
 typedef struct _ZN4main3ast11EnumVariantE {
 _ZN4main3ast5IdentE ident;
+_ZN4main3ast4ItemE*  _enum;
 } _ZN4main3ast11EnumVariantE;
 
 
 typedef struct _ZN4main3ast8EnumDataE _ZN4main3ast8EnumDataE;
-#line 374 "src/ast.z"
+#line 390 "src/ast.z"
 typedef struct _ZN4main3ast8EnumDataE {
 _ZN4main3ast11EnumVariantE*  variants;
 u32 num_variants;
+_ZN4main3ast2TyE*  ty;
 } _ZN4main3ast8EnumDataE;
 
 
 typedef struct _ZN4main3ast17FunctionParameterE _ZN4main3ast17FunctionParameterE;
-#line 379 "src/ast.z"
+#line 396 "src/ast.z"
 typedef struct _ZN4main3ast17FunctionParameterE {
 _ZN4main3ast7PatternE pat;
 _ZN4main3ast7AstTypeE*  ast_ty;
+_ZN4main3ast2TyE*  ty;
 } _ZN4main3ast17FunctionParameterE;
 
 
 typedef struct _ZN4main3ast14FunctionHeaderE _ZN4main3ast14FunctionHeaderE;
-#line 385 "src/ast.z"
+#line 403 "src/ast.z"
 typedef struct _ZN4main3ast14FunctionHeaderE {
 _ZN4main3ast17FunctionParameterE*  parameters;
 u32 num_parameters;
-_ZN4main3ast7AstTypeE*  output_ast;
+_ZN4main3ast7AstTypeE*  output_ast_ty;
 _ZN4main3ast8GenericsE generics;
+_ZN4main3ast2TyE*  ty;
 } _ZN4main3ast14FunctionHeaderE;
 
 
 typedef struct _ZN4main3ast12FunctionDataE _ZN4main3ast12FunctionDataE;
-#line 392 "src/ast.z"
+#line 411 "src/ast.z"
 typedef struct _ZN4main3ast12FunctionDataE {
 _ZN4main3ast14FunctionHeaderE header;
 _ZN4main3ast4ExprE*  body;
@@ -2315,16 +2341,17 @@ _ZN4main3ast4ExprE*  body;
 
 
 typedef struct _ZN4main3ast12VariableDataE _ZN4main3ast12VariableDataE;
-#line 398 "src/ast.z"
+#line 417 "src/ast.z"
 typedef struct _ZN4main3ast12VariableDataE {
 _ZN4main3ast7AstTypeE*  ast_ty;
+_ZN4main3ast2TyE*  ty;
 bool mutable;
 _ZN4main3ast4ExprE*  body;
 } _ZN4main3ast12VariableDataE;
 
 
 typedef union _ZN4main3ast12ItemKindNodeE _ZN4main3ast12ItemKindNodeE;
-#line 404 "src/ast.z"
+#line 424 "src/ast.z"
 typedef union _ZN4main3ast12ItemKindNodeE {
 _ZN4main3ast12CompoundDataE compound;
 _ZN4main3ast8EnumDataE _enum;
@@ -2335,7 +2362,7 @@ _ZN4main3ast4PathE _use;
 } _ZN4main3ast12ItemKindNodeE;
 
 
-#line 413 "src/ast.z"
+#line 433 "src/ast.z"
 typedef enum _ZN4main3ast8ItemKindE {
 ItemKind_Const,
 ItemKind_Enum,
@@ -2349,7 +2376,7 @@ ItemKind_Variable,
 
 
 typedef struct _ZN4main3ast4ItemE _ZN4main3ast4ItemE;
-#line 424 "src/ast.z"
+#line 444 "src/ast.z"
 typedef struct _ZN4main3ast4ItemE {
 _ZN4main3ast5IdentE ident;
 _ZN4main3ast8ItemKindE kind;
@@ -2361,7 +2388,7 @@ bool should_mangle;
 
 
 typedef struct _ZN4main3ast3AstE _ZN4main3ast3AstE;
-#line 433 "src/ast.z"
+#line 453 "src/ast.z"
 typedef struct _ZN4main3ast3AstE {
 _ZN4main3ast4ItemE*  items;
 u32 num_items;
@@ -2369,28 +2396,28 @@ _ZN4main3ast6ModuleE*  root_module;
 } _ZN4main3ast3AstE;
 
 
-#line 440 "src/ast.z"
+#line 460 "src/ast.z"
 _ZN4main3ast4ExprE*  _ZN4main3ast15ast_create_exprE(_ZN4main3ast3AstE*  ast, _ZN4main3ast8ExprKindE kind) {
-#line 441 "src/ast.z"
+#line 461 "src/ast.z"
 _ZN4main3ast4ExprE*  expr = malloc(sizeof(_ZN4main3ast4ExprE)) ;
 ;
-#line 442 "src/ast.z"
+#line 462 "src/ast.z"
 expr->kind = kind;
 ;
-#line 444 "src/ast.z"
+#line 464 "src/ast.z"
 return expr;
 ;
 }
 
-#line 447 "src/ast.z"
+#line 467 "src/ast.z"
 _ZN4main3ast4ItemE*  _ZN4main3ast15ast_create_itemE(_ZN4main3ast3AstE*  ast) {
-#line 449 "src/ast.z"
+#line 469 "src/ast.z"
 _ZN4main3ast4ItemE*  item = &ast->items[ast->num_items];
 ;
-#line 450 "src/ast.z"
+#line 470 "src/ast.z"
 ast->num_items = (ast->num_items+ 1);
 ;
-#line 452 "src/ast.z"
+#line 472 "src/ast.z"
 return item;
 ;
 }
@@ -2561,7 +2588,7 @@ _ZN4main3ast4PathE _ZN4main6parser10parse_pathE(_ZN4main6parser14ParsingContextE
 _ZN4main3ast4PathE path ;
 ;
 #line 89 "src/parser.z"
-path.segments = malloc((8* 4)) ;
+path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* 6)) ;
 ;
 #line 90 "src/parser.z"
 path.num_segments = 0;
@@ -4061,221 +4088,227 @@ while ( !_ZN4main6parser6acceptE(ctx,TokenKind_RightCurly) )
 item->node._enum.variants[item->node._enum.num_variants].ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
 #line 588 "src/parser.z"
-item->node._enum.num_variants = (item->node._enum.num_variants+ 1);
+item->node._enum.variants[item->node._enum.num_variants]._enum = item;
 ;
 #line 589 "src/parser.z"
+item->node._enum.num_variants = (item->node._enum.num_variants+ 1);
+;
+#line 590 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Comma) ;
 }
 ;
 }
 
-#line 593 "src/parser.z"
-_ZN4main3ast14FunctionHeaderE _ZN4main6parser21parse_function_headerE(_ZN4main6parser14ParsingContextE*  ctx) {
 #line 594 "src/parser.z"
+_ZN4main3ast14FunctionHeaderE _ZN4main6parser21parse_function_headerE(_ZN4main6parser14ParsingContextE*  ctx) {
+#line 595 "src/parser.z"
 _ZN4main3ast14FunctionHeaderE header ;
 ;
-#line 596 "src/parser.z"
+#line 597 "src/parser.z"
 header.parameters = malloc((sizeof(_ZN4main3ast17FunctionParameterE)* 16)) ;
 ;
-#line 597 "src/parser.z"
+#line 598 "src/parser.z"
 header.num_parameters = 0;
 ;
-#line 599 "src/parser.z"
+#line 600 "src/parser.z"
 if (_ZN4main6parser10can_acceptE(ctx,TokenKind_Less) ){
-#line 599 "src/parser.z"
+#line 600 "src/parser.z"
 header.generics = _ZN4main6parser14parse_genericsE(ctx) ;
 ;
 }
 else {
-#line 600 "src/parser.z"
+#line 601 "src/parser.z"
 header.generics.num_parameters = 0;
 ;
 }
 ;
-#line 602 "src/parser.z"
+#line 603 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_LeftParen) ;
-#line 604 "src/parser.z"
+#line 605 "src/parser.z"
 while ( !_ZN4main6parser6acceptE(ctx,TokenKind_RightParen) )
 {
-#line 606 "src/parser.z"
+#line 607 "src/parser.z"
 header.parameters[header.num_parameters].pat = _ZN4main6parser13parse_patternE(ctx) ;
 ;
-#line 608 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
 #line 609 "src/parser.z"
+_ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
+#line 610 "src/parser.z"
 _ZN4main3ast7AstTypeE*  type = _ZN4main6parser10parse_typeE(ctx) ;
 ;
-#line 610 "src/parser.z"
+#line 611 "src/parser.z"
 header.parameters[header.num_parameters].ast_ty = type;
 ;
-#line 611 "src/parser.z"
+#line 612 "src/parser.z"
 header.num_parameters = (header.num_parameters+ 1);
 ;
-#line 613 "src/parser.z"
+#line 614 "src/parser.z"
 _ZN4main6parser6acceptE(ctx,TokenKind_Comma) ;
 }
 ;
-#line 616 "src/parser.z"
+#line 617 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_Arrow) ){
-#line 616 "src/parser.z"
-header.output_ast = _ZN4main6parser10parse_typeE(ctx) ;
+#line 617 "src/parser.z"
+header.output_ast_ty = _ZN4main6parser10parse_typeE(ctx) ;
 ;
 }
 else {
-#line 619 "src/parser.z"
+#line 620 "src/parser.z"
 _ZN4main3ast7AstTypeE*  output = malloc(sizeof(_ZN4main3ast7AstTypeE)) ;
 ;
-#line 620 "src/parser.z"
+#line 621 "src/parser.z"
 output->kind = AstTypeKind_Void;
 ;
-#line 621 "src/parser.z"
-header.output_ast = output;
+#line 622 "src/parser.z"
+header.output_ast_ty = output;
 ;
 }
 ;
-#line 624 "src/parser.z"
+#line 625 "src/parser.z"
 return header;
 ;
 }
 
-#line 627 "src/parser.z"
+#line 628 "src/parser.z"
 void  _ZN4main6parser19parse_function_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 629 "src/parser.z"
+#line 630 "src/parser.z"
 item->kind = ItemKind_Function;
 ;
-#line 631 "src/parser.z"
+#line 632 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Fn) ;
-#line 633 "src/parser.z"
+#line 634 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 635 "src/parser.z"
+#line 636 "src/parser.z"
 _ZN4main7session7SessionE*  sess = ctx->sess;
 ;
-#line 636 "src/parser.z"
+#line 637 "src/parser.z"
 if ((item->ident.name.x== _ZN4main9interning6internE(&sess->interner,"main") .x)){
-#line 636 "src/parser.z"
+#line 637 "src/parser.z"
 item->should_mangle = false;
 ;
 }
 ;
-#line 638 "src/parser.z"
+#line 639 "src/parser.z"
 item->node.function.header = _ZN4main6parser21parse_function_headerE(ctx) ;
 ;
-#line 640 "src/parser.z"
+#line 641 "src/parser.z"
 if ((_ZN4main6parser10look_aheadE(ctx,0) .kind== TokenKind_LeftCurly)){
-#line 640 "src/parser.z"
+#line 641 "src/parser.z"
 item->node.function.body = _ZN4main6parser16parse_expressionE(ctx,0) ;
 ;
 }
 else {
-#line 641 "src/parser.z"
+#line 642 "src/parser.z"
 item->node.function.body = 0;
 ;
 }
 ;
 }
 
-#line 644 "src/parser.z"
-void  _ZN4main6parser9parse_useE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
 #line 645 "src/parser.z"
+void  _ZN4main6parser9parse_useE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 646 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Use) ;
-#line 647 "src/parser.z"
+#line 648 "src/parser.z"
 item->kind = ItemKind_Use;
 ;
-#line 648 "src/parser.z"
+#line 649 "src/parser.z"
 item->node._use = _ZN4main6parser10parse_pathE(ctx) ;
 ;
 #line 650 "src/parser.z"
+item->ident.name.x = 0;
+;
+#line 652 "src/parser.z"
 _ZN4main6parser6acceptE(ctx,TokenKind_Semicolon) ;
 }
 
-#line 653 "src/parser.z"
+#line 655 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser15parse_mod_innerE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast5IdentE name) ;
 
-#line 654 "src/parser.z"
+#line 656 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser18parse_mod_externalE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast, char*  path, _ZN4main3ast6ModuleE*  parent) ;
 
-#line 656 "src/parser.z"
+#line 658 "src/parser.z"
 void  _ZN4main6parser9parse_modE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 657 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Mod) ;
 #line 659 "src/parser.z"
+_ZN4main6parser6expectE(ctx,TokenKind_Mod) ;
+#line 661 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 660 "src/parser.z"
+#line 662 "src/parser.z"
 item->kind = ItemKind_Module;
 ;
-#line 662 "src/parser.z"
+#line 664 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_LeftCurly) ){
-#line 662 "src/parser.z"
+#line 664 "src/parser.z"
 item->node.module = _ZN4main6parser15parse_mod_innerE(ctx,item->ident) ;
 ;
 }
 else {
-#line 664 "src/parser.z"
+#line 666 "src/parser.z"
 _ZN4main7session7SessionE*  sess = ctx->sess;
 ;
-#line 665 "src/parser.z"
+#line 667 "src/parser.z"
 char*  path = _ZN4main9interning7get_strE(&sess->interner,item->ident.name) ;
 ;
-#line 666 "src/parser.z"
+#line 668 "src/parser.z"
 item->node.module = _ZN4main6parser18parse_mod_externalE(ctx->sess,ctx->ast,path,ctx->current_module) ;
 ;
 }
 ;
 }
 
-#line 671 "src/parser.z"
-_ZN4main3ast4ItemE*  _ZN4main6parser10parse_itemE(_ZN4main6parser14ParsingContextE*  ctx) {
 #line 673 "src/parser.z"
+_ZN4main3ast4ItemE*  _ZN4main6parser10parse_itemE(_ZN4main6parser14ParsingContextE*  ctx) {
+#line 675 "src/parser.z"
 _ZN4main3ast4ItemE*  item = _ZN4main3ast15ast_create_itemE(ctx->ast) ;
 ;
-#line 674 "src/parser.z"
+#line 676 "src/parser.z"
 item->span.from = _ZN4main6parser10span_startE(ctx) ;
 ;
-#line 675 "src/parser.z"
+#line 677 "src/parser.z"
 item->should_mangle = !_ZN4main6parser6acceptE(ctx,TokenKind_Extern) ;
 ;
-#line 677 "src/parser.z"
+#line 679 "src/parser.z"
 _ZN4main6tokens5TokenE tok = _ZN4main6parser10look_aheadE(ctx,0) ;
 ;
-#line 679 "src/parser.z"
+#line 681 "src/parser.z"
 if ((tok.kind== TokenKind_Fn)){
-#line 679 "src/parser.z"
+#line 681 "src/parser.z"
 _ZN4main6parser19parse_function_declE(ctx,item) ;
 }
 else {
-#line 680 "src/parser.z"
+#line 682 "src/parser.z"
 if (((tok.kind== TokenKind_Struct)|| (tok.kind== TokenKind_Union))){
-#line 680 "src/parser.z"
+#line 682 "src/parser.z"
 _ZN4main6parser19parse_compound_declE(ctx,item) ;
 }
 else {
-#line 681 "src/parser.z"
+#line 683 "src/parser.z"
 if ((tok.kind== TokenKind_Enum)){
-#line 681 "src/parser.z"
+#line 683 "src/parser.z"
 _ZN4main6parser15parse_enum_declE(ctx,item) ;
 }
 else {
-#line 682 "src/parser.z"
+#line 684 "src/parser.z"
 if (((tok.kind== TokenKind_Var)|| (tok.kind== TokenKind_Val))){
-#line 682 "src/parser.z"
+#line 684 "src/parser.z"
 _ZN4main6parser19parse_variable_declE(ctx,item) ;
 }
 else {
-#line 683 "src/parser.z"
+#line 685 "src/parser.z"
 if ((tok.kind== TokenKind_Use)){
-#line 683 "src/parser.z"
+#line 685 "src/parser.z"
 _ZN4main6parser9parse_useE(ctx,item) ;
 }
 else {
-#line 684 "src/parser.z"
+#line 686 "src/parser.z"
 if ((tok.kind== TokenKind_Mod)){
-#line 684 "src/parser.z"
+#line 686 "src/parser.z"
 _ZN4main6parser9parse_modE(ctx,item) ;
 }
 else {
-#line 685 "src/parser.z"
+#line 687 "src/parser.z"
 _ZN4main5error10emit_errorE(ctx->source_map,tok.span,"Unexpected token on top-level") ;
 }
 ;
@@ -4289,216 +4322,219 @@ _ZN4main5error10emit_errorE(ctx->source_map,tok.span,"Unexpected token on top-le
 ;
 }
 ;
-#line 687 "src/parser.z"
-_ZN4main6parser6acceptE(ctx,TokenKind_Semicolon) ;
 #line 689 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_Semicolon) ;
+#line 691 "src/parser.z"
 item->span.to = _ZN4main6parser8span_endE(ctx) ;
 ;
-#line 690 "src/parser.z"
+#line 692 "src/parser.z"
 return item;
 ;
 }
 
-#line 693 "src/parser.z"
+#line 695 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser15parse_mod_innerE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast5IdentE name) {
-#line 694 "src/parser.z"
+#line 696 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = malloc(sizeof(_ZN4main3ast6ModuleE)) ;
 ;
-#line 695 "src/parser.z"
+#line 697 "src/parser.z"
 module->span.from = _ZN4main6parser10span_startE(ctx) ;
 ;
-#line 696 "src/parser.z"
+#line 698 "src/parser.z"
 module->items = malloc((8* 2048)) ;
 ;
-#line 697 "src/parser.z"
+#line 699 "src/parser.z"
 module->num_items = 0;
 ;
-#line 698 "src/parser.z"
+#line 700 "src/parser.z"
 module->index_lookup = _ZN4main6intmap13intmap_createE(2048) ;
 ;
-#line 699 "src/parser.z"
+#line 701 "src/parser.z"
 module->index = malloc((sizeof(_ZN4main3ast10IndexEntryE)* 2048)) ;
 ;
-#line 700 "src/parser.z"
+#line 702 "src/parser.z"
 module->num_indices = 1;
 ;
-#line 701 "src/parser.z"
+#line 703 "src/parser.z"
 module->parent = ctx->current_module;
 ;
-#line 703 "src/parser.z"
+#line 705 "src/parser.z"
 _ZN4main3ast6ModuleE*  parent = module->parent;
 ;
-#line 705 "src/parser.z"
+#line 707 "src/parser.z"
 if (parent){
-#line 705 "src/parser.z"
+#line 707 "src/parser.z"
 module->path.num_segments = (parent->path.num_segments+ 1);
 ;
 }
 else {
-#line 706 "src/parser.z"
+#line 708 "src/parser.z"
 module->path.num_segments = 1;
 ;
 }
 ;
-#line 708 "src/parser.z"
+#line 710 "src/parser.z"
 module->path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* module->path.num_segments)) ;
 ;
-#line 709 "src/parser.z"
+#line 711 "src/parser.z"
 if (parent){
-#line 709 "src/parser.z"
+#line 711 "src/parser.z"
 memcpy(module->path.segments,parent->path.segments,(parent->path.num_segments* sizeof(_ZN4main3ast5IdentE))) ;
 }
 ;
-#line 710 "src/parser.z"
+#line 712 "src/parser.z"
 module->path.segments[(module->path.num_segments- 1)] = name;
 ;
-#line 712 "src/parser.z"
+#line 714 "src/parser.z"
 ctx->current_module = module;
 ;
-#line 714 "src/parser.z"
+#line 716 "src/parser.z"
 while ( (!_ZN4main6parser6acceptE(ctx,TokenKind_RightCurly) && !_ZN4main6parser15is_done_parsingE(ctx) ))
 {
-#line 715 "src/parser.z"
+#line 717 "src/parser.z"
 module->items[module->num_items] = _ZN4main6parser10parse_itemE(ctx) ;
 ;
-#line 716 "src/parser.z"
+#line 718 "src/parser.z"
 module->num_items = (module->num_items+ 1);
 ;
 }
 ;
-#line 719 "src/parser.z"
+#line 721 "src/parser.z"
 module->span.to = _ZN4main6parser8span_endE(ctx) ;
 ;
-#line 721 "src/parser.z"
+#line 723 "src/parser.z"
 ctx->current_module = module->parent;
 ;
-#line 723 "src/parser.z"
+#line 725 "src/parser.z"
 return module;
 ;
 }
 
-#line 726 "src/parser.z"
-_ZN4main3ast6ModuleE*  _ZN4main6parser18parse_mod_externalE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast, char*  path, _ZN4main3ast6ModuleE*  parent) {
 #line 728 "src/parser.z"
+_ZN4main3ast6ModuleE*  _ZN4main6parser18parse_mod_externalE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast, char*  path, _ZN4main3ast6ModuleE*  parent) {
+#line 730 "src/parser.z"
 _ZN4main10source_map10SourceFileE*  source_file = _ZN4main10source_map19source_map_new_fileE(&sess->source,sess->root_path,path) ;
 ;
-#line 730 "src/parser.z"
+#line 732 "src/parser.z"
 u32 num_tokens ;
 ;
-#line 731 "src/parser.z"
+#line 733 "src/parser.z"
 _ZN4main6tokens5TokenE*  tokens = _ZN4main5lexer3lexE(sess,source_file,&num_tokens) ;
 ;
-#line 733 "src/parser.z"
+#line 735 "src/parser.z"
 _ZN4main6parser14ParsingContextE ctx ;
 ;
-#line 734 "src/parser.z"
+#line 736 "src/parser.z"
 ctx.current_token = 0;
 ;
-#line 735 "src/parser.z"
+#line 737 "src/parser.z"
 ctx.tokens = tokens;
 ;
-#line 736 "src/parser.z"
+#line 738 "src/parser.z"
 ctx.num_tokens = num_tokens;
 ;
-#line 737 "src/parser.z"
+#line 739 "src/parser.z"
 ctx.source_map = &sess->source;
 ;
-#line 738 "src/parser.z"
+#line 740 "src/parser.z"
 ctx.sess = sess;
 ;
-#line 739 "src/parser.z"
+#line 741 "src/parser.z"
 ctx.ast = ast;
 ;
-#line 740 "src/parser.z"
+#line 742 "src/parser.z"
 ctx.current_module = parent;
 ;
-#line 742 "src/parser.z"
+#line 744 "src/parser.z"
 _ZN4main3ast5IdentE name_ident ;
 ;
-#line 743 "src/parser.z"
+#line 745 "src/parser.z"
 name_ident.name = _ZN4main9interning6internE(&sess->interner,path) ;
 ;
-#line 744 "src/parser.z"
+#line 746 "src/parser.z"
 name_ident.span.from = 0;
 ;
-#line 745 "src/parser.z"
+#line 747 "src/parser.z"
 name_ident.span.to = 0;
 ;
-#line 747 "src/parser.z"
+#line 749 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = _ZN4main6parser15parse_mod_innerE(&ctx,name_ident) ;
 ;
-#line 749 "src/parser.z"
+#line 751 "src/parser.z"
 return module;
 ;
 }
 
-#line 752 "src/parser.z"
-_ZN4main3ast6ModuleE*  _ZN4main6parser18create_root_moduleE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast, char*  path) {
 #line 754 "src/parser.z"
+_ZN4main3ast6ModuleE*  _ZN4main6parser18create_root_moduleE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast, char*  path) {
+#line 756 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = malloc(sizeof(_ZN4main3ast6ModuleE)) ;
 ;
-#line 755 "src/parser.z"
+#line 757 "src/parser.z"
 module->items = malloc((8* 2048)) ;
 ;
-#line 756 "src/parser.z"
+#line 758 "src/parser.z"
 module->index_lookup = _ZN4main6intmap13intmap_createE(2048) ;
 ;
-#line 757 "src/parser.z"
+#line 759 "src/parser.z"
 module->index = malloc((sizeof(_ZN4main3ast10IndexEntryE)* 2048)) ;
 ;
-#line 758 "src/parser.z"
+#line 760 "src/parser.z"
 module->num_indices = 1;
 ;
-#line 759 "src/parser.z"
+#line 761 "src/parser.z"
 module->parent = _ZN4main4cstd4nullE;
 ;
-#line 761 "src/parser.z"
+#line 762 "src/parser.z"
+module->path.num_segments = 0;
+;
+#line 764 "src/parser.z"
 _ZN4main3ast4ItemE*  main_item = _ZN4main3ast15ast_create_itemE(ast) ;
 ;
-#line 762 "src/parser.z"
+#line 765 "src/parser.z"
 main_item->kind = ItemKind_Module;
 ;
-#line 763 "src/parser.z"
+#line 766 "src/parser.z"
 main_item->ident.name = _ZN4main9interning6internE(&sess->interner,path) ;
 ;
-#line 765 "src/parser.z"
+#line 768 "src/parser.z"
 _ZN4main3ast6ModuleE*  main_module = _ZN4main6parser18parse_mod_externalE(sess,ast,path,module) ;
 ;
-#line 766 "src/parser.z"
+#line 769 "src/parser.z"
 main_item->span.from = main_module->span.from;
 ;
-#line 767 "src/parser.z"
+#line 770 "src/parser.z"
 main_item->span.to = main_module->span.to;
 ;
-#line 768 "src/parser.z"
+#line 771 "src/parser.z"
 main_item->node.module = main_module;
 ;
-#line 769 "src/parser.z"
+#line 772 "src/parser.z"
 module->items[0] = main_item;
 ;
-#line 770 "src/parser.z"
+#line 773 "src/parser.z"
 module->num_items = 1;
 ;
-#line 772 "src/parser.z"
+#line 775 "src/parser.z"
 return module;
 ;
 }
 
-#line 775 "src/parser.z"
+#line 778 "src/parser.z"
 _ZN4main3ast3AstE _ZN4main6parser5parseE(_ZN4main7session7SessionE*  sess, char*  root_module_name) {
-#line 777 "src/parser.z"
+#line 780 "src/parser.z"
 _ZN4main3ast3AstE ast ;
 ;
-#line 779 "src/parser.z"
+#line 782 "src/parser.z"
 ast.items = malloc((sizeof(_ZN4main3ast4ItemE)* 2048)) ;
 ;
-#line 780 "src/parser.z"
+#line 783 "src/parser.z"
 ast.num_items = 1;
 ;
-#line 782 "src/parser.z"
+#line 785 "src/parser.z"
 ast.root_module = _ZN4main6parser18create_root_moduleE(sess,&ast,root_module_name) ;
 ;
-#line 784 "src/parser.z"
+#line 787 "src/parser.z"
 return ast;
 ;
 }
@@ -4510,23 +4546,39 @@ return ast;
 
 
 
-typedef struct _ZN4main10resolution12VariableInfoE _ZN4main10resolution12VariableInfoE;
 #line 8 "src/resolution.z"
+typedef enum _ZN4main10resolution16VariableInfoKindE {
+VariableInfoKind_Variable,
+VariableInfoKind_Parameter,
+} _ZN4main10resolution16VariableInfoKindE;
+
+
+typedef union _ZN4main10resolution16VariableInfoNodeE _ZN4main10resolution16VariableInfoNodeE;
+#line 13 "src/resolution.z"
+typedef union _ZN4main10resolution16VariableInfoNodeE {
+_ZN4main3ast7LetDataE*  variable;
+_ZN4main3ast17FunctionParameterE*  parameter;
+} _ZN4main10resolution16VariableInfoNodeE;
+
+
+typedef struct _ZN4main10resolution12VariableInfoE _ZN4main10resolution12VariableInfoE;
+#line 18 "src/resolution.z"
 typedef struct _ZN4main10resolution12VariableInfoE {
 _ZN4main3ast5IdentE ident;
-u32 slot;
+_ZN4main10resolution16VariableInfoKindE kind;
+_ZN4main10resolution16VariableInfoNodeE node;
 } _ZN4main10resolution12VariableInfoE;
 
 
 typedef struct _ZN4main10resolution13VariableBlockE _ZN4main10resolution13VariableBlockE;
-#line 13 "src/resolution.z"
+#line 24 "src/resolution.z"
 typedef struct _ZN4main10resolution13VariableBlockE {
 _ZN4main10resolution12VariableInfoE*  variables;
 u32 num_variables;
 } _ZN4main10resolution13VariableBlockE;
 
 
-#line 18 "src/resolution.z"
+#line 29 "src/resolution.z"
 typedef enum _ZN4main10resolution9ScopeKindE {
 ScopeKind_VariableBlock,
 ScopeKind_Module,
@@ -4534,7 +4586,7 @@ ScopeKind_Module,
 
 
 typedef union _ZN4main10resolution9ScopeNodeE _ZN4main10resolution9ScopeNodeE;
-#line 23 "src/resolution.z"
+#line 34 "src/resolution.z"
 typedef union _ZN4main10resolution9ScopeNodeE {
 _ZN4main3ast6ModuleE*  module;
 _ZN4main10resolution13VariableBlockE variable;
@@ -4542,7 +4594,7 @@ _ZN4main10resolution13VariableBlockE variable;
 
 
 typedef struct _ZN4main10resolution5ScopeE _ZN4main10resolution5ScopeE;
-#line 28 "src/resolution.z"
+#line 39 "src/resolution.z"
 typedef struct _ZN4main10resolution5ScopeE {
 _ZN4main10resolution9ScopeKindE kind;
 _ZN4main10resolution9ScopeNodeE node;
@@ -4550,7 +4602,7 @@ _ZN4main10resolution9ScopeNodeE node;
 
 
 typedef struct _ZN4main10resolution17PrimitiveTypeSidsE _ZN4main10resolution17PrimitiveTypeSidsE;
-#line 33 "src/resolution.z"
+#line 44 "src/resolution.z"
 typedef struct _ZN4main10resolution17PrimitiveTypeSidsE {
 _ZN4main9interning3SidE _void;
 _ZN4main9interning3SidE _constvoid;
@@ -4570,57 +4622,57 @@ _ZN4main9interning3SidE _f64;
 } _ZN4main10resolution17PrimitiveTypeSidsE;
 
 
-#line 51 "src/resolution.z"
+#line 62 "src/resolution.z"
 void  _ZN4main10resolution23setup_primitive_ty_sidsE(_ZN4main9interning8InternerE*  i, _ZN4main10resolution17PrimitiveTypeSidsE*  p) {
-#line 52 "src/resolution.z"
+#line 63 "src/resolution.z"
 p->_void = _ZN4main9interning6internE(i,"void") ;
 ;
-#line 53 "src/resolution.z"
+#line 64 "src/resolution.z"
 p->_constvoid = _ZN4main9interning6internE(i,"constvoid") ;
 ;
-#line 54 "src/resolution.z"
+#line 65 "src/resolution.z"
 p->_bool = _ZN4main9interning6internE(i,"bool") ;
 ;
-#line 55 "src/resolution.z"
+#line 66 "src/resolution.z"
 p->_char = _ZN4main9interning6internE(i,"char") ;
 ;
-#line 56 "src/resolution.z"
+#line 67 "src/resolution.z"
 p->_constchar = _ZN4main9interning6internE(i,"constchar") ;
 ;
-#line 57 "src/resolution.z"
+#line 68 "src/resolution.z"
 p->_i8 = _ZN4main9interning6internE(i,"i8") ;
 ;
-#line 58 "src/resolution.z"
+#line 69 "src/resolution.z"
 p->_i16 = _ZN4main9interning6internE(i,"i16") ;
 ;
-#line 59 "src/resolution.z"
+#line 70 "src/resolution.z"
 p->_i32 = _ZN4main9interning6internE(i,"i32") ;
 ;
-#line 60 "src/resolution.z"
+#line 71 "src/resolution.z"
 p->_i64 = _ZN4main9interning6internE(i,"i64") ;
 ;
-#line 61 "src/resolution.z"
+#line 72 "src/resolution.z"
 p->_u8 = _ZN4main9interning6internE(i,"u8") ;
 ;
-#line 62 "src/resolution.z"
+#line 73 "src/resolution.z"
 p->_u16 = _ZN4main9interning6internE(i,"u16") ;
 ;
-#line 63 "src/resolution.z"
+#line 74 "src/resolution.z"
 p->_u32 = _ZN4main9interning6internE(i,"u32") ;
 ;
-#line 64 "src/resolution.z"
+#line 75 "src/resolution.z"
 p->_u64 = _ZN4main9interning6internE(i,"u64") ;
 ;
-#line 65 "src/resolution.z"
+#line 76 "src/resolution.z"
 p->_f32 = _ZN4main9interning6internE(i,"f32") ;
 ;
-#line 66 "src/resolution.z"
+#line 77 "src/resolution.z"
 p->_f64 = _ZN4main9interning6internE(i,"f64") ;
 ;
 }
 
 typedef struct _ZN4main10resolution17ResolutionContextE _ZN4main10resolution17ResolutionContextE;
-#line 69 "src/resolution.z"
+#line 80 "src/resolution.z"
 typedef struct _ZN4main10resolution17ResolutionContextE {
 _ZN4main10resolution5ScopeE*  scope_stack;
 u32 stack_top;
@@ -4632,159 +4684,203 @@ _ZN4main10resolution17PrimitiveTypeSidsE primitive_ty_sids;
 } _ZN4main10resolution17ResolutionContextE;
 
 
-#line 79 "src/resolution.z"
+#line 90 "src/resolution.z"
 void  _ZN4main10resolution10push_blockE(_ZN4main10resolution17ResolutionContextE*  ctx) {
-#line 80 "src/resolution.z"
+#line 91 "src/resolution.z"
 ctx->stack_top = (ctx->stack_top+ 1);
 ;
-#line 81 "src/resolution.z"
+#line 92 "src/resolution.z"
 _ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
 ;
-#line 83 "src/resolution.z"
+#line 94 "src/resolution.z"
 scope->kind = ScopeKind_VariableBlock;
 ;
-#line 84 "src/resolution.z"
+#line 95 "src/resolution.z"
 scope->node.variable.variables = malloc((8* 32)) ;
 ;
-#line 85 "src/resolution.z"
+#line 96 "src/resolution.z"
 scope->node.variable.num_variables = 0;
 ;
 }
 
-#line 88 "src/resolution.z"
+#line 99 "src/resolution.z"
 void  _ZN4main10resolution9pop_blockE(_ZN4main10resolution17ResolutionContextE*  ctx) {
-#line 89 "src/resolution.z"
+#line 100 "src/resolution.z"
 _ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
 ;
-#line 90 "src/resolution.z"
+#line 101 "src/resolution.z"
 free(scope->node.variable.variables) ;
-#line 91 "src/resolution.z"
+#line 102 "src/resolution.z"
 ctx->stack_top = (ctx->stack_top- 1);
 ;
 }
 
-#line 94 "src/resolution.z"
-u32 _ZN4main10resolution13push_variableE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast5IdentE ident) {
-#line 95 "src/resolution.z"
-_ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
-;
-#line 96 "src/resolution.z"
-if ((scope->kind!= ScopeKind_VariableBlock)){
-#line 96 "src/resolution.z"
-abort() ;
-}
-;
-#line 97 "src/resolution.z"
-_ZN4main10resolution13VariableBlockE*  v = &scope->node.variable;
-;
-#line 98 "src/resolution.z"
-v->variables[v->num_variables].ident = ident;
-;
-#line 99 "src/resolution.z"
-v->variables[v->num_variables].slot = v->num_variables;
-;
-#line 100 "src/resolution.z"
-v->num_variables = (v->num_variables+ 1);
-;
-#line 101 "src/resolution.z"
-return v->variables[v->num_variables].slot;
-;
-}
-
-#line 104 "src/resolution.z"
-void  _ZN4main10resolution11push_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
 #line 105 "src/resolution.z"
-ctx->stack_top = (ctx->stack_top+ 1);
-;
+void  _ZN4main10resolution14push_parameterE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast5IdentE ident, _ZN4main3ast17FunctionParameterE*  data) {
 #line 106 "src/resolution.z"
 _ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
 ;
+#line 107 "src/resolution.z"
+if ((scope->kind!= ScopeKind_VariableBlock)){
+#line 107 "src/resolution.z"
+abort() ;
+}
+;
 #line 108 "src/resolution.z"
-scope->kind = ScopeKind_Module;
+_ZN4main10resolution13VariableBlockE*  v = &scope->node.variable;
 ;
 #line 109 "src/resolution.z"
+v->variables[v->num_variables].ident = ident;
+;
+#line 110 "src/resolution.z"
+v->variables[v->num_variables].kind = VariableInfoKind_Parameter;
+;
+#line 111 "src/resolution.z"
+v->variables[v->num_variables].node.parameter = data;
+;
+#line 112 "src/resolution.z"
+v->num_variables = (v->num_variables+ 1);
+;
+}
+
+#line 115 "src/resolution.z"
+void  _ZN4main10resolution13push_variableE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast5IdentE ident, _ZN4main3ast7LetDataE*  data) {
+#line 116 "src/resolution.z"
+_ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
+;
+#line 117 "src/resolution.z"
+if ((scope->kind!= ScopeKind_VariableBlock)){
+#line 117 "src/resolution.z"
+abort() ;
+}
+;
+#line 118 "src/resolution.z"
+_ZN4main10resolution13VariableBlockE*  v = &scope->node.variable;
+;
+#line 119 "src/resolution.z"
+v->variables[v->num_variables].ident = ident;
+;
+#line 120 "src/resolution.z"
+v->variables[v->num_variables].kind = VariableInfoKind_Variable;
+;
+#line 121 "src/resolution.z"
+v->variables[v->num_variables].node.variable = data;
+;
+#line 122 "src/resolution.z"
+v->num_variables = (v->num_variables+ 1);
+;
+}
+
+#line 125 "src/resolution.z"
+void  _ZN4main10resolution11push_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
+#line 126 "src/resolution.z"
+ctx->stack_top = (ctx->stack_top+ 1);
+;
+#line 127 "src/resolution.z"
+_ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[ctx->stack_top];
+;
+#line 129 "src/resolution.z"
+scope->kind = ScopeKind_Module;
+;
+#line 130 "src/resolution.z"
 scope->node.module = module;
 ;
 }
 
-#line 112 "src/resolution.z"
+#line 133 "src/resolution.z"
 void  _ZN4main10resolution10pop_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx) {
-#line 113 "src/resolution.z"
+#line 134 "src/resolution.z"
 ctx->stack_top = (ctx->stack_top- 1);
 ;
 }
 
-#line 118 "src/resolution.z"
+#line 139 "src/resolution.z"
 _ZN4main3ast4PathE _ZN4main10resolution6lookupE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast5IdentE ident) {
-#line 119 "src/resolution.z"
+#line 140 "src/resolution.z"
 i32 i = ctx->stack_top;
 ;
-#line 120 "src/resolution.z"
+#line 141 "src/resolution.z"
 while ( (i> 0))
 {
-#line 121 "src/resolution.z"
+#line 142 "src/resolution.z"
 _ZN4main10resolution5ScopeE*  scope = &ctx->scope_stack[i];
 ;
-#line 122 "src/resolution.z"
+#line 143 "src/resolution.z"
 if ((scope->kind== ScopeKind_Module)){
-#line 123 "src/resolution.z"
+#line 144 "src/resolution.z"
 _ZN4main3ast6ModuleE*  module = scope->node.module;
 ;
-#line 124 "src/resolution.z"
+#line 145 "src/resolution.z"
 u32 idx = _ZN4main6intmap13intmap_lookupE(module->index_lookup,ident.name.x) ;
 ;
-#line 125 "src/resolution.z"
+#line 146 "src/resolution.z"
 if ((idx> 0)){
-#line 126 "src/resolution.z"
+#line 147 "src/resolution.z"
 _ZN4main3ast10IndexEntryE entry = module->index[idx];
 ;
-#line 127 "src/resolution.z"
+#line 148 "src/resolution.z"
 return entry.path;
 ;
 }
 ;
 }
 else {
-#line 130 "src/resolution.z"
+#line 151 "src/resolution.z"
 if ((scope->kind== ScopeKind_VariableBlock)){
-#line 131 "src/resolution.z"
+#line 152 "src/resolution.z"
 _ZN4main10resolution13VariableBlockE*  block = &scope->node.variable;
 ;
-#line 132 "src/resolution.z"
+#line 153 "src/resolution.z"
 i32 j = (block->num_variables- 1);
 ;
-#line 133 "src/resolution.z"
+#line 154 "src/resolution.z"
 while ( (j>= 0))
 {
-#line 134 "src/resolution.z"
+#line 155 "src/resolution.z"
 _ZN4main10resolution12VariableInfoE variable = block->variables[j];
 ;
-#line 135 "src/resolution.z"
+#line 156 "src/resolution.z"
 if ((variable.ident.name.x== ident.name.x)){
-#line 136 "src/resolution.z"
+#line 157 "src/resolution.z"
 _ZN4main3ast4PathE path ;
 ;
-#line 137 "src/resolution.z"
+#line 158 "src/resolution.z"
 path.segments = malloc(sizeof(_ZN4main3ast5IdentE)) ;
 ;
-#line 138 "src/resolution.z"
+#line 159 "src/resolution.z"
 path.segments[0] = variable.ident;
 ;
-#line 139 "src/resolution.z"
+#line 160 "src/resolution.z"
 path.num_segments = 1;
 ;
-#line 140 "src/resolution.z"
+#line 161 "src/resolution.z"
+if ((variable.kind== VariableInfoKind_Variable)){
+#line 162 "src/resolution.z"
 path.binding.kind = BindingKind_Variable;
 ;
-#line 141 "src/resolution.z"
-path.binding.node.slot = variable.slot;
+#line 163 "src/resolution.z"
+path.binding.node.variable = variable.node.variable;
 ;
-#line 142 "src/resolution.z"
+}
+else {
+#line 165 "src/resolution.z"
+if ((variable.kind== VariableInfoKind_Parameter)){
+#line 166 "src/resolution.z"
+path.binding.kind = BindingKind_Parameter;
+;
+#line 167 "src/resolution.z"
+path.binding.node.parameter = variable.node.parameter;
+;
+}
+;
+}
+;
+#line 169 "src/resolution.z"
 return path;
 ;
 }
 ;
-#line 144 "src/resolution.z"
+#line 171 "src/resolution.z"
 j = (j- 1);
 ;
 }
@@ -4793,140 +4889,140 @@ j = (j- 1);
 ;
 }
 ;
-#line 147 "src/resolution.z"
+#line 174 "src/resolution.z"
 i = (i- 1);
 ;
 }
 ;
-#line 149 "src/resolution.z"
+#line 176 "src/resolution.z"
 _ZN4main5error10emit_errorE(ctx->source_map,ident.span,"Unable to resolve item") ;
-#line 150 "src/resolution.z"
+#line 177 "src/resolution.z"
 abort() ;
 }
 
-#line 153 "src/resolution.z"
+#line 180 "src/resolution.z"
 _ZN4main3ast7BindingE _ZN4main10resolution17index_use_bindingE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4PathE path) {
-#line 154 "src/resolution.z"
+#line 181 "src/resolution.z"
 _ZN4main3ast6ModuleE*  cur_mod = ctx->root_module;
 ;
-#line 155 "src/resolution.z"
+#line 182 "src/resolution.z"
 u32 i = 0;
 ;
-#line 156 "src/resolution.z"
+#line 183 "src/resolution.z"
 while ( true)
 {
-#line 157 "src/resolution.z"
+#line 184 "src/resolution.z"
 u32 j = 0;
 ;
-#line 158 "src/resolution.z"
+#line 185 "src/resolution.z"
 bool found = false;
 ;
-#line 159 "src/resolution.z"
+#line 186 "src/resolution.z"
 while ( (j< cur_mod->num_items))
 {
-#line 160 "src/resolution.z"
+#line 187 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = cur_mod->items[j];
 ;
-#line 161 "src/resolution.z"
+#line 188 "src/resolution.z"
 if ((item->ident.name.x== path.segments[i].name.x)){
-#line 162 "src/resolution.z"
+#line 189 "src/resolution.z"
 if ((item->kind== ItemKind_Module)){
-#line 163 "src/resolution.z"
+#line 190 "src/resolution.z"
 cur_mod = item->node.module;
 ;
 }
 else {
-#line 165 "src/resolution.z"
+#line 192 "src/resolution.z"
 if ((i!= (path.num_segments- 1))){
-#line 165 "src/resolution.z"
+#line 192 "src/resolution.z"
 _ZN4main5error10emit_errorE(ctx->source_map,path.span,"Invalid path in use") ;
 }
 ;
 }
 ;
-#line 167 "src/resolution.z"
+#line 194 "src/resolution.z"
 if (((i== (path.num_segments- 1))|| (path.segments[(i+ 1)].name.x== 0))){
-#line 168 "src/resolution.z"
+#line 195 "src/resolution.z"
 _ZN4main3ast7BindingE binding ;
 ;
-#line 169 "src/resolution.z"
+#line 196 "src/resolution.z"
 binding.kind = BindingKind_Item;
 ;
-#line 170 "src/resolution.z"
+#line 197 "src/resolution.z"
 binding.node.item = item;
 ;
-#line 171 "src/resolution.z"
+#line 198 "src/resolution.z"
 return binding;
 ;
 }
 ;
-#line 174 "src/resolution.z"
+#line 201 "src/resolution.z"
 found = true;
 ;
-#line 175 "src/resolution.z"
+#line 202 "src/resolution.z"
 break;
 ;
 }
 ;
-#line 177 "src/resolution.z"
+#line 204 "src/resolution.z"
 j = (j+ 1);
 ;
 }
 ;
-#line 179 "src/resolution.z"
+#line 206 "src/resolution.z"
 if (!found){
-#line 179 "src/resolution.z"
+#line 206 "src/resolution.z"
 _ZN4main5error10emit_errorE(ctx->source_map,path.span,"Unable to resolve use") ;
 }
 ;
-#line 180 "src/resolution.z"
+#line 207 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 184 "src/resolution.z"
+#line 211 "src/resolution.z"
 void  _ZN4main10resolution12absolute_useE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast4ItemE*  item) {
-#line 185 "src/resolution.z"
+#line 212 "src/resolution.z"
 _ZN4main3ast4PathE*  p = &item->node._use;
 ;
-#line 186 "src/resolution.z"
+#line 213 "src/resolution.z"
 _ZN4main3ast4PathE abs ;
 ;
-#line 187 "src/resolution.z"
+#line 214 "src/resolution.z"
 if ((p->segments[0].name.x== _ZN4main9interning6internE(ctx->interner,"self") .x)){
-#line 188 "src/resolution.z"
+#line 215 "src/resolution.z"
 abs.num_segments = ((module->path.num_segments+ p->num_segments)- 1);
 ;
-#line 189 "src/resolution.z"
+#line 216 "src/resolution.z"
 abs.segments = malloc((sizeof(_ZN4main3ast5IdentE)* abs.num_segments)) ;
 ;
-#line 190 "src/resolution.z"
+#line 217 "src/resolution.z"
 memcpy(abs.segments,module->path.segments,(sizeof(_ZN4main3ast5IdentE)* module->path.num_segments)) ;
-#line 191 "src/resolution.z"
+#line 218 "src/resolution.z"
 memcpy(&abs.segments[module->path.num_segments],&p->segments[1],(sizeof(_ZN4main3ast5IdentE)* (p->num_segments- 1))) ;
-#line 192 "src/resolution.z"
+#line 219 "src/resolution.z"
 *p = abs;
 ;
 }
 else {
-#line 194 "src/resolution.z"
+#line 221 "src/resolution.z"
 if ((p->segments[0].name.x== _ZN4main9interning6internE(ctx->interner,"super") .x)){
-#line 195 "src/resolution.z"
+#line 222 "src/resolution.z"
 _ZN4main3ast6ModuleE*  parent = module->parent;
 ;
-#line 196 "src/resolution.z"
+#line 223 "src/resolution.z"
 abs.num_segments = ((parent->path.num_segments+ p->num_segments)- 1);
 ;
-#line 197 "src/resolution.z"
+#line 224 "src/resolution.z"
 abs.segments = malloc((sizeof(_ZN4main3ast5IdentE)* abs.num_segments)) ;
 ;
-#line 198 "src/resolution.z"
+#line 225 "src/resolution.z"
 memcpy(abs.segments,parent->path.segments,(sizeof(_ZN4main3ast5IdentE)* parent->path.num_segments)) ;
-#line 199 "src/resolution.z"
+#line 226 "src/resolution.z"
 memcpy(&abs.segments[parent->path.num_segments],&p->segments[1],(sizeof(_ZN4main3ast5IdentE)* (p->num_segments- 1))) ;
-#line 200 "src/resolution.z"
+#line 227 "src/resolution.z"
 *p = abs;
 ;
 }
@@ -4935,186 +5031,186 @@ memcpy(&abs.segments[parent->path.num_segments],&p->segments[1],(sizeof(_ZN4main
 ;
 }
 
-#line 204 "src/resolution.z"
+#line 231 "src/resolution.z"
 void  _ZN4main10resolution9index_useE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 205 "src/resolution.z"
+#line 232 "src/resolution.z"
 u32 i = 0;
 ;
-#line 206 "src/resolution.z"
+#line 233 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 207 "src/resolution.z"
+#line 234 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 208 "src/resolution.z"
+#line 235 "src/resolution.z"
 if ((item->kind== ItemKind_Use)){
-#line 209 "src/resolution.z"
+#line 236 "src/resolution.z"
 _ZN4main10resolution12absolute_useE(ctx,module,item) ;
-#line 210 "src/resolution.z"
+#line 237 "src/resolution.z"
 _ZN4main3ast4PathE*  path = &item->node._use;
 ;
-#line 211 "src/resolution.z"
+#line 238 "src/resolution.z"
 path->binding = _ZN4main10resolution17index_use_bindingE(ctx,*path) ;
 ;
 }
 ;
-#line 214 "src/resolution.z"
+#line 241 "src/resolution.z"
 if ((item->kind== ItemKind_Module)){
-#line 215 "src/resolution.z"
+#line 242 "src/resolution.z"
 _ZN4main10resolution9index_useE(ctx,item->node.module) ;
 }
 ;
-#line 218 "src/resolution.z"
+#line 245 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 222 "src/resolution.z"
-void  _ZN4main10resolution8add_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast6ModuleE*  parent, _ZN4main3ast4ItemE*  item) {
-#line 224 "src/resolution.z"
-_ZN4main3ast10IndexEntryE*  idx_entry = &module->index[module->num_indices];
-;
-#line 227 "src/resolution.z"
-idx_entry->path.num_segments = (parent->path.num_segments+ 1);
-;
-#line 228 "src/resolution.z"
-idx_entry->path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* idx_entry->path.num_segments)) ;
-;
-#line 229 "src/resolution.z"
-memcpy(idx_entry->path.segments,parent->path.segments,(sizeof(_ZN4main3ast5IdentE)* parent->path.num_segments)) ;
-#line 230 "src/resolution.z"
-idx_entry->path.segments[parent->path.num_segments] = item->ident;
-;
-#line 231 "src/resolution.z"
-idx_entry->path.binding.kind = BindingKind_Item;
-;
-#line 232 "src/resolution.z"
-idx_entry->path.binding.node.item = item;
-;
-#line 234 "src/resolution.z"
-_ZN4main6intmap13intmap_insertE(module->index_lookup,item->ident.name.x,module->num_indices) ;
-#line 236 "src/resolution.z"
-module->num_indices = (module->num_indices+ 1);
-;
-}
-
-#line 240 "src/resolution.z"
-void  _ZN4main10resolution17add_absolute_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast4PathE path, _ZN4main3ast4ItemE*  item) {
-#line 242 "src/resolution.z"
-_ZN4main3ast10IndexEntryE*  idx_entry = &module->index[module->num_indices];
-;
-#line 245 "src/resolution.z"
-idx_entry->path = path;
-;
-#line 247 "src/resolution.z"
-_ZN4main6intmap13intmap_insertE(module->index_lookup,item->ident.name.x,module->num_indices) ;
 #line 249 "src/resolution.z"
-module->num_indices = (module->num_indices+ 1);
-;
-}
-
-#line 252 "src/resolution.z"
-void  _ZN4main10resolution12index_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 253 "src/resolution.z"
-u32 i = 0;
+void  _ZN4main10resolution8add_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast6ModuleE*  parent, _ZN4main3ast4ItemE*  item) {
+#line 251 "src/resolution.z"
+_ZN4main3ast10IndexEntryE*  idx_entry = &module->index[module->num_indices];
 ;
 #line 254 "src/resolution.z"
+idx_entry->path.num_segments = (parent->path.num_segments+ 1);
+;
+#line 255 "src/resolution.z"
+idx_entry->path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* idx_entry->path.num_segments)) ;
+;
+#line 256 "src/resolution.z"
+memcpy(idx_entry->path.segments,parent->path.segments,(sizeof(_ZN4main3ast5IdentE)* parent->path.num_segments)) ;
+#line 257 "src/resolution.z"
+idx_entry->path.segments[parent->path.num_segments] = item->ident;
+;
+#line 258 "src/resolution.z"
+idx_entry->path.binding.kind = BindingKind_Item;
+;
+#line 259 "src/resolution.z"
+idx_entry->path.binding.node.item = item;
+;
+#line 261 "src/resolution.z"
+_ZN4main6intmap13intmap_insertE(module->index_lookup,item->ident.name.x,module->num_indices) ;
+#line 263 "src/resolution.z"
+module->num_indices = (module->num_indices+ 1);
+;
+}
+
+#line 267 "src/resolution.z"
+void  _ZN4main10resolution17add_absolute_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast4PathE path, _ZN4main3ast4ItemE*  item) {
+#line 269 "src/resolution.z"
+_ZN4main3ast10IndexEntryE*  idx_entry = &module->index[module->num_indices];
+;
+#line 272 "src/resolution.z"
+idx_entry->path = path;
+;
+#line 274 "src/resolution.z"
+_ZN4main6intmap13intmap_insertE(module->index_lookup,item->ident.name.x,module->num_indices) ;
+#line 276 "src/resolution.z"
+module->num_indices = (module->num_indices+ 1);
+;
+}
+
+#line 279 "src/resolution.z"
+void  _ZN4main10resolution12index_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
+#line 280 "src/resolution.z"
+u32 i = 0;
+;
+#line 281 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 255 "src/resolution.z"
+#line 282 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 257 "src/resolution.z"
+#line 284 "src/resolution.z"
 if ((item->kind== ItemKind_Use)){
-#line 258 "src/resolution.z"
+#line 285 "src/resolution.z"
 _ZN4main3ast4PathE path = item->node._use;
 ;
-#line 260 "src/resolution.z"
+#line 287 "src/resolution.z"
 if ((path.segments[(path.num_segments- 1)].name.x!= 0)){
-#line 261 "src/resolution.z"
+#line 288 "src/resolution.z"
 _ZN4main10resolution17add_absolute_itemE(ctx,module,path,path.binding.node.item) ;
 }
 ;
 }
 else {
-#line 264 "src/resolution.z"
+#line 291 "src/resolution.z"
 _ZN4main10resolution8add_itemE(ctx,module,module,item) ;
 }
 ;
-#line 266 "src/resolution.z"
+#line 293 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 269 "src/resolution.z"
+#line 296 "src/resolution.z"
 i = 0;
 ;
-#line 270 "src/resolution.z"
+#line 297 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 271 "src/resolution.z"
+#line 298 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 272 "src/resolution.z"
+#line 299 "src/resolution.z"
 if ((item->kind== ItemKind_Module)){
-#line 272 "src/resolution.z"
+#line 299 "src/resolution.z"
 _ZN4main10resolution12index_moduleE(ctx,item->node.module) ;
 }
 ;
-#line 273 "src/resolution.z"
+#line 300 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 277 "src/resolution.z"
+#line 304 "src/resolution.z"
 void  _ZN4main10resolution22index_module_wildcardsE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 278 "src/resolution.z"
+#line 305 "src/resolution.z"
 u32 i = 0;
 ;
-#line 279 "src/resolution.z"
+#line 306 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 280 "src/resolution.z"
+#line 307 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 282 "src/resolution.z"
+#line 309 "src/resolution.z"
 if ((item->kind== ItemKind_Use)){
-#line 283 "src/resolution.z"
+#line 310 "src/resolution.z"
 _ZN4main3ast4PathE path = item->node._use;
 ;
-#line 284 "src/resolution.z"
+#line 311 "src/resolution.z"
 if ((path.segments[(path.num_segments- 1)].name.x== 0)){
-#line 285 "src/resolution.z"
+#line 312 "src/resolution.z"
 _ZN4main3ast4ItemE*  bound = path.binding.node.item;
 ;
-#line 286 "src/resolution.z"
+#line 313 "src/resolution.z"
 if ((bound->kind== ItemKind_Module)){
-#line 287 "src/resolution.z"
+#line 314 "src/resolution.z"
 _ZN4main3ast6ModuleE*  m = bound->node.module;
 ;
-#line 288 "src/resolution.z"
+#line 315 "src/resolution.z"
 u32 j = 0;
 ;
-#line 289 "src/resolution.z"
+#line 316 "src/resolution.z"
 while ( (j< m->num_items))
 {
-#line 290 "src/resolution.z"
+#line 317 "src/resolution.z"
 _ZN4main3ast4ItemE*  it = m->items[j];
 ;
-#line 291 "src/resolution.z"
+#line 318 "src/resolution.z"
 _ZN4main10resolution8add_itemE(ctx,module,m,it) ;
-#line 292 "src/resolution.z"
+#line 319 "src/resolution.z"
 j = (j+ 1);
 ;
 }
 ;
 }
 else {
-#line 295 "src/resolution.z"
+#line 322 "src/resolution.z"
 abort() ;
 }
 ;
@@ -5122,174 +5218,174 @@ abort() ;
 ;
 }
 ;
-#line 298 "src/resolution.z"
+#line 325 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 301 "src/resolution.z"
+#line 328 "src/resolution.z"
 i = 0;
 ;
-#line 302 "src/resolution.z"
+#line 329 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 303 "src/resolution.z"
+#line 330 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 304 "src/resolution.z"
+#line 331 "src/resolution.z"
 if ((item->kind== ItemKind_Module)){
-#line 304 "src/resolution.z"
+#line 331 "src/resolution.z"
 _ZN4main10resolution22index_module_wildcardsE(ctx,item->node.module) ;
 }
 ;
-#line 305 "src/resolution.z"
+#line 332 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 309 "src/resolution.z"
+#line 336 "src/resolution.z"
 bool _ZN4main10resolution25check_if_sid_is_primitiveE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main9interning3SidE s, _ZN4main3ast11PrimitiveTyE*  prim) {
-#line 311 "src/resolution.z"
+#line 338 "src/resolution.z"
 _ZN4main10resolution17PrimitiveTypeSidsE*  p = &ctx->primitive_ty_sids;
 ;
-#line 312 "src/resolution.z"
+#line 339 "src/resolution.z"
 if ((s.x== p->_void.x)){
-#line 312 "src/resolution.z"
+#line 339 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Void;
 ;
 }
 else {
-#line 313 "src/resolution.z"
+#line 340 "src/resolution.z"
 if ((s.x== p->_constvoid.x)){
-#line 313 "src/resolution.z"
+#line 340 "src/resolution.z"
 prim->kind = PrimitiveTyKind_ConstVoid;
 ;
 }
 else {
-#line 314 "src/resolution.z"
+#line 341 "src/resolution.z"
 if ((s.x== p->_bool.x)){
-#line 314 "src/resolution.z"
+#line 341 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Bool;
 ;
 }
 else {
-#line 315 "src/resolution.z"
+#line 342 "src/resolution.z"
 if ((s.x== p->_char.x)){
-#line 315 "src/resolution.z"
+#line 342 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Char;
 ;
 }
 else {
-#line 316 "src/resolution.z"
+#line 343 "src/resolution.z"
 if ((s.x== p->_constchar.x)){
-#line 316 "src/resolution.z"
+#line 343 "src/resolution.z"
 prim->kind = PrimitiveTyKind_ConstChar;
 ;
 }
 else {
-#line 318 "src/resolution.z"
+#line 345 "src/resolution.z"
 if ((s.x== p->_i8.x)){
-#line 318 "src/resolution.z"
+#line 345 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Signed;
 ;
-#line 318 "src/resolution.z"
+#line 345 "src/resolution.z"
 prim->node.integer = IntegerSize_I8;
 ;
 }
 else {
-#line 319 "src/resolution.z"
+#line 346 "src/resolution.z"
 if ((s.x== p->_i16.x)){
-#line 319 "src/resolution.z"
+#line 346 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Signed;
 ;
-#line 319 "src/resolution.z"
+#line 346 "src/resolution.z"
 prim->node.integer = IntegerSize_I16;
 ;
 }
 else {
-#line 320 "src/resolution.z"
+#line 347 "src/resolution.z"
 if ((s.x== p->_i32.x)){
-#line 320 "src/resolution.z"
+#line 347 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Signed;
 ;
-#line 320 "src/resolution.z"
+#line 347 "src/resolution.z"
 prim->node.integer = IntegerSize_I32;
 ;
 }
 else {
-#line 321 "src/resolution.z"
+#line 348 "src/resolution.z"
 if ((s.x== p->_i64.x)){
-#line 321 "src/resolution.z"
+#line 348 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Signed;
 ;
-#line 321 "src/resolution.z"
+#line 348 "src/resolution.z"
 prim->node.integer = IntegerSize_I64;
 ;
 }
 else {
-#line 323 "src/resolution.z"
+#line 350 "src/resolution.z"
 if ((s.x== p->_u8.x)){
-#line 323 "src/resolution.z"
+#line 350 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Unsigned;
 ;
-#line 323 "src/resolution.z"
+#line 350 "src/resolution.z"
 prim->node.integer = IntegerSize_I8;
 ;
 }
 else {
-#line 324 "src/resolution.z"
+#line 351 "src/resolution.z"
 if ((s.x== p->_u16.x)){
-#line 324 "src/resolution.z"
+#line 351 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Unsigned;
 ;
-#line 324 "src/resolution.z"
+#line 351 "src/resolution.z"
 prim->node.integer = IntegerSize_I16;
 ;
 }
 else {
-#line 325 "src/resolution.z"
+#line 352 "src/resolution.z"
 if ((s.x== p->_u32.x)){
-#line 325 "src/resolution.z"
+#line 352 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Unsigned;
 ;
-#line 325 "src/resolution.z"
+#line 352 "src/resolution.z"
 prim->node.integer = IntegerSize_I32;
 ;
 }
 else {
-#line 326 "src/resolution.z"
+#line 353 "src/resolution.z"
 if ((s.x== p->_u64.x)){
-#line 326 "src/resolution.z"
+#line 353 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Unsigned;
 ;
-#line 326 "src/resolution.z"
+#line 353 "src/resolution.z"
 prim->node.integer = IntegerSize_I64;
 ;
 }
 else {
-#line 328 "src/resolution.z"
+#line 355 "src/resolution.z"
 if ((s.x== p->_f32.x)){
-#line 328 "src/resolution.z"
+#line 355 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Floating;
 ;
-#line 328 "src/resolution.z"
+#line 355 "src/resolution.z"
 prim->node.floating = FloatingSize_F32;
 ;
 }
 else {
-#line 329 "src/resolution.z"
+#line 356 "src/resolution.z"
 if ((s.x== p->_f64.x)){
-#line 329 "src/resolution.z"
+#line 356 "src/resolution.z"
 prim->kind = PrimitiveTyKind_Floating;
 ;
-#line 329 "src/resolution.z"
+#line 356 "src/resolution.z"
 prim->node.floating = FloatingSize_F64;
 ;
 }
 else {
-#line 331 "src/resolution.z"
+#line 358 "src/resolution.z"
 return false;
 ;
 }
@@ -5322,111 +5418,111 @@ return false;
 ;
 }
 ;
-#line 333 "src/resolution.z"
+#line 360 "src/resolution.z"
 return true;
 ;
 }
 
-#line 336 "src/resolution.z"
+#line 363 "src/resolution.z"
 void  _ZN4main10resolution12resolve_pathE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4PathE*  path) {
-#line 337 "src/resolution.z"
+#line 364 "src/resolution.z"
 _ZN4main3ast11PrimitiveTyE prim ;
 ;
-#line 339 "src/resolution.z"
+#line 366 "src/resolution.z"
 if (_ZN4main10resolution25check_if_sid_is_primitiveE(ctx,path->segments[0].name,&prim) ){
-#line 340 "src/resolution.z"
+#line 367 "src/resolution.z"
 path->binding.kind = BindingKind_PrimitiveType;
 ;
-#line 341 "src/resolution.z"
+#line 368 "src/resolution.z"
 path->binding.node.primitive = prim;
 ;
 }
 else {
-#line 343 "src/resolution.z"
+#line 370 "src/resolution.z"
 if ((path->num_segments> 1)){
-#line 344 "src/resolution.z"
+#line 371 "src/resolution.z"
 _ZN4main3ast4PathE base_path = _ZN4main10resolution6lookupE(ctx,path->segments[0]) ;
 ;
-#line 345 "src/resolution.z"
+#line 372 "src/resolution.z"
 if ((base_path.binding.kind== BindingKind_Item)){
-#line 346 "src/resolution.z"
+#line 373 "src/resolution.z"
 _ZN4main3ast4ItemE*  item = base_path.binding.node.item;
 ;
-#line 348 "src/resolution.z"
+#line 375 "src/resolution.z"
 if ((item->kind== ItemKind_Enum)){
-#line 350 "src/resolution.z"
+#line 377 "src/resolution.z"
 _ZN4main3ast4PathE p ;
 ;
-#line 351 "src/resolution.z"
+#line 378 "src/resolution.z"
 p.num_segments = (base_path.num_segments+ 1);
 ;
-#line 352 "src/resolution.z"
+#line 379 "src/resolution.z"
 p.segments = malloc((sizeof(_ZN4main3ast5IdentE)* p.num_segments)) ;
 ;
-#line 353 "src/resolution.z"
+#line 380 "src/resolution.z"
 memcpy(p.segments,base_path.segments,(base_path.num_segments* sizeof(_ZN4main3ast5IdentE))) ;
-#line 356 "src/resolution.z"
+#line 383 "src/resolution.z"
 u32 i = 0;
 ;
-#line 357 "src/resolution.z"
+#line 384 "src/resolution.z"
 _ZN4main3ast8EnumDataE data = item->node._enum;
 ;
-#line 358 "src/resolution.z"
+#line 385 "src/resolution.z"
 bool found = false;
 ;
-#line 359 "src/resolution.z"
+#line 386 "src/resolution.z"
 while ( (i< data.num_variants))
 {
-#line 360 "src/resolution.z"
+#line 387 "src/resolution.z"
 if ((data.variants[i].ident.name.x== path->segments[1].name.x)){
-#line 361 "src/resolution.z"
+#line 388 "src/resolution.z"
 p.segments[base_path.num_segments] = data.variants[i].ident;
 ;
-#line 362 "src/resolution.z"
+#line 389 "src/resolution.z"
 p.binding.kind = BindingKind_Variant;
 ;
-#line 363 "src/resolution.z"
+#line 390 "src/resolution.z"
 p.binding.node.variant = &data.variants[i];
 ;
-#line 364 "src/resolution.z"
+#line 391 "src/resolution.z"
 found = true;
 ;
-#line 365 "src/resolution.z"
+#line 392 "src/resolution.z"
 break;
 ;
 }
 ;
-#line 367 "src/resolution.z"
+#line 394 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 369 "src/resolution.z"
+#line 396 "src/resolution.z"
 if (!found){
-#line 369 "src/resolution.z"
+#line 396 "src/resolution.z"
 _ZN4main5error10emit_errorE(ctx->source_map,path->span,"Enum does not have requested variant") ;
 }
 ;
-#line 371 "src/resolution.z"
+#line 398 "src/resolution.z"
 *path = p;
 ;
 }
 else {
-#line 373 "src/resolution.z"
+#line 400 "src/resolution.z"
 abort() ;
 }
 ;
 }
 else {
-#line 375 "src/resolution.z"
+#line 402 "src/resolution.z"
 abort() ;
 }
 ;
 }
 else {
-#line 377 "src/resolution.z"
+#line 404 "src/resolution.z"
 if ((path->num_segments== 1)){
-#line 378 "src/resolution.z"
+#line 405 "src/resolution.z"
 *path = _ZN4main10resolution6lookupE(ctx,path->segments[0]) ;
 ;
 }
@@ -5437,17 +5533,17 @@ if ((path->num_segments== 1)){
 ;
 }
 
-#line 382 "src/resolution.z"
+#line 409 "src/resolution.z"
 void  _ZN4main10resolution12resolve_typeE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast7AstTypeE*  ty) {
-#line 383 "src/resolution.z"
+#line 410 "src/resolution.z"
 if ((ty->kind== AstTypeKind_Ptr)){
-#line 384 "src/resolution.z"
+#line 411 "src/resolution.z"
 _ZN4main10resolution12resolve_typeE(ctx,ty->node.ptr) ;
 }
 else {
-#line 386 "src/resolution.z"
+#line 413 "src/resolution.z"
 if ((ty->kind== AstTypeKind_Path)){
-#line 387 "src/resolution.z"
+#line 414 "src/resolution.z"
 _ZN4main10resolution12resolve_pathE(ctx,&ty->node.path) ;
 }
 ;
@@ -5455,219 +5551,219 @@ _ZN4main10resolution12resolve_pathE(ctx,&ty->node.path) ;
 ;
 }
 
-#line 391 "src/resolution.z"
+#line 418 "src/resolution.z"
 void  _ZN4main10resolution12resolve_exprE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ExprE*  expr) ;
 
-#line 392 "src/resolution.z"
+#line 419 "src/resolution.z"
 void  _ZN4main10resolution12resolve_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ItemE*  item) ;
 
-#line 394 "src/resolution.z"
+#line 421 "src/resolution.z"
 void  _ZN4main10resolution13resolve_unaryE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast9UnaryDataE unary) {
-#line 395 "src/resolution.z"
+#line 422 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,unary.inner) ;
 }
 
-#line 398 "src/resolution.z"
+#line 425 "src/resolution.z"
 void  _ZN4main10resolution14resolve_binaryE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast10BinaryDataE binary) {
-#line 399 "src/resolution.z"
+#line 426 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,binary.left) ;
-#line 400 "src/resolution.z"
+#line 427 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,binary.right) ;
 }
 
-#line 403 "src/resolution.z"
+#line 430 "src/resolution.z"
 void  _ZN4main10resolution12resolve_callE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast8CallDataE call) {
-#line 404 "src/resolution.z"
+#line 431 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,call.func) ;
-#line 406 "src/resolution.z"
+#line 433 "src/resolution.z"
 u32 i = 0;
 ;
-#line 407 "src/resolution.z"
+#line 434 "src/resolution.z"
 while ( (i< call.num_args))
 {
-#line 408 "src/resolution.z"
+#line 435 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,call.args[i]) ;
-#line 409 "src/resolution.z"
+#line 436 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 413 "src/resolution.z"
+#line 440 "src/resolution.z"
 void  _ZN4main10resolution19resolve_conditionalE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast15ConditionalDataE cond) {
-#line 414 "src/resolution.z"
+#line 441 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,cond.condition) ;
-#line 415 "src/resolution.z"
+#line 442 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,cond.then) ;
-#line 416 "src/resolution.z"
+#line 443 "src/resolution.z"
 if (cond.otherwise){
-#line 417 "src/resolution.z"
+#line 444 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,cond.otherwise) ;
 }
 ;
 }
 
-#line 421 "src/resolution.z"
+#line 448 "src/resolution.z"
 void  _ZN4main10resolution13resolve_whileE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast9WhileDataE data) {
-#line 422 "src/resolution.z"
+#line 449 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,data.condition) ;
-#line 423 "src/resolution.z"
+#line 450 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,data.body) ;
 }
 
-#line 426 "src/resolution.z"
+#line 453 "src/resolution.z"
 void  _ZN4main10resolution16resolve_indexingE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast12IndexingDataE idx) {
-#line 427 "src/resolution.z"
+#line 454 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,idx.array) ;
-#line 428 "src/resolution.z"
+#line 455 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,idx.index) ;
 }
 
-#line 431 "src/resolution.z"
+#line 458 "src/resolution.z"
 void  _ZN4main10resolution13resolve_fieldE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast9FieldDataE field) {
-#line 432 "src/resolution.z"
+#line 459 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,field.strct) ;
 }
 
-#line 435 "src/resolution.z"
+#line 462 "src/resolution.z"
 void  _ZN4main10resolution18resolve_assignmentE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast14AssignmentDataE assignment) {
-#line 436 "src/resolution.z"
+#line 463 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,assignment.left) ;
-#line 437 "src/resolution.z"
+#line 464 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,assignment.right) ;
 }
 
-#line 440 "src/resolution.z"
+#line 467 "src/resolution.z"
 void  _ZN4main10resolution13resolve_blockE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast5BlockE*  block) {
-#line 442 "src/resolution.z"
+#line 469 "src/resolution.z"
 _ZN4main10resolution10push_blockE(ctx) ;
-#line 443 "src/resolution.z"
+#line 470 "src/resolution.z"
 u32 i = 0;
 ;
-#line 444 "src/resolution.z"
+#line 471 "src/resolution.z"
 while ( (i< block->num_exprs))
 {
-#line 445 "src/resolution.z"
+#line 472 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,block->exprs[i]) ;
-#line 446 "src/resolution.z"
+#line 473 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 448 "src/resolution.z"
+#line 475 "src/resolution.z"
 _ZN4main10resolution9pop_blockE(ctx) ;
 }
 
-#line 451 "src/resolution.z"
-void  _ZN4main10resolution11resolve_letE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast7LetDataE data) {
-#line 452 "src/resolution.z"
-_ZN4main10resolution13push_variableE(ctx,data.pat.ident) ;
-#line 453 "src/resolution.z"
-_ZN4main10resolution12resolve_typeE(ctx,data.ast_ty) ;
-#line 454 "src/resolution.z"
-if (data.value){
-#line 454 "src/resolution.z"
-_ZN4main10resolution12resolve_exprE(ctx,data.value) ;
+#line 478 "src/resolution.z"
+void  _ZN4main10resolution11resolve_letE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast7LetDataE*  data) {
+#line 479 "src/resolution.z"
+_ZN4main10resolution13push_variableE(ctx,data->pat.ident,data) ;
+#line 480 "src/resolution.z"
+_ZN4main10resolution12resolve_typeE(ctx,data->ast_ty) ;
+#line 481 "src/resolution.z"
+if (data->value){
+#line 481 "src/resolution.z"
+_ZN4main10resolution12resolve_exprE(ctx,data->value) ;
 }
 ;
 }
 
-#line 457 "src/resolution.z"
+#line 484 "src/resolution.z"
 void  _ZN4main10resolution14resolve_sizeofE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 458 "src/resolution.z"
+#line 485 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,expr) ;
 }
 
-#line 461 "src/resolution.z"
+#line 488 "src/resolution.z"
 void  _ZN4main10resolution12resolve_exprE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 462 "src/resolution.z"
+#line 489 "src/resolution.z"
 if ((expr->kind== ExprKind_Unary)){
-#line 462 "src/resolution.z"
+#line 489 "src/resolution.z"
 _ZN4main10resolution13resolve_unaryE(ctx,expr->node.unary) ;
 }
 else {
-#line 463 "src/resolution.z"
+#line 490 "src/resolution.z"
 if ((expr->kind== ExprKind_Binary)){
-#line 463 "src/resolution.z"
+#line 490 "src/resolution.z"
 _ZN4main10resolution14resolve_binaryE(ctx,expr->node.binary) ;
 }
 else {
-#line 464 "src/resolution.z"
+#line 491 "src/resolution.z"
 if ((expr->kind== ExprKind_Block)){
-#line 464 "src/resolution.z"
+#line 491 "src/resolution.z"
 _ZN4main10resolution13resolve_blockE(ctx,expr->node.block) ;
 }
 else {
-#line 465 "src/resolution.z"
+#line 492 "src/resolution.z"
 if ((expr->kind== ExprKind_Call)){
-#line 465 "src/resolution.z"
+#line 492 "src/resolution.z"
 _ZN4main10resolution12resolve_callE(ctx,expr->node.call) ;
 }
 else {
-#line 466 "src/resolution.z"
+#line 493 "src/resolution.z"
 if ((expr->kind== ExprKind_Conditional)){
-#line 466 "src/resolution.z"
+#line 493 "src/resolution.z"
 _ZN4main10resolution19resolve_conditionalE(ctx,expr->node.conditional) ;
 }
 else {
-#line 467 "src/resolution.z"
+#line 494 "src/resolution.z"
 if ((expr->kind== ExprKind_While)){
-#line 467 "src/resolution.z"
+#line 494 "src/resolution.z"
 _ZN4main10resolution13resolve_whileE(ctx,expr->node.whl) ;
 }
 else {
-#line 468 "src/resolution.z"
+#line 495 "src/resolution.z"
 if ((expr->kind== ExprKind_Indexing)){
-#line 468 "src/resolution.z"
+#line 495 "src/resolution.z"
 _ZN4main10resolution16resolve_indexingE(ctx,expr->node.indexing) ;
 }
 else {
-#line 469 "src/resolution.z"
+#line 496 "src/resolution.z"
 if ((expr->kind== ExprKind_Field)){
-#line 469 "src/resolution.z"
+#line 496 "src/resolution.z"
 _ZN4main10resolution13resolve_fieldE(ctx,expr->node.field) ;
 }
 else {
-#line 470 "src/resolution.z"
+#line 497 "src/resolution.z"
 if ((expr->kind== ExprKind_Path)){
-#line 470 "src/resolution.z"
+#line 497 "src/resolution.z"
 _ZN4main10resolution12resolve_pathE(ctx,&expr->node.path) ;
 }
 else {
-#line 471 "src/resolution.z"
+#line 498 "src/resolution.z"
 if ((expr->kind== ExprKind_Assignment)){
-#line 471 "src/resolution.z"
+#line 498 "src/resolution.z"
 _ZN4main10resolution18resolve_assignmentE(ctx,expr->node.assignment) ;
 }
 else {
-#line 472 "src/resolution.z"
+#line 499 "src/resolution.z"
 if ((expr->kind== ExprKind_Let)){
-#line 472 "src/resolution.z"
-_ZN4main10resolution11resolve_letE(ctx,expr->node._let) ;
+#line 499 "src/resolution.z"
+_ZN4main10resolution11resolve_letE(ctx,&expr->node._let) ;
 }
 else {
-#line 473 "src/resolution.z"
+#line 500 "src/resolution.z"
 if ((expr->kind== ExprKind_Return)){
-#line 473 "src/resolution.z"
+#line 500 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,expr->node._return) ;
 }
 else {
-#line 474 "src/resolution.z"
+#line 501 "src/resolution.z"
 if ((expr->kind== ExprKind_Literal)){
 }
 else {
-#line 475 "src/resolution.z"
+#line 502 "src/resolution.z"
 if ((expr->kind== ExprKind_ControlFlow)){
 }
 else {
-#line 476 "src/resolution.z"
+#line 503 "src/resolution.z"
 if ((expr->kind== ExprKind_Sizeof)){
-#line 476 "src/resolution.z"
+#line 503 "src/resolution.z"
 _ZN4main10resolution14resolve_sizeofE(ctx,expr->node._sizeof) ;
 }
 else {
-#line 477 "src/resolution.z"
+#line 504 "src/resolution.z"
 abort() ;
 }
 ;
@@ -5701,175 +5797,177 @@ abort() ;
 ;
 }
 
-#line 480 "src/resolution.z"
+#line 507 "src/resolution.z"
 void  _ZN4main10resolution16resolve_functionE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 481 "src/resolution.z"
+#line 508 "src/resolution.z"
 _ZN4main3ast12FunctionDataE func = item->node.function;
 ;
-#line 483 "src/resolution.z"
-_ZN4main10resolution12resolve_typeE(ctx,func.header.output_ast) ;
-#line 484 "src/resolution.z"
+#line 510 "src/resolution.z"
+_ZN4main10resolution12resolve_typeE(ctx,func.header.output_ast_ty) ;
+#line 511 "src/resolution.z"
 u32 i = 0;
 ;
-#line 485 "src/resolution.z"
+#line 512 "src/resolution.z"
 while ( (i< func.header.num_parameters))
 {
-#line 486 "src/resolution.z"
+#line 513 "src/resolution.z"
 _ZN4main3ast17FunctionParameterE*  param = &func.header.parameters[i];
 ;
-#line 487 "src/resolution.z"
+#line 514 "src/resolution.z"
 _ZN4main10resolution12resolve_typeE(ctx,param->ast_ty) ;
-#line 488 "src/resolution.z"
+#line 515 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 491 "src/resolution.z"
+#line 518 "src/resolution.z"
 if (func.body){
-#line 492 "src/resolution.z"
+#line 519 "src/resolution.z"
 _ZN4main10resolution10push_blockE(ctx) ;
-#line 493 "src/resolution.z"
+#line 520 "src/resolution.z"
 u32 i = 0;
 ;
-#line 494 "src/resolution.z"
+#line 521 "src/resolution.z"
 while ( (i< func.header.num_parameters))
 {
-#line 495 "src/resolution.z"
+#line 522 "src/resolution.z"
 _ZN4main3ast17FunctionParameterE*  param = &func.header.parameters[i];
 ;
-#line 496 "src/resolution.z"
-_ZN4main10resolution13push_variableE(ctx,param->pat.ident) ;
-#line 498 "src/resolution.z"
+#line 523 "src/resolution.z"
+_ZN4main10resolution14push_parameterE(ctx,param->pat.ident,param) ;
+#line 525 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 501 "src/resolution.z"
+#line 528 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,item->node.function.body) ;
-#line 502 "src/resolution.z"
+#line 529 "src/resolution.z"
 _ZN4main10resolution9pop_blockE(ctx) ;
 }
 ;
 }
 
-#line 506 "src/resolution.z"
+#line 533 "src/resolution.z"
 void  _ZN4main10resolution16resolve_variableE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 507 "src/resolution.z"
+#line 534 "src/resolution.z"
+_ZN4main10resolution12resolve_typeE(ctx,item->node.variable.ast_ty) ;
+#line 535 "src/resolution.z"
 _ZN4main10resolution10push_blockE(ctx) ;
-#line 508 "src/resolution.z"
+#line 536 "src/resolution.z"
 if (item->node.variable.body){
-#line 509 "src/resolution.z"
+#line 537 "src/resolution.z"
 _ZN4main10resolution12resolve_exprE(ctx,item->node.variable.body) ;
 }
 ;
-#line 511 "src/resolution.z"
+#line 539 "src/resolution.z"
 _ZN4main10resolution9pop_blockE(ctx) ;
 }
 
-#line 514 "src/resolution.z"
+#line 542 "src/resolution.z"
 void  _ZN4main10resolution16resolve_compoundE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 516 "src/resolution.z"
+#line 544 "src/resolution.z"
 _ZN4main3ast12CompoundDataE data = item->node.compound;
 ;
-#line 518 "src/resolution.z"
+#line 546 "src/resolution.z"
 u32 i = 0;
 ;
-#line 519 "src/resolution.z"
+#line 547 "src/resolution.z"
 while ( (i< data.num_fields))
 {
-#line 520 "src/resolution.z"
+#line 548 "src/resolution.z"
 _ZN4main10resolution12resolve_typeE(ctx,data.fields[i].ast_ty) ;
-#line 521 "src/resolution.z"
+#line 549 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 525 "src/resolution.z"
+#line 553 "src/resolution.z"
 void  _ZN4main10resolution14resolve_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) ;
 
-#line 527 "src/resolution.z"
+#line 555 "src/resolution.z"
 void  _ZN4main10resolution12resolve_itemE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 528 "src/resolution.z"
+#line 556 "src/resolution.z"
 if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
-#line 528 "src/resolution.z"
+#line 556 "src/resolution.z"
 _ZN4main10resolution16resolve_variableE(ctx,item) ;
 }
 ;
-#line 529 "src/resolution.z"
+#line 557 "src/resolution.z"
 if ((item->kind== ItemKind_Function)){
-#line 529 "src/resolution.z"
+#line 557 "src/resolution.z"
 _ZN4main10resolution16resolve_functionE(ctx,item) ;
 }
 ;
-#line 530 "src/resolution.z"
+#line 558 "src/resolution.z"
 if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-#line 530 "src/resolution.z"
+#line 558 "src/resolution.z"
 _ZN4main10resolution16resolve_compoundE(ctx,item) ;
 }
 ;
-#line 531 "src/resolution.z"
+#line 559 "src/resolution.z"
 if ((item->kind== ItemKind_Module)){
-#line 531 "src/resolution.z"
+#line 559 "src/resolution.z"
 _ZN4main10resolution14resolve_moduleE(ctx,item->node.module) ;
 }
 ;
 }
 
-#line 534 "src/resolution.z"
+#line 562 "src/resolution.z"
 void  _ZN4main10resolution14resolve_moduleE(_ZN4main10resolution17ResolutionContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 535 "src/resolution.z"
+#line 563 "src/resolution.z"
 _ZN4main10resolution11push_moduleE(ctx,module) ;
-#line 537 "src/resolution.z"
+#line 565 "src/resolution.z"
 u32 i = 0;
 ;
-#line 538 "src/resolution.z"
+#line 566 "src/resolution.z"
 while ( (i< module->num_items))
 {
-#line 539 "src/resolution.z"
+#line 567 "src/resolution.z"
 _ZN4main10resolution12resolve_itemE(ctx,module->items[i]) ;
-#line 540 "src/resolution.z"
+#line 568 "src/resolution.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 542 "src/resolution.z"
+#line 570 "src/resolution.z"
 _ZN4main10resolution10pop_moduleE(ctx) ;
 }
 
-#line 545 "src/resolution.z"
+#line 573 "src/resolution.z"
 void  _ZN4main10resolution7resolveE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast) {
-#line 546 "src/resolution.z"
+#line 574 "src/resolution.z"
 _ZN4main10resolution17ResolutionContextE ctx ;
 ;
-#line 548 "src/resolution.z"
+#line 576 "src/resolution.z"
 ctx.interner = &sess->interner;
 ;
-#line 549 "src/resolution.z"
+#line 577 "src/resolution.z"
 _ZN4main10resolution23setup_primitive_ty_sidsE(ctx.interner,&ctx.primitive_ty_sids) ;
-#line 550 "src/resolution.z"
+#line 578 "src/resolution.z"
 ctx.ast = ast;
 ;
-#line 551 "src/resolution.z"
+#line 579 "src/resolution.z"
 ctx.scope_stack = malloc((sizeof(_ZN4main10resolution5ScopeE)* 128)) ;
 ;
-#line 552 "src/resolution.z"
+#line 580 "src/resolution.z"
 ctx.stack_top = 0;
 ;
-#line 553 "src/resolution.z"
+#line 581 "src/resolution.z"
 ctx.source_map = &sess->source;
 ;
-#line 554 "src/resolution.z"
+#line 582 "src/resolution.z"
 ctx.root_module = ast->root_module;
 ;
-#line 556 "src/resolution.z"
+#line 584 "src/resolution.z"
 _ZN4main10resolution9index_useE(&ctx,ast->root_module) ;
-#line 557 "src/resolution.z"
+#line 585 "src/resolution.z"
 _ZN4main10resolution12index_moduleE(&ctx,ast->root_module) ;
-#line 558 "src/resolution.z"
+#line 586 "src/resolution.z"
 _ZN4main10resolution22index_module_wildcardsE(&ctx,ast->root_module) ;
-#line 559 "src/resolution.z"
+#line 587 "src/resolution.z"
 _ZN4main10resolution14resolve_moduleE(&ctx,ast->root_module) ;
 }
 
@@ -5884,6 +5982,7 @@ typedef struct _ZN4main9typecheck11CommonTypesE _ZN4main9typecheck11CommonTypesE
 typedef struct _ZN4main9typecheck11CommonTypesE {
 _ZN4main3ast2TyE*  _void;
 _ZN4main3ast2TyE*  _constvoid;
+_ZN4main3ast2TyE*  _variadic;
 _ZN4main3ast2TyE*  _bool;
 _ZN4main3ast2TyE*  _char;
 _ZN4main3ast2TyE*  _constchar;
@@ -5901,7 +6000,7 @@ _ZN4main3ast2TyE*  _f64;
 
 
 typedef struct _ZN4main9typecheck11TypeContextE _ZN4main9typecheck11TypeContextE;
-#line 26 "src/typecheck.z"
+#line 27 "src/typecheck.z"
 typedef struct _ZN4main9typecheck11TypeContextE {
 _ZN4main3ast3AstE*  ast;
 _ZN4main9interning8InternerE*  interner;
@@ -5913,106 +6012,172 @@ u32 next_type_idx;
 } _ZN4main9typecheck11TypeContextE;
 
 
-#line 36 "src/typecheck.z"
-u64 _ZN4main9typecheck7hash_tyE(_ZN4main3ast2TyE*  ty) ;
-
+#line 37 "src/typecheck.z"
+u32 _ZN4main9typecheck12integer_sizeE(_ZN4main3ast11IntegerSizeE size) {
 #line 38 "src/typecheck.z"
-u64 _ZN4main9typecheck7hash_fnE(_ZN4main3ast2TyE*  ty) {
+if ((size== IntegerSize_I8)){
+#line 38 "src/typecheck.z"
+return 8;
+;
+}
+else {
+#line 39 "src/typecheck.z"
+if ((size== IntegerSize_I16)){
+#line 39 "src/typecheck.z"
+return 16;
+;
+}
+else {
 #line 40 "src/typecheck.z"
-_ZN4main3ast5FnDefE def = ty->node.function;
+if ((size== IntegerSize_I32)){
+#line 40 "src/typecheck.z"
+return 32;
 ;
+}
+else {
 #line 41 "src/typecheck.z"
-u64 h = _ZN4main9typecheck7hash_tyE(def.output) ;
+if ((size== IntegerSize_I64)){
+#line 41 "src/typecheck.z"
+return 64;
 ;
-#line 43 "src/typecheck.z"
-u32 i = 0;
-;
-#line 44 "src/typecheck.z"
-while ( (i< def.num_parameters))
-{
-#line 45 "src/typecheck.z"
-h = (h^ (((_ZN4main9typecheck7hash_tyE(def.parameters[i]) + 2654435769)+ (h<< 6))+ (h>> 2)));
-;
-#line 46 "src/typecheck.z"
-i = (i+ 1);
+}
+else {
+#line 42 "src/typecheck.z"
+abort() ;
+}
 ;
 }
 ;
+}
+;
+}
+;
+}
+
+#line 45 "src/typecheck.z"
+u32 _ZN4main9typecheck13floating_sizeE(_ZN4main3ast12FloatingSizeE size) {
+#line 46 "src/typecheck.z"
+if ((size== FloatingSize_F32)){
+#line 46 "src/typecheck.z"
+return 32;
+;
+}
+else {
+#line 47 "src/typecheck.z"
+if ((size== FloatingSize_F64)){
+#line 47 "src/typecheck.z"
+return 64;
+;
+}
+else {
 #line 48 "src/typecheck.z"
-return h;
+abort() ;
+}
+;
+}
 ;
 }
 
 #line 51 "src/typecheck.z"
-u64 _ZN4main9typecheck9hash_pathE(_ZN4main3ast4PathE path) {
-#line 52 "src/typecheck.z"
-u64 h = path.num_segments;
-;
+u64 _ZN4main9typecheck7hash_tyE(_ZN4main3ast2TyE*  ty) ;
+
 #line 53 "src/typecheck.z"
-u32 i = 0;
-;
-#line 54 "src/typecheck.z"
-while ( (i< path.num_segments))
-{
+u64 _ZN4main9typecheck7hash_fnE(_ZN4main3ast2TyE*  ty) {
 #line 55 "src/typecheck.z"
-h = (h^ (((path.segments[i].name.x+ 2654435769)+ (h<< 6))+ (h>> 2)));
+_ZN4main3ast5FnDefE def = ty->node.function;
 ;
 #line 56 "src/typecheck.z"
+u64 h = _ZN4main9typecheck7hash_tyE(def.output) ;
+;
+#line 58 "src/typecheck.z"
+u32 i = 0;
+;
+#line 59 "src/typecheck.z"
+while ( (i< def.num_parameters))
+{
+#line 60 "src/typecheck.z"
+h = (h^ (((_ZN4main9typecheck7hash_tyE(def.parameters[i]) + 2654435769)+ (h<< 6))+ (h>> 2)));
+;
+#line 61 "src/typecheck.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 58 "src/typecheck.z"
+#line 63 "src/typecheck.z"
 return h;
 ;
 }
 
-#line 61 "src/typecheck.z"
+#line 66 "src/typecheck.z"
+u64 _ZN4main9typecheck9hash_pathE(_ZN4main3ast4PathE path) {
+#line 67 "src/typecheck.z"
+u64 h = path.num_segments;
+;
+#line 68 "src/typecheck.z"
+u32 i = 0;
+;
+#line 69 "src/typecheck.z"
+while ( (i< path.num_segments))
+{
+#line 70 "src/typecheck.z"
+h = (h^ (((path.segments[i].name.x+ 2654435769)+ (h<< 6))+ (h>> 2)));
+;
+#line 71 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+#line 73 "src/typecheck.z"
+return h;
+;
+}
+
+#line 76 "src/typecheck.z"
 u64 _ZN4main9typecheck7hash_tyE(_ZN4main3ast2TyE*  ty) {
-#line 63 "src/typecheck.z"
+#line 78 "src/typecheck.z"
 u64 h ;
 ;
-#line 65 "src/typecheck.z"
+#line 80 "src/typecheck.z"
 h = ty->kind;
 ;
-#line 67 "src/typecheck.z"
+#line 82 "src/typecheck.z"
 if (((ty->kind== TyKind_Signed)|| (ty->kind== TyKind_Unsigned))){
-#line 67 "src/typecheck.z"
-h = (h^ (ty->node.integer<< 4));
+#line 82 "src/typecheck.z"
+h = (h^ (_ZN4main9typecheck12integer_sizeE(ty->node.integer) << 4));
 ;
 }
 else {
-#line 68 "src/typecheck.z"
+#line 83 "src/typecheck.z"
 if ((ty->kind== TyKind_Floating)){
-#line 68 "src/typecheck.z"
-h = (h^ (ty->node.floating<< 4));
+#line 83 "src/typecheck.z"
+h = (h^ (_ZN4main9typecheck13floating_sizeE(ty->node.floating) << 4));
 ;
 }
 else {
-#line 69 "src/typecheck.z"
+#line 84 "src/typecheck.z"
 if (((ty->kind== TyKind_Struct)|| (ty->kind== TyKind_Union))){
-#line 69 "src/typecheck.z"
+#line 84 "src/typecheck.z"
 h = (h^ (_ZN4main9typecheck9hash_pathE(ty->node.compound.path) << 4));
 ;
 }
 else {
-#line 70 "src/typecheck.z"
+#line 85 "src/typecheck.z"
 if ((ty->kind== TyKind_Enum)){
-#line 70 "src/typecheck.z"
+#line 85 "src/typecheck.z"
 h = (h^ (_ZN4main9typecheck9hash_pathE(ty->node._enum.path) << 4));
 ;
 }
 else {
-#line 71 "src/typecheck.z"
+#line 86 "src/typecheck.z"
 if ((ty->kind== TyKind_Fn)){
-#line 71 "src/typecheck.z"
+#line 86 "src/typecheck.z"
 h = (h^ (_ZN4main9typecheck7hash_fnE(ty) << 4));
 ;
 }
 else {
-#line 72 "src/typecheck.z"
+#line 87 "src/typecheck.z"
 if ((ty->kind== TyKind_Ptr)){
-#line 72 "src/typecheck.z"
+#line 87 "src/typecheck.z"
 h = (h^ (_ZN4main9typecheck7hash_tyE(ty->node.ptr) << 4));
 ;
 }
@@ -6027,214 +6192,213 @@ h = (h^ (_ZN4main9typecheck7hash_tyE(ty->node.ptr) << 4));
 ;
 }
 ;
-#line 74 "src/typecheck.z"
+#line 89 "src/typecheck.z"
 return h;
 ;
 }
 
-#line 77 "src/typecheck.z"
-u32 _ZN4main9typecheck16intern_ty_to_idxE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast2TyE ty) {
-#line 78 "src/typecheck.z"
+#line 92 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck9intern_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast2TyE ty) {
+#line 93 "src/typecheck.z"
 u64 h = _ZN4main9typecheck7hash_tyE(&ty) ;
 ;
-#line 79 "src/typecheck.z"
+#line 94 "src/typecheck.z"
 u32 ty_idx = _ZN4main6intmap13intmap_lookupE(ctx->types_lookup,h) ;
 ;
-#line 80 "src/typecheck.z"
+#line 95 "src/typecheck.z"
 if ((ty_idx== 0)){
-#line 81 "src/typecheck.z"
+#line 96 "src/typecheck.z"
 ty_idx = ctx->next_type_idx;
 ;
-#line 82 "src/typecheck.z"
+#line 97 "src/typecheck.z"
 ctx->next_type_idx = (ctx->next_type_idx+ 1);
 ;
-#line 83 "src/typecheck.z"
-_ZN4main6intmap13intmap_insertE(ctx->types_lookup,h,ty_idx) ;
-}
-;
-#line 85 "src/typecheck.z"
-return ty_idx;
-;
-}
-
-#line 88 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck9intern_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast2TyE ty) {
-#line 89 "src/typecheck.z"
-return &ctx->types[_ZN4main9typecheck16intern_ty_to_idxE(ctx,ty) ];
-;
-}
-
-#line 92 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck16create_base_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6TyKindE kind) {
-#line 93 "src/typecheck.z"
-_ZN4main3ast2TyE ty ;
-;
-#line 94 "src/typecheck.z"
-ty.kind = kind;
-;
-#line 95 "src/typecheck.z"
-return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
-;
-}
-
 #line 98 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck17create_float_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast12FloatingSizeE size) {
+_ZN4main6intmap13intmap_insertE(ctx->types_lookup,h,ty_idx) ;
 #line 99 "src/typecheck.z"
-_ZN4main3ast2TyE ty ;
+ctx->types[ty_idx] = ty;
 ;
-#line 100 "src/typecheck.z"
-ty.kind = TyKind_Floating;
+}
 ;
 #line 101 "src/typecheck.z"
-ty.node.floating = size;
-;
-#line 102 "src/typecheck.z"
-return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
+return &ctx->types[ty_idx];
 ;
 }
 
+#line 104 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck16create_base_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6TyKindE kind) {
 #line 105 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck15create_int_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6TyKindE kind, _ZN4main3ast11IntegerSizeE size) {
-#line 106 "src/typecheck.z"
 _ZN4main3ast2TyE ty ;
 ;
-#line 107 "src/typecheck.z"
+#line 106 "src/typecheck.z"
 ty.kind = kind;
 ;
-#line 108 "src/typecheck.z"
-ty.node.integer = size;
-;
-#line 109 "src/typecheck.z"
+#line 107 "src/typecheck.z"
 return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
 ;
 }
 
+#line 110 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck17create_float_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast12FloatingSizeE size) {
+#line 111 "src/typecheck.z"
+_ZN4main3ast2TyE ty ;
+;
 #line 112 "src/typecheck.z"
-void  _ZN4main9typecheck19create_common_typesE(_ZN4main9typecheck11TypeContextE*  ctx) {
+ty.kind = TyKind_Floating;
+;
 #line 113 "src/typecheck.z"
-_ZN4main9typecheck11CommonTypesE*  t = &ctx->common;
+ty.node.floating = size;
 ;
 #line 114 "src/typecheck.z"
-t->_void = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Void) ;
+return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
 ;
-#line 115 "src/typecheck.z"
-t->_constvoid = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_ConstVoid) ;
-;
-#line 116 "src/typecheck.z"
-t->_bool = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Bool) ;
-;
+}
+
 #line 117 "src/typecheck.z"
-t->_char = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Char) ;
-;
+_ZN4main3ast2TyE*  _ZN4main9typecheck15create_int_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6TyKindE kind, _ZN4main3ast11IntegerSizeE size) {
 #line 118 "src/typecheck.z"
-t->_constchar = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_ConstChar) ;
+_ZN4main3ast2TyE ty ;
+;
+#line 119 "src/typecheck.z"
+ty.kind = kind;
 ;
 #line 120 "src/typecheck.z"
-t->_i8 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I8) ;
+ty.node.integer = size;
 ;
 #line 121 "src/typecheck.z"
-t->_i16 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I16) ;
+return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
 ;
-#line 122 "src/typecheck.z"
-t->_i32 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I32) ;
-;
-#line 123 "src/typecheck.z"
-t->_i64 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I64) ;
-;
+}
+
+#line 124 "src/typecheck.z"
+void  _ZN4main9typecheck19create_common_typesE(_ZN4main9typecheck11TypeContextE*  ctx) {
 #line 125 "src/typecheck.z"
-t->_u8 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I8) ;
+_ZN4main9typecheck11CommonTypesE*  t = &ctx->common;
 ;
 #line 126 "src/typecheck.z"
-t->_u16 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I16) ;
+t->_void = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Void) ;
 ;
 #line 127 "src/typecheck.z"
-t->_u32 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I32) ;
+t->_constvoid = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_ConstVoid) ;
 ;
 #line 128 "src/typecheck.z"
-t->_u64 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I64) ;
+t->_variadic = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Variadic) ;
+;
+#line 129 "src/typecheck.z"
+t->_bool = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Bool) ;
 ;
 #line 130 "src/typecheck.z"
-t->_f32 = _ZN4main9typecheck17create_float_typeE(ctx,FloatingSize_F32) ;
+t->_char = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_Char) ;
 ;
 #line 131 "src/typecheck.z"
+t->_constchar = _ZN4main9typecheck16create_base_typeE(ctx,TyKind_ConstChar) ;
+;
+#line 133 "src/typecheck.z"
+t->_i8 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I8) ;
+;
+#line 134 "src/typecheck.z"
+t->_i16 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I16) ;
+;
+#line 135 "src/typecheck.z"
+t->_i32 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I32) ;
+;
+#line 136 "src/typecheck.z"
+t->_i64 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Signed,IntegerSize_I64) ;
+;
+#line 138 "src/typecheck.z"
+t->_u8 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I8) ;
+;
+#line 139 "src/typecheck.z"
+t->_u16 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I16) ;
+;
+#line 140 "src/typecheck.z"
+t->_u32 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I32) ;
+;
+#line 141 "src/typecheck.z"
+t->_u64 = _ZN4main9typecheck15create_int_typeE(ctx,TyKind_Unsigned,IntegerSize_I64) ;
+;
+#line 143 "src/typecheck.z"
+t->_f32 = _ZN4main9typecheck17create_float_typeE(ctx,FloatingSize_F32) ;
+;
+#line 144 "src/typecheck.z"
 t->_f64 = _ZN4main9typecheck17create_float_typeE(ctx,FloatingSize_F64) ;
 ;
 }
 
-#line 134 "src/typecheck.z"
+#line 147 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck14ast_type_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7AstTypeE*  ast_ty) ;
 
-#line 136 "src/typecheck.z"
+#line 149 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck15primitive_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast11PrimitiveTyE prim) {
-#line 137 "src/typecheck.z"
+#line 150 "src/typecheck.z"
 _ZN4main9typecheck11CommonTypesE*  t = &ctx->common;
 ;
-#line 138 "src/typecheck.z"
+#line 151 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Void)){
-#line 138 "src/typecheck.z"
+#line 151 "src/typecheck.z"
 return t->_void;
 ;
 }
 else {
-#line 139 "src/typecheck.z"
+#line 152 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Bool)){
-#line 139 "src/typecheck.z"
+#line 152 "src/typecheck.z"
 return t->_bool;
 ;
 }
 else {
-#line 140 "src/typecheck.z"
+#line 153 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Char)){
-#line 140 "src/typecheck.z"
+#line 153 "src/typecheck.z"
 return t->_char;
 ;
 }
 else {
-#line 142 "src/typecheck.z"
+#line 155 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_ConstChar)){
-#line 142 "src/typecheck.z"
+#line 155 "src/typecheck.z"
 return t->_constchar;
 ;
 }
 else {
-#line 143 "src/typecheck.z"
+#line 156 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_ConstVoid)){
-#line 143 "src/typecheck.z"
+#line 156 "src/typecheck.z"
 return t->_constvoid;
 ;
 }
 else {
-#line 145 "src/typecheck.z"
+#line 158 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Signed)){
-#line 146 "src/typecheck.z"
+#line 159 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I8)){
-#line 146 "src/typecheck.z"
+#line 159 "src/typecheck.z"
 return t->_i8;
 ;
 }
 else {
-#line 147 "src/typecheck.z"
+#line 160 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I16)){
-#line 147 "src/typecheck.z"
+#line 160 "src/typecheck.z"
 return t->_i16;
 ;
 }
 else {
-#line 148 "src/typecheck.z"
+#line 161 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I32)){
-#line 148 "src/typecheck.z"
+#line 161 "src/typecheck.z"
 return t->_i32;
 ;
 }
 else {
-#line 149 "src/typecheck.z"
+#line 162 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I64)){
-#line 149 "src/typecheck.z"
+#line 162 "src/typecheck.z"
 return t->_i64;
 ;
 }
 else {
-#line 150 "src/typecheck.z"
+#line 163 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6246,37 +6410,37 @@ abort() ;
 ;
 }
 else {
-#line 152 "src/typecheck.z"
+#line 165 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Unsigned)){
-#line 153 "src/typecheck.z"
+#line 166 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I8)){
-#line 153 "src/typecheck.z"
+#line 166 "src/typecheck.z"
 return t->_u8;
 ;
 }
 else {
-#line 154 "src/typecheck.z"
+#line 167 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I16)){
-#line 154 "src/typecheck.z"
+#line 167 "src/typecheck.z"
 return t->_u16;
 ;
 }
 else {
-#line 155 "src/typecheck.z"
+#line 168 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I32)){
-#line 155 "src/typecheck.z"
+#line 168 "src/typecheck.z"
 return t->_u32;
 ;
 }
 else {
-#line 156 "src/typecheck.z"
+#line 169 "src/typecheck.z"
 if ((prim.node.integer== IntegerSize_I64)){
-#line 156 "src/typecheck.z"
+#line 169 "src/typecheck.z"
 return t->_u64;
 ;
 }
 else {
-#line 157 "src/typecheck.z"
+#line 170 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6288,23 +6452,31 @@ abort() ;
 ;
 }
 else {
-#line 159 "src/typecheck.z"
+#line 172 "src/typecheck.z"
 if ((prim.kind== PrimitiveTyKind_Floating)){
-#line 160 "src/typecheck.z"
+#line 173 "src/typecheck.z"
 if ((prim.node.floating== FloatingSize_F32)){
-#line 160 "src/typecheck.z"
+#line 173 "src/typecheck.z"
 return t->_f32;
 ;
 }
 else {
-#line 161 "src/typecheck.z"
+#line 174 "src/typecheck.z"
 if ((prim.node.floating== FloatingSize_F64)){
-#line 161 "src/typecheck.z"
+#line 174 "src/typecheck.z"
 return t->_f64;
 ;
 }
 else {
-#line 162 "src/typecheck.z"
+#line 175 "src/typecheck.z"
+abort() ;
+}
+;
+}
+;
+}
+else {
+#line 177 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6323,82 +6495,57 @@ abort() ;
 }
 ;
 }
-;
-}
-;
-}
 
-#line 166 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck18ast_compound_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4PathE path, _ZN4main3ast12CompoundDataE data) {
-#line 167 "src/typecheck.z"
-return 0;
-;
-}
-
-#line 170 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck14ast_enum_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4PathE path, _ZN4main3ast8EnumDataE data) {
-#line 171 "src/typecheck.z"
-return 0;
-;
-}
-
-#line 174 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck18ast_function_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast14FunctionHeaderE data) {
-#line 175 "src/typecheck.z"
-return 0;
-;
-}
-
-#line 178 "src/typecheck.z"
+#line 180 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck14ast_path_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7AstTypeE*  ast_ty) {
-#line 179 "src/typecheck.z"
+#line 181 "src/typecheck.z"
 _ZN4main3ast7BindingE binding = ast_ty->node.path.binding;
 ;
-#line 181 "src/typecheck.z"
+#line 183 "src/typecheck.z"
 if ((binding.kind== BindingKind_PrimitiveType)){
-#line 182 "src/typecheck.z"
+#line 184 "src/typecheck.z"
 return _ZN4main9typecheck15primitive_to_tyE(ctx,binding.node.primitive) ;
 ;
 }
 else {
-#line 184 "src/typecheck.z"
+#line 186 "src/typecheck.z"
 if ((binding.kind== BindingKind_Item)){
-#line 185 "src/typecheck.z"
+#line 187 "src/typecheck.z"
 _ZN4main3ast4ItemE*  item = binding.node.item;
 ;
-#line 186 "src/typecheck.z"
+#line 188 "src/typecheck.z"
 if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-#line 186 "src/typecheck.z"
-return _ZN4main9typecheck18ast_compound_to_tyE(ctx,ast_ty->node.path,item->node.compound) ;
-;
-}
-else {
-#line 187 "src/typecheck.z"
-if ((item->kind== ItemKind_Function)){
-#line 187 "src/typecheck.z"
-return _ZN4main9typecheck18ast_function_to_tyE(ctx,item->node.function.header) ;
-;
-}
-else {
 #line 188 "src/typecheck.z"
-if ((item->kind== ItemKind_Enum)){
-#line 188 "src/typecheck.z"
-return _ZN4main9typecheck14ast_enum_to_tyE(ctx,ast_ty->node.path,item->node._enum) ;
+return item->node.compound.ty;
 ;
 }
 else {
 #line 189 "src/typecheck.z"
-return _ZN4main4cstd4nullE;
+if ((item->kind== ItemKind_Function)){
+#line 189 "src/typecheck.z"
+return item->node.function.header.ty;
 ;
 }
-;
-}
-;
-}
+else {
+#line 190 "src/typecheck.z"
+if ((item->kind== ItemKind_Enum)){
+#line 190 "src/typecheck.z"
+return item->node._enum.ty;
 ;
 }
 else {
 #line 191 "src/typecheck.z"
+return _ZN4main4cstd4nullE;
+;
+}
+;
+}
+;
+}
+;
+}
+else {
+#line 193 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6406,46 +6553,53 @@ abort() ;
 ;
 }
 
-#line 194 "src/typecheck.z"
+#line 196 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck13ast_ptr_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7AstTypeE*  ast_ty) {
-#line 195 "src/typecheck.z"
+#line 197 "src/typecheck.z"
 _ZN4main3ast2TyE ty ;
 ;
-#line 196 "src/typecheck.z"
+#line 198 "src/typecheck.z"
 ty.kind = TyKind_Ptr;
 ;
-#line 197 "src/typecheck.z"
+#line 199 "src/typecheck.z"
 ty.node.ptr = _ZN4main9typecheck14ast_type_to_tyE(ctx,ast_ty->node.ptr) ;
 ;
-#line 198 "src/typecheck.z"
+#line 200 "src/typecheck.z"
 return _ZN4main9typecheck9intern_tyE(ctx,ty) ;
 ;
 }
 
-#line 201 "src/typecheck.z"
+#line 203 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck14ast_type_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7AstTypeE*  ast_ty) {
-#line 202 "src/typecheck.z"
+#line 204 "src/typecheck.z"
 if ((ast_ty->kind== AstTypeKind_Void)){
-#line 202 "src/typecheck.z"
+#line 204 "src/typecheck.z"
 return ctx->common._void;
-;
-}
-else {
-#line 203 "src/typecheck.z"
-if ((ast_ty->kind== AstTypeKind_Path)){
-#line 203 "src/typecheck.z"
-return _ZN4main9typecheck14ast_path_to_tyE(ctx,ast_ty) ;
-;
-}
-else {
-#line 204 "src/typecheck.z"
-if ((ast_ty->kind== AstTypeKind_Ptr)){
-#line 204 "src/typecheck.z"
-return _ZN4main9typecheck13ast_ptr_to_tyE(ctx,ast_ty) ;
 ;
 }
 else {
 #line 205 "src/typecheck.z"
+if ((ast_ty->kind== AstTypeKind_Path)){
+#line 205 "src/typecheck.z"
+return _ZN4main9typecheck14ast_path_to_tyE(ctx,ast_ty) ;
+;
+}
+else {
+#line 206 "src/typecheck.z"
+if ((ast_ty->kind== AstTypeKind_Ptr)){
+#line 206 "src/typecheck.z"
+return _ZN4main9typecheck13ast_ptr_to_tyE(ctx,ast_ty) ;
+;
+}
+else {
+#line 207 "src/typecheck.z"
+if ((ast_ty->kind== AstTypeKind_Variadic)){
+#line 207 "src/typecheck.z"
+return ctx->common._variadic;
+;
+}
+else {
+#line 208 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6454,54 +6608,56 @@ abort() ;
 }
 ;
 }
+;
+}
 
-#line 208 "src/typecheck.z"
+#line 211 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck17ast_literal_to_tyE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7LiteralE lit) {
-#line 209 "src/typecheck.z"
+#line 212 "src/typecheck.z"
 if ((lit.kind== LiteralKind_Int)){
-#line 209 "src/typecheck.z"
+#line 212 "src/typecheck.z"
 return ctx->common._i32;
 ;
 }
 else {
-#line 210 "src/typecheck.z"
+#line 213 "src/typecheck.z"
 if ((lit.kind== LiteralKind_Float)){
-#line 210 "src/typecheck.z"
+#line 213 "src/typecheck.z"
 return ctx->common._f32;
 ;
 }
 else {
-#line 211 "src/typecheck.z"
+#line 214 "src/typecheck.z"
 if ((lit.kind== LiteralKind_Bool)){
-#line 211 "src/typecheck.z"
+#line 214 "src/typecheck.z"
 return ctx->common._bool;
 ;
 }
 else {
-#line 212 "src/typecheck.z"
+#line 215 "src/typecheck.z"
 if ((lit.kind== LiteralKind_Char)){
-#line 212 "src/typecheck.z"
+#line 215 "src/typecheck.z"
 return ctx->common._char;
 ;
 }
 else {
-#line 213 "src/typecheck.z"
+#line 216 "src/typecheck.z"
 if ((lit.kind== LiteralKind_Str)){
-#line 214 "src/typecheck.z"
+#line 217 "src/typecheck.z"
 _ZN4main3ast2TyE str_ty ;
 ;
-#line 215 "src/typecheck.z"
+#line 218 "src/typecheck.z"
 str_ty.kind = TyKind_Ptr;
 ;
-#line 216 "src/typecheck.z"
+#line 219 "src/typecheck.z"
 str_ty.node.ptr = ctx->common._char;
 ;
-#line 217 "src/typecheck.z"
+#line 220 "src/typecheck.z"
 return _ZN4main9typecheck9intern_tyE(ctx,str_ty) ;
 ;
 }
 else {
-#line 219 "src/typecheck.z"
+#line 222 "src/typecheck.z"
 abort() ;
 }
 ;
@@ -6515,582 +6671,1069 @@ abort() ;
 ;
 }
 
-#line 222 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck10check_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) ;
-
-#line 223 "src/typecheck.z"
-void  _ZN4main9typecheck10check_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) ;
-
-#line 224 "src/typecheck.z"
-void  _ZN4main9typecheck9check_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) ;
-
-#line 226 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck11check_unaryE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 225 "src/typecheck.z"
+u32 _ZN4main9typecheck11coerce_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast2TyE*  from, _ZN4main3ast2TyE*  to) {
 #line 227 "src/typecheck.z"
-_ZN4main3ast2TyE*  inner = _ZN4main9typecheck10check_exprE(ctx,expr->node.unary.inner) ;
-;
-#line 228 "src/typecheck.z"
-return inner;
+if ((from== to)){
+#line 227 "src/typecheck.z"
+return 1;
 ;
 }
-
-#line 231 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck12check_binaryE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+else {
+#line 228 "src/typecheck.z"
+if ((to->kind== TyKind_Variadic)){
+#line 228 "src/typecheck.z"
+return 1;
+;
+}
+else {
+#line 229 "src/typecheck.z"
+if (((from->kind== TyKind_Signed)|| (from->kind== TyKind_Unsigned))){
+#line 230 "src/typecheck.z"
+u32 from_size = _ZN4main9typecheck12integer_sizeE(from->node.integer) ;
+;
 #line 232 "src/typecheck.z"
-_ZN4main3ast2TyE*  left = _ZN4main9typecheck10check_exprE(ctx,expr->node.binary.left) ;
-;
+if (((to->kind== TyKind_Signed)|| (to->kind== TyKind_Unsigned))){
 #line 233 "src/typecheck.z"
-_ZN4main3ast2TyE*  right = _ZN4main9typecheck10check_exprE(ctx,expr->node.binary.right) ;
+u32 to_size = _ZN4main9typecheck12integer_sizeE(to->node.integer) ;
 ;
 #line 234 "src/typecheck.z"
-if ((left!= right)){
+if ((from_size<= to_size)){
 #line 234 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Arguments of binary op must be compatible") ;
+return 2;
+;
+}
+;
 }
 ;
 #line 236 "src/typecheck.z"
-return left;
+if ((to->kind== TyKind_Bool)){
+#line 236 "src/typecheck.z"
+return 2;
+;
+}
+;
+#line 238 "src/typecheck.z"
+if ((to->kind== TyKind_Ptr)){
+#line 238 "src/typecheck.z"
+return 2;
+;
+}
+;
+}
+else {
+#line 240 "src/typecheck.z"
+if ((from->kind== TyKind_Ptr)){
+#line 241 "src/typecheck.z"
+_ZN4main3ast2TyE*  inner_from = from->node.ptr;
+;
+#line 243 "src/typecheck.z"
+if ((to->kind== TyKind_Bool)){
+#line 243 "src/typecheck.z"
+return 2;
+;
+}
+else {
+#line 245 "src/typecheck.z"
+if ((to->kind== TyKind_Ptr)){
+#line 246 "src/typecheck.z"
+_ZN4main3ast2TyE*  inner_to = to->node.ptr;
+;
+#line 247 "src/typecheck.z"
+if (((inner_from->kind== TyKind_Void)|| (inner_from->kind== TyKind_ConstVoid))){
+#line 247 "src/typecheck.z"
+return 2;
+;
+}
+;
+#line 248 "src/typecheck.z"
+if (((inner_to->kind== TyKind_Void)|| (inner_to->kind== TyKind_ConstVoid))){
+#line 248 "src/typecheck.z"
+return 2;
+;
+}
+;
+#line 250 "src/typecheck.z"
+if (((inner_from->kind== TyKind_Char)&& (inner_to->kind== TyKind_ConstChar))){
+#line 250 "src/typecheck.z"
+return 2;
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+#line 253 "src/typecheck.z"
+return 0;
 ;
 }
 
-#line 239 "src/typecheck.z"
+#line 256 "src/typecheck.z"
+void  _ZN4main9typecheck18coerce_binary_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr, _ZN4main3ast2TyE*  left, _ZN4main3ast2TyE*  right) {
+#line 258 "src/typecheck.z"
+u32 coerce_left = _ZN4main9typecheck11coerce_typeE(ctx,left,right) ;
+;
+#line 259 "src/typecheck.z"
+u32 coerce_right = _ZN4main9typecheck11coerce_typeE(ctx,right,left) ;
+;
+#line 261 "src/typecheck.z"
+if (((coerce_left== 1)|| (coerce_right== 1))){
+}
+else {
+#line 262 "src/typecheck.z"
+if ((coerce_left== 2)){
+#line 263 "src/typecheck.z"
+_ZN4main3ast4ExprE*  cast_expr = _ZN4main3ast15ast_create_exprE(ctx->ast,ExprKind_Cast) ;
+;
+#line 264 "src/typecheck.z"
+cast_expr->node._cast.ty = right;
+;
+#line 265 "src/typecheck.z"
+cast_expr->node._cast.inner = expr->node.binary.left;
+;
+#line 266 "src/typecheck.z"
+expr->node.binary.left = cast_expr;
+;
+}
+else {
+#line 268 "src/typecheck.z"
+if ((coerce_right== 2)){
+#line 269 "src/typecheck.z"
+_ZN4main3ast4ExprE*  cast_expr = _ZN4main3ast15ast_create_exprE(ctx->ast,ExprKind_Cast) ;
+;
+#line 270 "src/typecheck.z"
+cast_expr->node._cast.ty = left;
+;
+#line 271 "src/typecheck.z"
+cast_expr->node._cast.inner = expr->node.binary.right;
+;
+#line 272 "src/typecheck.z"
+expr->node.binary.right = cast_expr;
+;
+}
+else {
+#line 274 "src/typecheck.z"
+_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Cannot coerce type in binary expression") ;
+}
+;
+}
+;
+}
+;
+}
+
+#line 277 "src/typecheck.z"
+_ZN4main3ast4ExprE*  _ZN4main9typecheck16coerce_expr_typeE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr, _ZN4main3ast2TyE*  from, _ZN4main3ast2TyE*  to) {
+#line 278 "src/typecheck.z"
+u32 can_coerce = _ZN4main9typecheck11coerce_typeE(ctx,from,to) ;
+;
+#line 279 "src/typecheck.z"
+if ((can_coerce== 1)){
+#line 279 "src/typecheck.z"
+return expr;
+;
+}
+else {
+#line 280 "src/typecheck.z"
+if ((can_coerce== 2)){
+#line 281 "src/typecheck.z"
+_ZN4main3ast4ExprE*  cast_expr = _ZN4main3ast15ast_create_exprE(ctx->ast,ExprKind_Cast) ;
+;
+#line 282 "src/typecheck.z"
+cast_expr->node._cast.ty = to;
+;
+#line 283 "src/typecheck.z"
+cast_expr->node._cast.inner = expr;
+;
+#line 284 "src/typecheck.z"
+return cast_expr;
+;
+}
+else {
+#line 286 "src/typecheck.z"
+_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Cannot coerce type") ;
+}
+;
+}
+;
+#line 287 "src/typecheck.z"
+abort() ;
+}
+
+#line 290 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck10check_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) ;
+
+#line 291 "src/typecheck.z"
+void  _ZN4main9typecheck10check_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) ;
+
+#line 292 "src/typecheck.z"
+void  _ZN4main9typecheck9check_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) ;
+
+#line 294 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck11check_unaryE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 295 "src/typecheck.z"
+_ZN4main3ast2TyE*  inner_ty = _ZN4main9typecheck10check_exprE(ctx,expr->node.unary.inner) ;
+;
+#line 296 "src/typecheck.z"
+_ZN4main3ast17UnaryOperatorKindE op = expr->node.unary.op;
+;
+#line 297 "src/typecheck.z"
+if ((op== UnaryOperatorKind_Deref)){
+#line 298 "src/typecheck.z"
+if ((inner_ty->kind== TyKind_Ptr)){
+#line 299 "src/typecheck.z"
+return inner_ty->node.ptr;
+;
+}
+else {
+#line 301 "src/typecheck.z"
+_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Trying to deref non-pointer") ;
+}
+;
+}
+else {
+#line 303 "src/typecheck.z"
+if ((op== UnaryOperatorKind_Refer)){
+#line 304 "src/typecheck.z"
+_ZN4main3ast2TyE ptr_ty ;
+;
+#line 305 "src/typecheck.z"
+ptr_ty.kind = TyKind_Ptr;
+;
+#line 306 "src/typecheck.z"
+ptr_ty.node.ptr = inner_ty;
+;
+#line 307 "src/typecheck.z"
+return _ZN4main9typecheck9intern_tyE(ctx,ptr_ty) ;
+;
+}
+else {
+#line 309 "src/typecheck.z"
+if ((op== UnaryOperatorKind_Negation)){
+#line 310 "src/typecheck.z"
+return inner_ty;
+;
+}
+else {
+#line 312 "src/typecheck.z"
+if ((op== UnaryOperatorKind_Complement)){
+#line 313 "src/typecheck.z"
+expr->node.unary.inner = _ZN4main9typecheck16coerce_expr_typeE(ctx,expr->node.unary.inner,inner_ty,ctx->common._bool) ;
+;
+#line 314 "src/typecheck.z"
+return ctx->common._bool;
+;
+}
+;
+}
+;
+}
+;
+}
+;
+#line 316 "src/typecheck.z"
+abort() ;
+}
+
+#line 319 "src/typecheck.z"
+bool _ZN4main9typecheck19operator_is_booleanE(_ZN4main3ast18BinaryOperatorKindE op) {
+#line 320 "src/typecheck.z"
+return ((((((((op== BinaryOperatorKind_Less)|| (op== BinaryOperatorKind_LessEq))|| (op== BinaryOperatorKind_NotEq))|| (op== BinaryOperatorKind_Greater))|| (op== BinaryOperatorKind_GreaterEq))|| (op== BinaryOperatorKind_Equality))|| (op== BinaryOperatorKind_And))|| (op== BinaryOperatorKind_Or));
+;
+}
+
+#line 325 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck12check_binaryE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 326 "src/typecheck.z"
+_ZN4main3ast18BinaryOperatorKindE op = expr->node.binary.op;
+;
+#line 327 "src/typecheck.z"
+_ZN4main3ast2TyE*  left = _ZN4main9typecheck10check_exprE(ctx,expr->node.binary.left) ;
+;
+#line 328 "src/typecheck.z"
+_ZN4main3ast2TyE*  right = _ZN4main9typecheck10check_exprE(ctx,expr->node.binary.right) ;
+;
+#line 330 "src/typecheck.z"
+_ZN4main9typecheck18coerce_binary_exprE(ctx,expr,left,right) ;
+#line 332 "src/typecheck.z"
+if (_ZN4main9typecheck19operator_is_booleanE(op) ){
+#line 332 "src/typecheck.z"
+return ctx->common._bool;
+;
+}
+else {
+#line 333 "src/typecheck.z"
+return left;
+;
+}
+;
+}
+
+#line 336 "src/typecheck.z"
 void  _ZN4main9typecheck11check_blockE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast5BlockE*  block) {
-#line 240 "src/typecheck.z"
+#line 337 "src/typecheck.z"
 u32 i = 0;
 ;
-#line 241 "src/typecheck.z"
+#line 338 "src/typecheck.z"
 while ( (i< block->num_exprs))
 {
-#line 242 "src/typecheck.z"
+#line 339 "src/typecheck.z"
 _ZN4main9typecheck10check_exprE(ctx,block->exprs[i]) ;
-#line 243 "src/typecheck.z"
+#line 340 "src/typecheck.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 247 "src/typecheck.z"
+#line 344 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck16check_block_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 248 "src/typecheck.z"
+#line 345 "src/typecheck.z"
 _ZN4main9typecheck11check_blockE(ctx,expr->node.block) ;
-#line 249 "src/typecheck.z"
+#line 346 "src/typecheck.z"
 return ctx->common._void;
 ;
 }
 
-#line 252 "src/typecheck.z"
+#line 349 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck10check_callE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 253 "src/typecheck.z"
+#line 350 "src/typecheck.z"
 _ZN4main3ast8CallDataE call = expr->node.call;
 ;
-#line 254 "src/typecheck.z"
+#line 351 "src/typecheck.z"
 _ZN4main3ast2TyE*  fn_ty = _ZN4main9typecheck10check_exprE(ctx,call.func) ;
 ;
-#line 255 "src/typecheck.z"
+#line 352 "src/typecheck.z"
 if ((fn_ty->kind!= TyKind_Fn)){
-#line 255 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Tried to call non-function") ;
+#line 352 "src/typecheck.z"
+_ZN4main5error12emit_warningE(ctx->source_map,expr->span,"Tried to call non-function") ;
 }
 ;
-#line 257 "src/typecheck.z"
+#line 354 "src/typecheck.z"
 _ZN4main3ast5FnDefE*  fn_def = &fn_ty->node.function;
 ;
-#line 259 "src/typecheck.z"
-i32 i = 0;
+#line 356 "src/typecheck.z"
+bool is_variadic = false;
 ;
-#line 260 "src/typecheck.z"
-while ( (i< call.num_args))
-{
-#line 261 "src/typecheck.z"
-_ZN4main3ast2TyE*  arg_ty = _ZN4main9typecheck10check_exprE(ctx,call.args[i]) ;
+#line 357 "src/typecheck.z"
+if ((fn_def->num_parameters> 0)){
+#line 358 "src/typecheck.z"
+_ZN4main3ast2TyE*  param_ty = fn_def->parameters[(fn_def->num_parameters- 1)];
 ;
-#line 262 "src/typecheck.z"
-if ((arg_ty!= fn_def->parameters[i])){
-#line 262 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Function parameter type mismatch") ;
+#line 359 "src/typecheck.z"
+is_variadic = (param_ty->kind== TyKind_Variadic);
+;
 }
 ;
-#line 263 "src/typecheck.z"
+#line 362 "src/typecheck.z"
+if (((call.num_args== fn_def->num_parameters)|| ((call.num_args>= (fn_def->num_parameters- 1))&& is_variadic))){
+#line 363 "src/typecheck.z"
+i32 i = 0;
+;
+#line 364 "src/typecheck.z"
+while ( ((i< call.num_args)&& (i< fn_def->num_parameters)))
+{
+#line 365 "src/typecheck.z"
+_ZN4main3ast2TyE*  arg_ty = _ZN4main9typecheck10check_exprE(ctx,call.args[i]) ;
+;
+#line 366 "src/typecheck.z"
+call.args[i] = _ZN4main9typecheck16coerce_expr_typeE(ctx,call.args[i],arg_ty,fn_def->parameters[i]) ;
+;
+#line 367 "src/typecheck.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 265 "src/typecheck.z"
+}
+else {
+#line 370 "src/typecheck.z"
+_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Called function with incorrect number of arguments") ;
+}
+;
+#line 371 "src/typecheck.z"
 return fn_def->output;
 ;
 }
 
-#line 268 "src/typecheck.z"
+#line 374 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck17check_conditionalE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 269 "src/typecheck.z"
-_ZN4main3ast15ConditionalDataE data = expr->node.conditional;
+#line 375 "src/typecheck.z"
+_ZN4main3ast15ConditionalDataE*  data = &expr->node.conditional;
 ;
-#line 270 "src/typecheck.z"
-_ZN4main3ast4ExprE*  condition = data.condition;
+#line 377 "src/typecheck.z"
+_ZN4main3ast2TyE*  cond_ty = _ZN4main9typecheck10check_exprE(ctx,data->condition) ;
 ;
-#line 271 "src/typecheck.z"
-_ZN4main3ast2TyE*  cond_ty = _ZN4main9typecheck10check_exprE(ctx,condition) ;
+#line 378 "src/typecheck.z"
+data->condition = _ZN4main9typecheck16coerce_expr_typeE(ctx,data->condition,cond_ty,ctx->common._bool) ;
 ;
-#line 272 "src/typecheck.z"
-if ((cond_ty->kind!= TyKind_Bool)){
-#line 272 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,condition->span,"Condition must be of type bool") ;
+#line 380 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,data->then) ;
+#line 381 "src/typecheck.z"
+if (data->otherwise){
+#line 382 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,data->otherwise) ;
 }
 ;
-#line 274 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,data.then) ;
-#line 275 "src/typecheck.z"
-if (data.otherwise){
-#line 276 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,data.otherwise) ;
-}
-;
-#line 278 "src/typecheck.z"
+#line 384 "src/typecheck.z"
 return ctx->common._void;
 ;
 }
 
-#line 281 "src/typecheck.z"
+#line 387 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck11check_whileE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 282 "src/typecheck.z"
+#line 388 "src/typecheck.z"
 _ZN4main3ast9WhileDataE data = expr->node.whl;
 ;
-#line 283 "src/typecheck.z"
+#line 389 "src/typecheck.z"
 _ZN4main3ast4ExprE*  condition = data.condition;
 ;
-#line 284 "src/typecheck.z"
+#line 390 "src/typecheck.z"
 _ZN4main3ast2TyE*  cond_ty = _ZN4main9typecheck10check_exprE(ctx,condition) ;
 ;
-#line 285 "src/typecheck.z"
+#line 391 "src/typecheck.z"
 if ((cond_ty->kind!= TyKind_Bool)){
-#line 285 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,condition->span,"Condition must be of type bool") ;
+#line 391 "src/typecheck.z"
+_ZN4main5error12emit_warningE(ctx->source_map,condition->span,"Condition must be of type bool") ;
 }
 ;
-#line 286 "src/typecheck.z"
+#line 392 "src/typecheck.z"
 _ZN4main9typecheck10check_exprE(ctx,data.body) ;
-#line 287 "src/typecheck.z"
+#line 393 "src/typecheck.z"
 return ctx->common._void;
 ;
 }
 
-#line 290 "src/typecheck.z"
+#line 396 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck14check_indexingE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 291 "src/typecheck.z"
+#line 397 "src/typecheck.z"
 _ZN4main3ast12IndexingDataE data = expr->node.indexing;
 ;
-#line 292 "src/typecheck.z"
+#line 398 "src/typecheck.z"
 _ZN4main3ast2TyE*  array_ty = _ZN4main9typecheck10check_exprE(ctx,data.array) ;
 ;
-#line 293 "src/typecheck.z"
+#line 399 "src/typecheck.z"
 if ((array_ty->kind!= TyKind_Ptr)){
-#line 293 "src/typecheck.z"
+#line 399 "src/typecheck.z"
 _ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Cannot index into non-ptr type") ;
 }
 ;
-#line 294 "src/typecheck.z"
+#line 400 "src/typecheck.z"
 _ZN4main3ast2TyE*  index_ty = _ZN4main9typecheck10check_exprE(ctx,data.index) ;
 ;
-#line 295 "src/typecheck.z"
+#line 401 "src/typecheck.z"
 if (!((index_ty->kind== TyKind_Signed)|| (index_ty->kind== TyKind_Unsigned))){
-#line 296 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Cannot index into non-ptr type") ;
+#line 402 "src/typecheck.z"
+_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Only integers are valid indices") ;
 }
 ;
-#line 298 "src/typecheck.z"
+#line 404 "src/typecheck.z"
 return array_ty->node.ptr;
 ;
 }
 
-#line 301 "src/typecheck.z"
+#line 407 "src/typecheck.z"
 _ZN4main3ast2TyE*  _ZN4main9typecheck11check_fieldE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 302 "src/typecheck.z"
+#line 408 "src/typecheck.z"
 _ZN4main3ast9FieldDataE data = expr->node.field;
 ;
-#line 303 "src/typecheck.z"
+#line 409 "src/typecheck.z"
 _ZN4main3ast2TyE*  compound_ty = _ZN4main9typecheck10check_exprE(ctx,data.strct) ;
 ;
-#line 305 "src/typecheck.z"
+#line 411 "src/typecheck.z"
 _ZN4main3ast2TyE*  ptr_inner = compound_ty->node.ptr;
 ;
-#line 306 "src/typecheck.z"
+#line 412 "src/typecheck.z"
 if (((compound_ty->kind== TyKind_Ptr)&& ((ptr_inner->kind== TyKind_Struct)|| (ptr_inner->kind== TyKind_Union)))){
-#line 307 "src/typecheck.z"
+#line 413 "src/typecheck.z"
 compound_ty = compound_ty->node.ptr;
 ;
 }
 ;
-#line 310 "src/typecheck.z"
+#line 416 "src/typecheck.z"
 if (((compound_ty->kind!= TyKind_Struct)&& (compound_ty->kind!= TyKind_Union))){
-#line 310 "src/typecheck.z"
+#line 416 "src/typecheck.z"
 _ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Cannot access field of non-compound type") ;
 }
 ;
-#line 312 "src/typecheck.z"
-_ZN4main3ast11CompoundDefE compound = compound_ty->node.compound;
-;
-#line 314 "src/typecheck.z"
-u32 i = 0;
-;
-#line 315 "src/typecheck.z"
-while ( (i< compound.num_fields))
-{
-#line 316 "src/typecheck.z"
-if ((compound.fields[i].name.x== data.ident.name.x)){
-#line 317 "src/typecheck.z"
-return compound.fields[i].ty;
-;
-}
-;
-}
-;
-#line 320 "src/typecheck.z"
-_ZN4main5error10emit_errorE(ctx->source_map,expr->span,"Compound type has no such field") ;
-#line 321 "src/typecheck.z"
-return _ZN4main4cstd4nullE;
-;
-}
-
-#line 324 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck10check_pathE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4PathE*  path) {
-#line 325 "src/typecheck.z"
-abort() ;
-}
-
-#line 329 "src/typecheck.z"
-void  _ZN4main9typecheck9check_letE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7LetDataE data) {
-#line 330 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,data.value) ;
-}
-
-#line 333 "src/typecheck.z"
-void  _ZN4main9typecheck16check_assignmentE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast14AssignmentDataE assignment) {
-#line 334 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,assignment.left) ;
-#line 335 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,assignment.right) ;
-}
-
-#line 338 "src/typecheck.z"
-void  _ZN4main9typecheck12check_returnE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 339 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,expr) ;
-}
-
-#line 342 "src/typecheck.z"
-_ZN4main3ast2TyE*  _ZN4main9typecheck10check_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 343 "src/typecheck.z"
-if ((expr->kind== ExprKind_Unary)){
-#line 343 "src/typecheck.z"
-return _ZN4main9typecheck11check_unaryE(ctx,expr) ;
-;
-}
-else {
-#line 344 "src/typecheck.z"
-if ((expr->kind== ExprKind_Binary)){
-#line 344 "src/typecheck.z"
-return _ZN4main9typecheck12check_binaryE(ctx,expr) ;
-;
-}
-else {
-#line 345 "src/typecheck.z"
-if ((expr->kind== ExprKind_Block)){
-#line 345 "src/typecheck.z"
-return _ZN4main9typecheck16check_block_exprE(ctx,expr) ;
-;
-}
-else {
-#line 346 "src/typecheck.z"
-if ((expr->kind== ExprKind_Call)){
-#line 346 "src/typecheck.z"
-return _ZN4main9typecheck10check_callE(ctx,expr) ;
-;
-}
-else {
-#line 347 "src/typecheck.z"
-if ((expr->kind== ExprKind_Conditional)){
-#line 347 "src/typecheck.z"
-return _ZN4main9typecheck17check_conditionalE(ctx,expr) ;
-;
-}
-else {
-#line 348 "src/typecheck.z"
-if ((expr->kind== ExprKind_While)){
-#line 348 "src/typecheck.z"
-return _ZN4main9typecheck11check_whileE(ctx,expr) ;
-;
-}
-else {
-#line 349 "src/typecheck.z"
-if ((expr->kind== ExprKind_Indexing)){
-#line 349 "src/typecheck.z"
-return _ZN4main9typecheck14check_indexingE(ctx,expr) ;
-;
-}
-else {
-#line 350 "src/typecheck.z"
-if ((expr->kind== ExprKind_Field)){
-#line 350 "src/typecheck.z"
-return _ZN4main9typecheck11check_fieldE(ctx,expr) ;
-;
-}
-else {
-#line 351 "src/typecheck.z"
-if ((expr->kind== ExprKind_Path)){
-#line 351 "src/typecheck.z"
-return _ZN4main9typecheck10check_pathE(ctx,&expr->node.path) ;
-;
-}
-else {
-#line 352 "src/typecheck.z"
-if ((expr->kind== ExprKind_Literal)){
-#line 352 "src/typecheck.z"
-return _ZN4main9typecheck17ast_literal_to_tyE(ctx,expr->node.lit) ;
-;
-}
-else {
-#line 353 "src/typecheck.z"
-abort() ;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-
-#line 357 "src/typecheck.z"
-void  _ZN4main9typecheck14check_variableE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 358 "src/typecheck.z"
-_ZN4main3ast2TyE*  decl_ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,item->node.variable.ast_ty) ;
-;
-#line 360 "src/typecheck.z"
-printf("Checking %s\n",_ZN4main9interning7get_strE(ctx->interner,item->ident.name) ) ;
-#line 362 "src/typecheck.z"
-if (item->node.variable.body){
-#line 363 "src/typecheck.z"
-_ZN4main3ast2TyE*  expr_ty = _ZN4main9typecheck10check_exprE(ctx,item->node.variable.body) ;
-;
-#line 364 "src/typecheck.z"
-if ((decl_ty!= expr_ty)){
-#line 364 "src/typecheck.z"
-_ZN4main5error12emit_warningE(ctx->source_map,item->span,"Variable type declaration does not match expression type") ;
-}
-;
-}
-;
-}
-
-#line 368 "src/typecheck.z"
-void  _ZN4main9typecheck14check_functionE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 370 "src/typecheck.z"
-if (item->node.function.body){
-#line 371 "src/typecheck.z"
-_ZN4main9typecheck10check_exprE(ctx,item->node.function.body) ;
-}
-;
-}
-
-#line 375 "src/typecheck.z"
-void  _ZN4main9typecheck10check_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 376 "src/typecheck.z"
-if ((item->kind== ItemKind_Enum)){
-}
-else {
-#line 377 "src/typecheck.z"
-if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-}
-else {
-#line 378 "src/typecheck.z"
-if ((item->kind== ItemKind_Module)){
-#line 378 "src/typecheck.z"
-_ZN4main9typecheck9check_modE(ctx,item->node.module) ;
-}
-else {
-#line 379 "src/typecheck.z"
-if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
-#line 379 "src/typecheck.z"
-_ZN4main9typecheck14check_variableE(ctx,item) ;
-}
-else {
-#line 380 "src/typecheck.z"
-if ((item->kind== ItemKind_Function)){
-#line 380 "src/typecheck.z"
-_ZN4main9typecheck14check_functionE(ctx,item) ;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-;
-}
-
-#line 383 "src/typecheck.z"
-void  _ZN4main9typecheck9check_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 384 "src/typecheck.z"
-u32 i = 0;
-;
-#line 385 "src/typecheck.z"
-while ( (i< module->num_items))
-{
-#line 386 "src/typecheck.z"
-_ZN4main9typecheck10check_itemE(ctx,module->items[i]) ;
-#line 387 "src/typecheck.z"
-i = (i+ 1);
-;
-}
-;
-}
-
-#line 391 "src/typecheck.z"
-void  _ZN4main9typecheck12collect_enumE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
-#line 392 "src/typecheck.z"
-_ZN4main3ast7EnumDefE def ;
-;
-#line 393 "src/typecheck.z"
-def.variants = malloc((sizeof(_ZN4main3ast5IdentE)* item->node._enum.num_variants)) ;
-;
-#line 394 "src/typecheck.z"
-def.path = path;
-;
-#line 396 "src/typecheck.z"
-u32 i = 0;
-;
-#line 397 "src/typecheck.z"
-while ( (i< item->node._enum.num_variants))
-{
-#line 398 "src/typecheck.z"
-def.variants[i] = item->node._enum.variants[i].ident.name;
-;
-#line 399 "src/typecheck.z"
-i = (i+ 1);
-;
-}
-;
-#line 401 "src/typecheck.z"
-def.num_variants = item->node._enum.num_variants;
-;
-#line 403 "src/typecheck.z"
-_ZN4main3ast2TyE ty ;
-;
-#line 404 "src/typecheck.z"
-ty.kind = TyKind_Enum;
-;
-#line 405 "src/typecheck.z"
-ty.node._enum = def;
-;
-#line 407 "src/typecheck.z"
-_ZN4main3ast2TyE*  ty_ptr = _ZN4main9typecheck9intern_tyE(ctx,ty) ;
-;
-}
-
-#line 410 "src/typecheck.z"
-void  _ZN4main9typecheck16collect_functionE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-}
-
-#line 414 "src/typecheck.z"
-void  _ZN4main9typecheck16collect_compoundE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
-#line 416 "src/typecheck.z"
-_ZN4main3ast11CompoundDefE def ;
-;
-#line 417 "src/typecheck.z"
-def.fields = malloc((sizeof(_ZN4main3ast8FieldDefE)* item->node.compound.num_fields)) ;
-;
 #line 418 "src/typecheck.z"
-def.path = path;
+_ZN4main3ast11CompoundDefE compound = compound_ty->node.compound;
 ;
 #line 420 "src/typecheck.z"
 u32 i = 0;
 ;
 #line 421 "src/typecheck.z"
-while ( (i< item->node.compound.num_fields))
+while ( (i< compound.num_fields))
 {
 #line 422 "src/typecheck.z"
-def.fields[i].name = item->node.compound.fields[i].ident.name;
-;
+if ((compound.fields[i].name.x== data.ident.name.x)){
 #line 423 "src/typecheck.z"
-def.fields[i].ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,item->node.compound.fields[i].ast_ty) ;
+return compound.fields[i].ty;
 ;
-#line 424 "src/typecheck.z"
+}
+;
+#line 425 "src/typecheck.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 426 "src/typecheck.z"
-def.num_fields = item->node.compound.num_fields;
-;
+#line 427 "src/typecheck.z"
+_ZN4main5error12emit_warningE(ctx->source_map,expr->span,"Compound type has no such field") ;
 #line 428 "src/typecheck.z"
-_ZN4main3ast2TyE ty ;
+return _ZN4main4cstd4nullE;
 ;
-#line 429 "src/typecheck.z"
-if ((item->kind== ItemKind_Struct)){
-#line 429 "src/typecheck.z"
-ty.kind = TyKind_Struct;
+}
+
+#line 431 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck10check_pathE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4PathE*  path) {
+#line 432 "src/typecheck.z"
+if ((path->binding.kind== BindingKind_Item)){
+#line 433 "src/typecheck.z"
+_ZN4main3ast4ItemE*  item = path->binding.node.item;
+;
+#line 434 "src/typecheck.z"
+if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
+#line 435 "src/typecheck.z"
+return item->node.compound.ty;
 ;
 }
 else {
-#line 430 "src/typecheck.z"
-if ((item->kind== ItemKind_Union)){
-#line 430 "src/typecheck.z"
-ty.kind = TyKind_Union;
-;
-}
-;
-}
-;
-#line 432 "src/typecheck.z"
-ty.node.compound = def;
-;
-#line 434 "src/typecheck.z"
-_ZN4main3ast2TyE*  ty_ptr = _ZN4main9typecheck9intern_tyE(ctx,ty) ;
-;
-}
-
 #line 437 "src/typecheck.z"
-void  _ZN4main9typecheck11collect_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) ;
-
-#line 439 "src/typecheck.z"
-void  _ZN4main9typecheck12collect_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
-#line 440 "src/typecheck.z"
 if ((item->kind== ItemKind_Enum)){
-#line 440 "src/typecheck.z"
-_ZN4main9typecheck12collect_enumE(ctx,item,path) ;
-}
+#line 438 "src/typecheck.z"
+return item->node._enum.ty;
 ;
-#line 441 "src/typecheck.z"
+}
+else {
+#line 440 "src/typecheck.z"
 if ((item->kind== ItemKind_Function)){
 #line 441 "src/typecheck.z"
+return item->node.function.header.ty;
+;
+}
+else {
+#line 443 "src/typecheck.z"
+if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
+#line 444 "src/typecheck.z"
+return item->node.variable.ty;
+;
+}
+else {
+#line 446 "src/typecheck.z"
+abort() ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+else {
+#line 448 "src/typecheck.z"
+if ((path->binding.kind== BindingKind_Variable)){
+#line 449 "src/typecheck.z"
+_ZN4main3ast7LetDataE*  data = path->binding.node.variable;
+;
+#line 450 "src/typecheck.z"
+return data->ty;
+;
+}
+else {
+#line 452 "src/typecheck.z"
+if ((path->binding.kind== BindingKind_Parameter)){
+#line 453 "src/typecheck.z"
+_ZN4main3ast17FunctionParameterE*  param = path->binding.node.parameter;
+;
+#line 454 "src/typecheck.z"
+return param->ty;
+;
+}
+else {
+#line 456 "src/typecheck.z"
+if ((path->binding.kind== BindingKind_Variant)){
+#line 457 "src/typecheck.z"
+_ZN4main3ast11EnumVariantE*  variant = path->binding.node.variant;
+;
+#line 458 "src/typecheck.z"
+_ZN4main3ast4ItemE*  enum_item = variant->_enum;
+;
+#line 459 "src/typecheck.z"
+return enum_item->node._enum.ty;
+;
+}
+else {
+#line 461 "src/typecheck.z"
+if ((path->binding.kind== BindingKind_PrimitiveType)){
+#line 462 "src/typecheck.z"
+return _ZN4main9typecheck15primitive_to_tyE(ctx,path->binding.node.primitive) ;
+;
+}
+else {
+#line 464 "src/typecheck.z"
+abort() ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+
+#line 468 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck9check_letE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast7LetDataE*  data) {
+#line 469 "src/typecheck.z"
+data->ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,data->ast_ty) ;
+;
+#line 470 "src/typecheck.z"
+if (data->value){
+#line 470 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,data->value) ;
+}
+;
+#line 471 "src/typecheck.z"
+return ctx->common._void;
+;
+}
+
+#line 474 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck16check_assignmentE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast14AssignmentDataE assignment) {
+#line 475 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,assignment.left) ;
+#line 476 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,assignment.right) ;
+#line 477 "src/typecheck.z"
+return ctx->common._void;
+;
+}
+
+#line 480 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck12check_returnE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 481 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,expr) ;
+#line 482 "src/typecheck.z"
+return ctx->common._void;
+;
+}
+
+#line 485 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck12check_sizeofE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 486 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,expr) ;
+#line 487 "src/typecheck.z"
+return ctx->common._u64;
+;
+}
+
+#line 490 "src/typecheck.z"
+_ZN4main3ast2TyE*  _ZN4main9typecheck10check_exprE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
+#line 491 "src/typecheck.z"
+if ((expr->kind== ExprKind_Unary)){
+#line 491 "src/typecheck.z"
+return _ZN4main9typecheck11check_unaryE(ctx,expr) ;
+;
+}
+else {
+#line 492 "src/typecheck.z"
+if ((expr->kind== ExprKind_Binary)){
+#line 492 "src/typecheck.z"
+return _ZN4main9typecheck12check_binaryE(ctx,expr) ;
+;
+}
+else {
+#line 493 "src/typecheck.z"
+if ((expr->kind== ExprKind_Block)){
+#line 493 "src/typecheck.z"
+return _ZN4main9typecheck16check_block_exprE(ctx,expr) ;
+;
+}
+else {
+#line 494 "src/typecheck.z"
+if ((expr->kind== ExprKind_Call)){
+#line 494 "src/typecheck.z"
+return _ZN4main9typecheck10check_callE(ctx,expr) ;
+;
+}
+else {
+#line 495 "src/typecheck.z"
+if ((expr->kind== ExprKind_Conditional)){
+#line 495 "src/typecheck.z"
+return _ZN4main9typecheck17check_conditionalE(ctx,expr) ;
+;
+}
+else {
+#line 496 "src/typecheck.z"
+if ((expr->kind== ExprKind_ControlFlow)){
+#line 496 "src/typecheck.z"
+return ctx->common._void;
+;
+}
+else {
+#line 497 "src/typecheck.z"
+if ((expr->kind== ExprKind_While)){
+#line 497 "src/typecheck.z"
+return _ZN4main9typecheck11check_whileE(ctx,expr) ;
+;
+}
+else {
+#line 498 "src/typecheck.z"
+if ((expr->kind== ExprKind_Indexing)){
+#line 498 "src/typecheck.z"
+return _ZN4main9typecheck14check_indexingE(ctx,expr) ;
+;
+}
+else {
+#line 499 "src/typecheck.z"
+if ((expr->kind== ExprKind_Field)){
+#line 499 "src/typecheck.z"
+return _ZN4main9typecheck11check_fieldE(ctx,expr) ;
+;
+}
+else {
+#line 500 "src/typecheck.z"
+if ((expr->kind== ExprKind_Path)){
+#line 500 "src/typecheck.z"
+return _ZN4main9typecheck10check_pathE(ctx,&expr->node.path) ;
+;
+}
+else {
+#line 501 "src/typecheck.z"
+if ((expr->kind== ExprKind_Literal)){
+#line 501 "src/typecheck.z"
+return _ZN4main9typecheck17ast_literal_to_tyE(ctx,expr->node.lit) ;
+;
+}
+else {
+#line 502 "src/typecheck.z"
+if ((expr->kind== ExprKind_Assignment)){
+#line 502 "src/typecheck.z"
+return _ZN4main9typecheck16check_assignmentE(ctx,expr->node.assignment) ;
+;
+}
+else {
+#line 503 "src/typecheck.z"
+if ((expr->kind== ExprKind_Let)){
+#line 503 "src/typecheck.z"
+return _ZN4main9typecheck9check_letE(ctx,&expr->node._let) ;
+;
+}
+else {
+#line 504 "src/typecheck.z"
+if ((expr->kind== ExprKind_Return)){
+#line 504 "src/typecheck.z"
+return _ZN4main9typecheck12check_returnE(ctx,expr->node._return) ;
+;
+}
+else {
+#line 505 "src/typecheck.z"
+if ((expr->kind== ExprKind_Sizeof)){
+#line 505 "src/typecheck.z"
+return _ZN4main9typecheck12check_sizeofE(ctx,expr->node._sizeof) ;
+;
+}
+else {
+#line 506 "src/typecheck.z"
+abort() ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+
+#line 510 "src/typecheck.z"
+void  _ZN4main9typecheck14check_variableE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 511 "src/typecheck.z"
+_ZN4main3ast12VariableDataE*  data = &item->node.variable;
+;
+#line 512 "src/typecheck.z"
+_ZN4main3ast2TyE*  decl_ty = data->ty;
+;
+#line 514 "src/typecheck.z"
+if (item->node.variable.body){
+#line 515 "src/typecheck.z"
+_ZN4main3ast2TyE*  expr_ty = _ZN4main9typecheck10check_exprE(ctx,data->body) ;
+;
+#line 517 "src/typecheck.z"
+data->body = _ZN4main9typecheck16coerce_expr_typeE(ctx,data->body,expr_ty,decl_ty) ;
+;
+}
+;
+}
+
+#line 521 "src/typecheck.z"
+void  _ZN4main9typecheck14check_functionE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 523 "src/typecheck.z"
+if (item->node.function.body){
+#line 524 "src/typecheck.z"
+_ZN4main9typecheck10check_exprE(ctx,item->node.function.body) ;
+}
+;
+}
+
+#line 528 "src/typecheck.z"
+void  _ZN4main9typecheck10check_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 529 "src/typecheck.z"
+if ((item->kind== ItemKind_Enum)){
+}
+else {
+#line 530 "src/typecheck.z"
+if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
+}
+else {
+#line 531 "src/typecheck.z"
+if ((item->kind== ItemKind_Use)){
+}
+else {
+#line 532 "src/typecheck.z"
+if ((item->kind== ItemKind_Module)){
+#line 532 "src/typecheck.z"
+_ZN4main9typecheck9check_modE(ctx,item->node.module) ;
+}
+else {
+#line 533 "src/typecheck.z"
+if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
+#line 533 "src/typecheck.z"
+_ZN4main9typecheck14check_variableE(ctx,item) ;
+}
+else {
+#line 534 "src/typecheck.z"
+if ((item->kind== ItemKind_Function)){
+#line 534 "src/typecheck.z"
+_ZN4main9typecheck14check_functionE(ctx,item) ;
+}
+else {
+#line 535 "src/typecheck.z"
+abort() ;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+;
+}
+
+#line 538 "src/typecheck.z"
+void  _ZN4main9typecheck9check_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
+#line 539 "src/typecheck.z"
+u32 i = 0;
+;
+#line 540 "src/typecheck.z"
+while ( (i< module->num_items))
+{
+#line 541 "src/typecheck.z"
+_ZN4main9typecheck10check_itemE(ctx,module->items[i]) ;
+#line 542 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+}
+
+#line 546 "src/typecheck.z"
+void  _ZN4main9typecheck12collect_enumE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
+#line 548 "src/typecheck.z"
+_ZN4main3ast2TyE*  ty = item->node._enum.ty;
+;
+#line 549 "src/typecheck.z"
+_ZN4main3ast7EnumDefE*  def = &ty->node._enum;
+;
+#line 551 "src/typecheck.z"
+def->variants = malloc((sizeof(_ZN4main9interning3SidE)* item->node._enum.num_variants)) ;
+;
+#line 552 "src/typecheck.z"
+u32 i = 0;
+;
+#line 553 "src/typecheck.z"
+while ( (i< item->node._enum.num_variants))
+{
+#line 554 "src/typecheck.z"
+def->variants[i] = item->node._enum.variants[i].ident.name;
+;
+#line 555 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+#line 557 "src/typecheck.z"
+def->num_variants = item->node._enum.num_variants;
+;
+}
+
+#line 560 "src/typecheck.z"
+void  _ZN4main9typecheck16collect_variableE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 561 "src/typecheck.z"
+_ZN4main3ast12VariableDataE*  data = &item->node.variable;
+;
+#line 562 "src/typecheck.z"
+data->ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,data->ast_ty) ;
+;
+}
+
+#line 565 "src/typecheck.z"
+void  _ZN4main9typecheck16collect_functionE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 567 "src/typecheck.z"
+_ZN4main3ast14FunctionHeaderE*  header = &item->node.function.header;
+;
+#line 569 "src/typecheck.z"
+_ZN4main3ast5FnDefE def ;
+;
+#line 571 "src/typecheck.z"
+def.output = _ZN4main9typecheck14ast_type_to_tyE(ctx,header->output_ast_ty) ;
+;
+#line 572 "src/typecheck.z"
+def.num_parameters = header->num_parameters;
+;
+#line 573 "src/typecheck.z"
+def.parameters = malloc((8* def.num_parameters)) ;
+;
+#line 575 "src/typecheck.z"
+u32 i = 0;
+;
+#line 576 "src/typecheck.z"
+while ( (i< def.num_parameters))
+{
+#line 577 "src/typecheck.z"
+_ZN4main3ast2TyE*  param_ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,header->parameters[i].ast_ty) ;
+;
+#line 578 "src/typecheck.z"
+def.parameters[i] = param_ty;
+;
+#line 579 "src/typecheck.z"
+header->parameters[i].ty = param_ty;
+;
+#line 580 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+#line 583 "src/typecheck.z"
+_ZN4main3ast2TyE ty ;
+;
+#line 584 "src/typecheck.z"
+ty.kind = TyKind_Fn;
+;
+#line 585 "src/typecheck.z"
+ty.node.function = def;
+;
+#line 587 "src/typecheck.z"
+item->node.function.header.ty = _ZN4main9typecheck9intern_tyE(ctx,ty) ;
+;
+}
+
+#line 590 "src/typecheck.z"
+void  _ZN4main9typecheck16collect_compoundE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
+#line 591 "src/typecheck.z"
+_ZN4main3ast2TyE*  ty = item->node.compound.ty;
+;
+#line 592 "src/typecheck.z"
+_ZN4main3ast11CompoundDefE*  def = &ty->node.compound;
+;
+#line 594 "src/typecheck.z"
+if ((item->node.compound.num_fields> 0)){
+#line 596 "src/typecheck.z"
+def->fields = malloc((sizeof(_ZN4main3ast8FieldDefE)* item->node.compound.num_fields)) ;
+;
+#line 597 "src/typecheck.z"
+u32 i = 0;
+;
+#line 598 "src/typecheck.z"
+while ( (i< item->node.compound.num_fields))
+{
+#line 599 "src/typecheck.z"
+def->fields[i].name = item->node.compound.fields[i].ident.name;
+;
+#line 600 "src/typecheck.z"
+def->fields[i].ty = _ZN4main9typecheck14ast_type_to_tyE(ctx,item->node.compound.fields[i].ast_ty) ;
+;
+#line 601 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+#line 603 "src/typecheck.z"
+def->num_fields = item->node.compound.num_fields;
+;
+}
+;
+}
+
+#line 608 "src/typecheck.z"
+void  _ZN4main9typecheck11collect_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) ;
+
+#line 610 "src/typecheck.z"
+void  _ZN4main9typecheck12collect_itemE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast4ItemE*  item, _ZN4main3ast4PathE path) {
+#line 611 "src/typecheck.z"
+if ((item->kind== ItemKind_Enum)){
+#line 611 "src/typecheck.z"
+_ZN4main9typecheck12collect_enumE(ctx,item,path) ;
+}
+else {
+#line 612 "src/typecheck.z"
+if ((item->kind== ItemKind_Function)){
+#line 612 "src/typecheck.z"
 _ZN4main9typecheck16collect_functionE(ctx,item) ;
 }
 else {
-#line 442 "src/typecheck.z"
+#line 613 "src/typecheck.z"
+if (((item->kind== ItemKind_Variable)|| (item->kind== ItemKind_Const))){
+#line 613 "src/typecheck.z"
+_ZN4main9typecheck16collect_variableE(ctx,item) ;
+}
+else {
+#line 614 "src/typecheck.z"
 if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-#line 442 "src/typecheck.z"
+#line 614 "src/typecheck.z"
 _ZN4main9typecheck16collect_compoundE(ctx,item,path) ;
 }
 else {
-#line 443 "src/typecheck.z"
+#line 615 "src/typecheck.z"
 if ((item->kind== ItemKind_Module)){
-#line 443 "src/typecheck.z"
+#line 615 "src/typecheck.z"
 _ZN4main9typecheck11collect_modE(ctx,item->node.module) ;
 }
 ;
@@ -7099,57 +7742,166 @@ _ZN4main9typecheck11collect_modE(ctx,item->node.module) ;
 }
 ;
 }
+;
+}
+;
+}
 
-#line 446 "src/typecheck.z"
+#line 618 "src/typecheck.z"
 void  _ZN4main9typecheck11collect_modE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 447 "src/typecheck.z"
+#line 619 "src/typecheck.z"
 u32 i = 0;
 ;
-#line 448 "src/typecheck.z"
+#line 620 "src/typecheck.z"
 while ( (i< module->num_items))
 {
-#line 449 "src/typecheck.z"
+#line 621 "src/typecheck.z"
 _ZN4main3ast4ItemE*  item = module->items[i];
 ;
-#line 450 "src/typecheck.z"
+#line 622 "src/typecheck.z"
 u32 idx = _ZN4main6intmap13intmap_lookupE(module->index_lookup,item->ident.name.x) ;
 ;
-#line 451 "src/typecheck.z"
+#line 623 "src/typecheck.z"
 _ZN4main9typecheck12collect_itemE(ctx,item,module->index[idx].path) ;
-#line 452 "src/typecheck.z"
+#line 624 "src/typecheck.z"
 i = (i+ 1);
 ;
 }
 ;
 }
 
-#line 456 "src/typecheck.z"
+#line 628 "src/typecheck.z"
+void  _ZN4main9typecheck13collect_namesE(_ZN4main9typecheck11TypeContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
+#line 629 "src/typecheck.z"
+u32 i = 0;
+;
+#line 630 "src/typecheck.z"
+while ( (i< module->num_items))
+{
+#line 631 "src/typecheck.z"
+_ZN4main3ast4ItemE*  item = module->items[i];
+;
+#line 632 "src/typecheck.z"
+if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
+#line 633 "src/typecheck.z"
+_ZN4main3ast11CompoundDefE def ;
+;
+#line 634 "src/typecheck.z"
+def.path.num_segments = (module->path.num_segments+ 1);
+;
+#line 635 "src/typecheck.z"
+def.path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* def.path.num_segments)) ;
+;
+#line 636 "src/typecheck.z"
+memcpy(def.path.segments,module->path.segments,(sizeof(_ZN4main3ast5IdentE)* module->path.num_segments)) ;
+#line 637 "src/typecheck.z"
+def.path.segments[module->path.num_segments] = item->ident;
+;
+#line 639 "src/typecheck.z"
+_ZN4main3ast2TyE ty ;
+;
+#line 640 "src/typecheck.z"
+if ((item->kind== ItemKind_Struct)){
+#line 640 "src/typecheck.z"
+ty.kind = TyKind_Struct;
+;
+}
+else {
+#line 641 "src/typecheck.z"
+if ((item->kind== ItemKind_Union)){
+#line 641 "src/typecheck.z"
+ty.kind = TyKind_Union;
+;
+}
+;
+}
+;
+#line 643 "src/typecheck.z"
+ty.node.compound = def;
+;
+#line 645 "src/typecheck.z"
+item->node.compound.ty = _ZN4main9typecheck9intern_tyE(ctx,ty) ;
+;
+}
+else {
+#line 647 "src/typecheck.z"
+if ((item->kind== ItemKind_Enum)){
+#line 649 "src/typecheck.z"
+_ZN4main3ast7EnumDefE def ;
+;
+#line 650 "src/typecheck.z"
+def.path.num_segments = (module->path.num_segments+ 1);
+;
+#line 651 "src/typecheck.z"
+def.path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* def.path.num_segments)) ;
+;
+#line 652 "src/typecheck.z"
+memcpy(def.path.segments,module->path.segments,(sizeof(_ZN4main3ast5IdentE)* module->path.num_segments)) ;
+#line 653 "src/typecheck.z"
+def.path.segments[module->path.num_segments] = item->ident;
+;
+#line 655 "src/typecheck.z"
+_ZN4main3ast2TyE ty ;
+;
+#line 656 "src/typecheck.z"
+ty.kind = TyKind_Enum;
+;
+#line 658 "src/typecheck.z"
+ty.node._enum = def;
+;
+#line 660 "src/typecheck.z"
+item->node._enum.ty = _ZN4main9typecheck9intern_tyE(ctx,ty) ;
+;
+}
+else {
+#line 662 "src/typecheck.z"
+if ((item->kind== ItemKind_Module)){
+#line 662 "src/typecheck.z"
+_ZN4main9typecheck13collect_namesE(ctx,item->node.module) ;
+}
+;
+}
+;
+}
+;
+#line 663 "src/typecheck.z"
+i = (i+ 1);
+;
+}
+;
+}
+
+#line 667 "src/typecheck.z"
 void  _ZN4main9typecheck5checkE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast) {
-#line 457 "src/typecheck.z"
+#line 668 "src/typecheck.z"
 _ZN4main9typecheck11TypeContextE ctx ;
 ;
-#line 459 "src/typecheck.z"
+#line 670 "src/typecheck.z"
 ctx.ast = ast;
 ;
-#line 460 "src/typecheck.z"
+#line 671 "src/typecheck.z"
 ctx.interner = &sess->interner;
 ;
-#line 461 "src/typecheck.z"
+#line 672 "src/typecheck.z"
 ctx.source_map = &sess->source;
 ;
-#line 462 "src/typecheck.z"
+#line 673 "src/typecheck.z"
 ctx.types_lookup = _ZN4main6intmap13intmap_createE(1024) ;
 ;
-#line 463 "src/typecheck.z"
+#line 674 "src/typecheck.z"
 ctx.types = malloc((sizeof(_ZN4main3ast2TyE)* 1024)) ;
 ;
-#line 464 "src/typecheck.z"
+#line 675 "src/typecheck.z"
 ctx.next_type_idx = 1;
 ;
-#line 465 "src/typecheck.z"
+#line 676 "src/typecheck.z"
 _ZN4main9typecheck19create_common_typesE(&ctx) ;
-#line 467 "src/typecheck.z"
+#line 678 "src/typecheck.z"
+_ZN4main9typecheck13collect_namesE(&ctx,ast->root_module) ;
+#line 679 "src/typecheck.z"
 _ZN4main9typecheck11collect_modE(&ctx,ast->root_module) ;
+#line 680 "src/typecheck.z"
+_ZN4main9typecheck9check_modE(&ctx,ast->root_module) ;
 }
 
 
@@ -7182,100 +7934,109 @@ void  _ZN4main7codegen14generate_blockE(_ZN4main7codegen14CodegenContextE*  ctx,
 void  _ZN4main7codegen13generate_itemE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) ;
 
 #line 22 "src/codegen.z"
-bool _ZN4main7codegen11type_is_ptrE(_ZN4main3ast7AstTypeE*  ty) {
+u32 _ZN4main7codegen11type_is_ptrE(_ZN4main3ast7AstTypeE*  ty) {
 #line 23 "src/codegen.z"
-return (ty->kind== AstTypeKind_Ptr);
+if ((ty->kind== AstTypeKind_Ptr)){
+#line 23 "src/codegen.z"
+return 1;
+;
+}
+else {
+#line 24 "src/codegen.z"
+return 0;
+;
+}
 ;
 }
 
-#line 26 "src/codegen.z"
-void  _ZN4main7codegen16generate_preludeE(_ZN4main7codegen14CodegenContextE*  ctx) {
 #line 27 "src/codegen.z"
-fprintf(ctx->out,"//Prelude\n") ;
+void  _ZN4main7codegen16generate_preludeE(_ZN4main7codegen14CodegenContextE*  ctx) {
 #line 28 "src/codegen.z"
-fprintf(ctx->out,"#include <stdint.h>\n") ;
+fprintf(ctx->out,"//Prelude\n") ;
 #line 29 "src/codegen.z"
-fprintf(ctx->out,"#include <stdbool.h>\n") ;
+fprintf(ctx->out,"#include <stdint.h>\n") ;
 #line 30 "src/codegen.z"
-fprintf(ctx->out,"typedef uint8_t u8;\n") ;
+fprintf(ctx->out,"#include <stdbool.h>\n") ;
 #line 31 "src/codegen.z"
-fprintf(ctx->out,"typedef uint16_t u16;\n") ;
+fprintf(ctx->out,"typedef uint8_t u8;\n") ;
 #line 32 "src/codegen.z"
-fprintf(ctx->out,"typedef uint32_t u32;\n") ;
+fprintf(ctx->out,"typedef uint16_t u16;\n") ;
 #line 33 "src/codegen.z"
-fprintf(ctx->out,"typedef uint64_t u64;\n") ;
+fprintf(ctx->out,"typedef uint32_t u32;\n") ;
 #line 34 "src/codegen.z"
-fprintf(ctx->out,"typedef int8_t i8;\n") ;
+fprintf(ctx->out,"typedef uint64_t u64;\n") ;
 #line 35 "src/codegen.z"
-fprintf(ctx->out,"typedef int16_t i16;\n") ;
+fprintf(ctx->out,"typedef int8_t i8;\n") ;
 #line 36 "src/codegen.z"
-fprintf(ctx->out,"typedef int32_t i32;\n") ;
+fprintf(ctx->out,"typedef int16_t i16;\n") ;
 #line 37 "src/codegen.z"
-fprintf(ctx->out,"typedef int64_t i64;\n") ;
+fprintf(ctx->out,"typedef int32_t i32;\n") ;
 #line 38 "src/codegen.z"
-fprintf(ctx->out,"typedef float f32;\n") ;
+fprintf(ctx->out,"typedef int64_t i64;\n") ;
 #line 39 "src/codegen.z"
-fprintf(ctx->out,"typedef double f64;\n") ;
+fprintf(ctx->out,"typedef float f32;\n") ;
 #line 40 "src/codegen.z"
-fprintf(ctx->out,"typedef const char constchar;\n") ;
+fprintf(ctx->out,"typedef double f64;\n") ;
 #line 41 "src/codegen.z"
+fprintf(ctx->out,"typedef const char constchar;\n") ;
+#line 42 "src/codegen.z"
 fprintf(ctx->out,"typedef const void constvoid;\n") ;
 }
 
-#line 44 "src/codegen.z"
-void  _ZN4main7codegen12generate_sidE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main9interning3SidE sid) {
 #line 45 "src/codegen.z"
+void  _ZN4main7codegen12generate_sidE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main9interning3SidE sid) {
+#line 46 "src/codegen.z"
 fprintf(ctx->out,"%s",_ZN4main9interning7get_strE(ctx->interner,sid) ) ;
 }
 
-#line 48 "src/codegen.z"
-void  _ZN4main7codegen19generate_identifierE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast5IdentE ident) {
 #line 49 "src/codegen.z"
+void  _ZN4main7codegen19generate_identifierE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast5IdentE ident) {
+#line 50 "src/codegen.z"
 _ZN4main7codegen12generate_sidE(ctx,ident.name) ;
 }
 
-#line 52 "src/codegen.z"
-void  _ZN4main7codegen16generate_patternE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7PatternE pat) {
 #line 53 "src/codegen.z"
+void  _ZN4main7codegen16generate_patternE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7PatternE pat) {
+#line 54 "src/codegen.z"
 _ZN4main7codegen19generate_identifierE(ctx,pat.ident) ;
 }
 
-#line 56 "src/codegen.z"
-void  _ZN4main7codegen11mangle_pathE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4PathE path) {
 #line 57 "src/codegen.z"
+void  _ZN4main7codegen11mangle_pathE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4PathE path) {
+#line 58 "src/codegen.z"
 _ZN4main3ast4ItemE*  item = path.binding.node.item;
 ;
-#line 58 "src/codegen.z"
-if (((path.binding.kind== BindingKind_Item)&& item->should_mangle)){
 #line 59 "src/codegen.z"
-fprintf(ctx->out,"_ZN") ;
+if (((path.binding.kind== BindingKind_Item)&& item->should_mangle)){
 #line 60 "src/codegen.z"
+fprintf(ctx->out,"_ZN") ;
+#line 61 "src/codegen.z"
 u32 i = 0;
 ;
-#line 61 "src/codegen.z"
+#line 62 "src/codegen.z"
 while ( (i< path.num_segments))
 {
-#line 62 "src/codegen.z"
+#line 63 "src/codegen.z"
 char*  seg = _ZN4main9interning7get_strE(ctx->interner,path.segments[i].name) ;
 ;
-#line 63 "src/codegen.z"
-fprintf(ctx->out,"%lu%s",strlen(seg) ,seg) ;
 #line 64 "src/codegen.z"
+fprintf(ctx->out,"%lu%s",strlen(seg) ,seg) ;
+#line 65 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 66 "src/codegen.z"
+#line 67 "src/codegen.z"
 fprintf(ctx->out,"E") ;
 }
 else {
-#line 67 "src/codegen.z"
-if ((path.binding.kind== BindingKind_Variant)){
 #line 68 "src/codegen.z"
+if ((path.binding.kind== BindingKind_Variant)){
+#line 69 "src/codegen.z"
 fprintf(ctx->out,"%s_%s",_ZN4main9interning7get_strE(ctx->interner,path.segments[(path.num_segments- 2)].name) ,_ZN4main9interning7get_strE(ctx->interner,path.segments[(path.num_segments- 1)].name) ) ;
 }
 else {
-#line 71 "src/codegen.z"
+#line 72 "src/codegen.z"
 fprintf(ctx->out,"%s",_ZN4main9interning7get_strE(ctx->interner,path.segments[(path.num_segments- 1)].name) ) ;
 }
 ;
@@ -7283,62 +8044,62 @@ fprintf(ctx->out,"%s",_ZN4main9interning7get_strE(ctx->interner,path.segments[(p
 ;
 }
 
-#line 75 "src/codegen.z"
-void  _ZN4main7codegen21mangle_path_and_identE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4PathE path, _ZN4main3ast5IdentE ident) {
 #line 76 "src/codegen.z"
-fprintf(ctx->out," _ZN") ;
+void  _ZN4main7codegen21mangle_path_and_identE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4PathE path, _ZN4main3ast5IdentE ident) {
 #line 77 "src/codegen.z"
+fprintf(ctx->out," _ZN") ;
+#line 78 "src/codegen.z"
 u32 i = 0;
 ;
-#line 78 "src/codegen.z"
+#line 79 "src/codegen.z"
 while ( (i< path.num_segments))
 {
-#line 79 "src/codegen.z"
+#line 80 "src/codegen.z"
 char*  seg = _ZN4main9interning7get_strE(ctx->interner,path.segments[i].name) ;
 ;
-#line 80 "src/codegen.z"
-fprintf(ctx->out,"%lu%s",strlen(seg) ,seg) ;
 #line 81 "src/codegen.z"
+fprintf(ctx->out,"%lu%s",strlen(seg) ,seg) ;
+#line 82 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 83 "src/codegen.z"
+#line 84 "src/codegen.z"
 char*  name = _ZN4main9interning7get_strE(ctx->interner,ident.name) ;
 ;
-#line 84 "src/codegen.z"
+#line 85 "src/codegen.z"
 fprintf(ctx->out,"%lu%sE",strlen(name) ,name) ;
 }
 
-#line 87 "src/codegen.z"
-void  _ZN4main7codegen20mangle_function_nameE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast5IdentE ident, _ZN4main3ast14FunctionHeaderE header) {
 #line 88 "src/codegen.z"
+void  _ZN4main7codegen20mangle_function_nameE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast6ModuleE*  module, _ZN4main3ast5IdentE ident, _ZN4main3ast14FunctionHeaderE header) {
+#line 89 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,ident) ;
 }
 
-#line 91 "src/codegen.z"
-void  _ZN4main7codegen13generate_typeE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7AstTypeE*  ty) {
 #line 92 "src/codegen.z"
-if ((ty->kind== AstTypeKind_Path)){
+void  _ZN4main7codegen13generate_typeE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7AstTypeE*  ty) {
 #line 93 "src/codegen.z"
+if ((ty->kind== AstTypeKind_Path)){
+#line 94 "src/codegen.z"
 _ZN4main7codegen11mangle_pathE(ctx,ty->node.path) ;
 }
 else {
-#line 95 "src/codegen.z"
-if ((ty->kind== AstTypeKind_Ptr)){
 #line 96 "src/codegen.z"
-_ZN4main7codegen13generate_typeE(ctx,ty->node.ptr) ;
+if ((ty->kind== AstTypeKind_Ptr)){
 #line 97 "src/codegen.z"
+_ZN4main7codegen13generate_typeE(ctx,ty->node.ptr) ;
+#line 98 "src/codegen.z"
 fprintf(ctx->out,"* ") ;
 }
 else {
-#line 99 "src/codegen.z"
-if ((ty->kind== AstTypeKind_Void)){
 #line 100 "src/codegen.z"
+if ((ty->kind== AstTypeKind_Void)){
+#line 101 "src/codegen.z"
 fprintf(ctx->out,"void ") ;
 }
 else {
-#line 102 "src/codegen.z"
+#line 103 "src/codegen.z"
 abort() ;
 }
 ;
@@ -7348,39 +8109,39 @@ abort() ;
 ;
 }
 
-#line 105 "src/codegen.z"
+#line 106 "src/codegen.z"
 void  _ZN4main7codegen13generate_charE(_ZN4main7codegen14CodegenContextE*  ctx, char c) {
-#line 106 "src/codegen.z"
+#line 107 "src/codegen.z"
 if ((c== '\n')){
-#line 106 "src/codegen.z"
+#line 107 "src/codegen.z"
 fprintf(ctx->out,"'\\n'") ;
 }
 else {
-#line 107 "src/codegen.z"
+#line 108 "src/codegen.z"
 if ((c== '\t')){
-#line 107 "src/codegen.z"
+#line 108 "src/codegen.z"
 fprintf(ctx->out,"'\\t'") ;
 }
 else {
-#line 108 "src/codegen.z"
+#line 109 "src/codegen.z"
 if ((c== '\r')){
-#line 108 "src/codegen.z"
+#line 109 "src/codegen.z"
 fprintf(ctx->out,"'\\r'") ;
 }
 else {
-#line 109 "src/codegen.z"
+#line 110 "src/codegen.z"
 if ((c== '\\')){
-#line 109 "src/codegen.z"
+#line 110 "src/codegen.z"
 fprintf(ctx->out,"'\\\\'") ;
 }
 else {
-#line 110 "src/codegen.z"
+#line 111 "src/codegen.z"
 if ((c== '\'')){
-#line 110 "src/codegen.z"
+#line 111 "src/codegen.z"
 fprintf(ctx->out,"'\\''") ;
 }
 else {
-#line 111 "src/codegen.z"
+#line 112 "src/codegen.z"
 fprintf(ctx->out,"'%c'",c) ;
 }
 ;
@@ -7394,47 +8155,47 @@ fprintf(ctx->out,"'%c'",c) ;
 ;
 }
 
-#line 114 "src/codegen.z"
+#line 115 "src/codegen.z"
 void  _ZN4main7codegen16generate_literalE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7LiteralE lit) {
-#line 115 "src/codegen.z"
+#line 116 "src/codegen.z"
 if ((lit.kind== LiteralKind_Int)){
-#line 115 "src/codegen.z"
+#line 116 "src/codegen.z"
 fprintf(ctx->out,"%ld",lit.value.integer) ;
 }
 else {
-#line 116 "src/codegen.z"
+#line 117 "src/codegen.z"
 if ((lit.kind== LiteralKind_Float)){
-#line 116 "src/codegen.z"
+#line 117 "src/codegen.z"
 fprintf(ctx->out,"%f",lit.value.floating) ;
 }
 else {
-#line 117 "src/codegen.z"
+#line 118 "src/codegen.z"
 if ((lit.kind== LiteralKind_Bool)){
-#line 117 "src/codegen.z"
+#line 118 "src/codegen.z"
 if (lit.value.boolean){
-#line 117 "src/codegen.z"
+#line 118 "src/codegen.z"
 fprintf(ctx->out,"true") ;
 }
 else {
-#line 117 "src/codegen.z"
+#line 118 "src/codegen.z"
 fprintf(ctx->out,"false") ;
 }
 ;
 }
 else {
-#line 118 "src/codegen.z"
-if ((lit.kind== LiteralKind_Str)){
 #line 119 "src/codegen.z"
+if ((lit.kind== LiteralKind_Str)){
+#line 120 "src/codegen.z"
 fprintf(ctx->out,"\"%s\"",_ZN4main9interning7get_strE(ctx->interner,lit.value.str) ) ;
 }
 else {
-#line 121 "src/codegen.z"
+#line 122 "src/codegen.z"
 if ((lit.kind== LiteralKind_Char)){
-#line 121 "src/codegen.z"
+#line 122 "src/codegen.z"
 _ZN4main7codegen13generate_charE(ctx,lit.value.ch) ;
 }
 else {
-#line 122 "src/codegen.z"
+#line 123 "src/codegen.z"
 abort() ;
 }
 ;
@@ -7448,33 +8209,33 @@ abort() ;
 ;
 }
 
-#line 125 "src/codegen.z"
+#line 126 "src/codegen.z"
 void  _ZN4main7codegen14generate_unaryE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast9UnaryDataE unary) {
-#line 126 "src/codegen.z"
+#line 127 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Negation)){
-#line 126 "src/codegen.z"
+#line 127 "src/codegen.z"
 fprintf(ctx->out,"-") ;
 }
 else {
-#line 127 "src/codegen.z"
+#line 128 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Complement)){
-#line 127 "src/codegen.z"
+#line 128 "src/codegen.z"
 fprintf(ctx->out,"!") ;
 }
 else {
-#line 128 "src/codegen.z"
+#line 129 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Refer)){
-#line 128 "src/codegen.z"
+#line 129 "src/codegen.z"
 fprintf(ctx->out,"&") ;
 }
 else {
-#line 129 "src/codegen.z"
+#line 130 "src/codegen.z"
 if ((unary.op== UnaryOperatorKind_Deref)){
-#line 129 "src/codegen.z"
+#line 130 "src/codegen.z"
 fprintf(ctx->out,"*") ;
 }
 else {
-#line 130 "src/codegen.z"
+#line 131 "src/codegen.z"
 abort() ;
 }
 ;
@@ -7484,125 +8245,125 @@ abort() ;
 ;
 }
 ;
-#line 132 "src/codegen.z"
+#line 133 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,unary.inner) ;
 }
 
-#line 135 "src/codegen.z"
-void  _ZN4main7codegen15generate_binaryE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast10BinaryDataE binary) {
 #line 136 "src/codegen.z"
-fprintf(ctx->out,"(") ;
+void  _ZN4main7codegen15generate_binaryE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast10BinaryDataE binary) {
 #line 137 "src/codegen.z"
+fprintf(ctx->out,"(") ;
+#line 138 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,binary.left) ;
-#line 138 "src/codegen.z"
+#line 139 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Addition)){
-#line 138 "src/codegen.z"
+#line 139 "src/codegen.z"
 fprintf(ctx->out,"+ ") ;
 }
 else {
-#line 139 "src/codegen.z"
+#line 140 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Subtraction)){
-#line 139 "src/codegen.z"
+#line 140 "src/codegen.z"
 fprintf(ctx->out,"- ") ;
 }
 else {
-#line 140 "src/codegen.z"
+#line 141 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Product)){
-#line 140 "src/codegen.z"
+#line 141 "src/codegen.z"
 fprintf(ctx->out,"* ") ;
 }
 else {
-#line 141 "src/codegen.z"
+#line 142 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Division)){
-#line 141 "src/codegen.z"
+#line 142 "src/codegen.z"
 fprintf(ctx->out,"/ ") ;
 }
 else {
-#line 142 "src/codegen.z"
+#line 143 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Modulus)){
-#line 142 "src/codegen.z"
+#line 143 "src/codegen.z"
 fprintf(ctx->out,"%% ") ;
 }
 else {
-#line 144 "src/codegen.z"
+#line 145 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Less)){
-#line 144 "src/codegen.z"
+#line 145 "src/codegen.z"
 fprintf(ctx->out,"< ") ;
 }
 else {
-#line 145 "src/codegen.z"
+#line 146 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_LessEq)){
-#line 145 "src/codegen.z"
+#line 146 "src/codegen.z"
 fprintf(ctx->out,"<= ") ;
 }
 else {
-#line 146 "src/codegen.z"
+#line 147 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Greater)){
-#line 146 "src/codegen.z"
+#line 147 "src/codegen.z"
 fprintf(ctx->out,"> ") ;
 }
 else {
-#line 147 "src/codegen.z"
+#line 148 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_GreaterEq)){
-#line 147 "src/codegen.z"
+#line 148 "src/codegen.z"
 fprintf(ctx->out,">= ") ;
 }
 else {
-#line 148 "src/codegen.z"
+#line 149 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Equality)){
-#line 148 "src/codegen.z"
+#line 149 "src/codegen.z"
 fprintf(ctx->out,"== ") ;
 }
 else {
-#line 149 "src/codegen.z"
+#line 150 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_NotEq)){
-#line 149 "src/codegen.z"
+#line 150 "src/codegen.z"
 fprintf(ctx->out,"!= ") ;
 }
 else {
-#line 151 "src/codegen.z"
+#line 152 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_BAnd)){
-#line 151 "src/codegen.z"
+#line 152 "src/codegen.z"
 fprintf(ctx->out,"& ") ;
 }
 else {
-#line 152 "src/codegen.z"
+#line 153 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_BOr)){
-#line 152 "src/codegen.z"
+#line 153 "src/codegen.z"
 fprintf(ctx->out,"| ") ;
 }
 else {
-#line 153 "src/codegen.z"
+#line 154 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Xor)){
-#line 153 "src/codegen.z"
+#line 154 "src/codegen.z"
 fprintf(ctx->out,"^ ") ;
 }
 else {
-#line 154 "src/codegen.z"
+#line 155 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_LeftShift)){
-#line 154 "src/codegen.z"
+#line 155 "src/codegen.z"
 fprintf(ctx->out,"<< ") ;
 }
 else {
-#line 155 "src/codegen.z"
+#line 156 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_RightShift)){
-#line 155 "src/codegen.z"
+#line 156 "src/codegen.z"
 fprintf(ctx->out,">> ") ;
 }
 else {
-#line 157 "src/codegen.z"
+#line 158 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_And)){
-#line 157 "src/codegen.z"
+#line 158 "src/codegen.z"
 fprintf(ctx->out,"&& ") ;
 }
 else {
-#line 158 "src/codegen.z"
+#line 159 "src/codegen.z"
 if ((binary.op== BinaryOperatorKind_Or)){
-#line 158 "src/codegen.z"
+#line 159 "src/codegen.z"
 fprintf(ctx->out,"|| ") ;
 }
 else {
-#line 159 "src/codegen.z"
+#line 160 "src/codegen.z"
 abort() ;
 }
 ;
@@ -7640,292 +8401,304 @@ abort() ;
 ;
 }
 ;
-#line 160 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,binary.right) ;
 #line 161 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,binary.right) ;
+#line 162 "src/codegen.z"
 fprintf(ctx->out,")") ;
 }
 
-#line 164 "src/codegen.z"
-void  _ZN4main7codegen13generate_callE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast8CallDataE call) {
 #line 165 "src/codegen.z"
+void  _ZN4main7codegen13generate_callE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast8CallDataE call) {
+#line 166 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,call.func) ;
-#line 167 "src/codegen.z"
-fprintf(ctx->out,"(") ;
 #line 168 "src/codegen.z"
+fprintf(ctx->out,"(") ;
+#line 169 "src/codegen.z"
 u32 i = 0;
 ;
-#line 169 "src/codegen.z"
+#line 170 "src/codegen.z"
 while ( (i< call.num_args))
 {
-#line 170 "src/codegen.z"
+#line 171 "src/codegen.z"
 _ZN4main3ast4ExprE*  arg = call.args[i];
 ;
-#line 171 "src/codegen.z"
+#line 172 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,arg) ;
-#line 172 "src/codegen.z"
+#line 173 "src/codegen.z"
 if ((i< (call.num_args- 1))){
-#line 172 "src/codegen.z"
+#line 173 "src/codegen.z"
 fprintf(ctx->out,",") ;
 }
 ;
-#line 173 "src/codegen.z"
+#line 174 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 175 "src/codegen.z"
+#line 176 "src/codegen.z"
 fprintf(ctx->out,") ") ;
 }
 
-#line 178 "src/codegen.z"
-void  _ZN4main7codegen20generate_conditionalE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast15ConditionalDataE cond) {
 #line 179 "src/codegen.z"
-fprintf(ctx->out,"if (") ;
+void  _ZN4main7codegen20generate_conditionalE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast15ConditionalDataE cond) {
 #line 180 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,cond.condition) ;
+fprintf(ctx->out,"if (") ;
 #line 181 "src/codegen.z"
-fprintf(ctx->out,")") ;
+_ZN4main7codegen13generate_exprE(ctx,cond.condition) ;
 #line 182 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,cond.then) ;
+fprintf(ctx->out,")") ;
 #line 183 "src/codegen.z"
-if (cond.otherwise){
+_ZN4main7codegen13generate_exprE(ctx,cond.then) ;
 #line 184 "src/codegen.z"
-fprintf(ctx->out,"else ") ;
+if (cond.otherwise){
 #line 185 "src/codegen.z"
+fprintf(ctx->out,"else ") ;
+#line 186 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,cond.otherwise) ;
 }
 ;
 }
 
-#line 189 "src/codegen.z"
-void  _ZN4main7codegen14generate_whileE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast9WhileDataE data) {
 #line 190 "src/codegen.z"
-fprintf(ctx->out,"while ( ") ;
+void  _ZN4main7codegen14generate_whileE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast9WhileDataE data) {
 #line 191 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,data.condition) ;
+fprintf(ctx->out,"while ( ") ;
 #line 192 "src/codegen.z"
-fprintf(ctx->out,")\n") ;
+_ZN4main7codegen13generate_exprE(ctx,data.condition) ;
 #line 193 "src/codegen.z"
+fprintf(ctx->out,")\n") ;
+#line 194 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,data.body) ;
 }
 
-#line 196 "src/codegen.z"
-void  _ZN4main7codegen17generate_indexingE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast12IndexingDataE idx) {
 #line 197 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,idx.array) ;
+void  _ZN4main7codegen17generate_indexingE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast12IndexingDataE idx) {
 #line 198 "src/codegen.z"
-fprintf(ctx->out,"[") ;
+_ZN4main7codegen13generate_exprE(ctx,idx.array) ;
 #line 199 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,idx.index) ;
+fprintf(ctx->out,"[") ;
 #line 200 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,idx.index) ;
+#line 201 "src/codegen.z"
 fprintf(ctx->out,"]") ;
 }
 
-#line 203 "src/codegen.z"
-void  _ZN4main7codegen14generate_fieldE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast9FieldDataE field) {
 #line 204 "src/codegen.z"
+void  _ZN4main7codegen14generate_fieldE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast9FieldDataE field) {
+#line 205 "src/codegen.z"
 _ZN4main3ast4ExprE*  strct = field.strct;
 ;
-#line 205 "src/codegen.z"
+#line 206 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,strct) ;
-#line 207 "src/codegen.z"
+#line 208 "src/codegen.z"
 char*  field_name = _ZN4main9interning7get_strE(ctx->interner,field.ident.name) ;
 ;
-#line 209 "src/codegen.z"
+#line 210 "src/codegen.z"
 bool is_ptr = false;
 ;
-#line 210 "src/codegen.z"
+#line 211 "src/codegen.z"
 char*  accessor_str ;
 ;
-#line 211 "src/codegen.z"
-if ((strct->kind== ExprKind_Path)){
 #line 212 "src/codegen.z"
+if ((strct->kind== ExprKind_Path)){
+#line 213 "src/codegen.z"
 char*  strct_name = _ZN4main9interning7get_strE(ctx->interner,strct->node.path.segments[0].name) ;
 ;
-#line 213 "src/codegen.z"
+#line 214 "src/codegen.z"
 is_ptr = _ZN4main6strmap13strmap_lookupE(ctx->ident_is_ptr,strct_name) ;
 ;
 }
 ;
-#line 216 "src/codegen.z"
+#line 217 "src/codegen.z"
 if (is_ptr){
-#line 216 "src/codegen.z"
+#line 217 "src/codegen.z"
 accessor_str = "->";
 ;
 }
 else {
-#line 217 "src/codegen.z"
+#line 218 "src/codegen.z"
 accessor_str = ".";
 ;
 }
 ;
-#line 218 "src/codegen.z"
+#line 219 "src/codegen.z"
 fprintf(ctx->out,"%s%s",accessor_str,field_name) ;
 }
 
-#line 221 "src/codegen.z"
-void  _ZN4main7codegen15generate_sizeofE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
 #line 222 "src/codegen.z"
-fprintf(ctx->out,"sizeof(") ;
+void  _ZN4main7codegen15generate_sizeofE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
 #line 223 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,expr) ;
+fprintf(ctx->out,"sizeof(") ;
 #line 224 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,expr) ;
+#line 225 "src/codegen.z"
 fprintf(ctx->out,")") ;
 }
 
-#line 227 "src/codegen.z"
-void  _ZN4main7codegen19generate_assignmentE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast14AssignmentDataE assignment) {
 #line 228 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,assignment.left) ;
+void  _ZN4main7codegen19generate_assignmentE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast14AssignmentDataE assignment) {
 #line 229 "src/codegen.z"
-fprintf(ctx->out," = ") ;
+_ZN4main7codegen13generate_exprE(ctx,assignment.left) ;
 #line 230 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,assignment.right) ;
+fprintf(ctx->out," = ") ;
 #line 231 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,assignment.right) ;
+#line 232 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 234 "src/codegen.z"
-void  _ZN4main7codegen15generate_returnE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
 #line 235 "src/codegen.z"
-fprintf(ctx->out,"return ") ;
+void  _ZN4main7codegen15generate_returnE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
 #line 236 "src/codegen.z"
-_ZN4main7codegen13generate_exprE(ctx,expr) ;
+fprintf(ctx->out,"return ") ;
 #line 237 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,expr) ;
+#line 238 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 240 "src/codegen.z"
+#line 241 "src/codegen.z"
 void  _ZN4main7codegen21generate_control_flowE(_ZN4main7codegen14CodegenContextE*  ctx, bool is_continue) {
-#line 241 "src/codegen.z"
+#line 242 "src/codegen.z"
 if (is_continue){
-#line 241 "src/codegen.z"
+#line 242 "src/codegen.z"
 fprintf(ctx->out,"continue;\n") ;
 }
 else {
-#line 242 "src/codegen.z"
+#line 243 "src/codegen.z"
 fprintf(ctx->out,"break;\n") ;
 }
 ;
 }
 
-#line 245 "src/codegen.z"
+#line 246 "src/codegen.z"
 void  _ZN4main7codegen12generate_letE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast7LetDataE data) {
-#line 247 "src/codegen.z"
+#line 248 "src/codegen.z"
 _ZN4main7codegen13generate_typeE(ctx,data.ast_ty) ;
-#line 249 "src/codegen.z"
+#line 250 "src/codegen.z"
 char*  var_name = _ZN4main9interning7get_strE(ctx->interner,data.pat.ident.name) ;
 ;
-#line 251 "src/codegen.z"
-_ZN4main6strmap13strmap_insertE(ctx->ident_is_ptr,var_name,_ZN4main7codegen11type_is_ptrE(data.ast_ty) ) ;
 #line 252 "src/codegen.z"
-fprintf(ctx->out," %s ",var_name) ;
+_ZN4main6strmap13strmap_insertE(ctx->ident_is_ptr,var_name,_ZN4main7codegen11type_is_ptrE(data.ast_ty) ) ;
 #line 253 "src/codegen.z"
-if (data.value){
+fprintf(ctx->out," %s ",var_name) ;
 #line 254 "src/codegen.z"
-fprintf(ctx->out,"= ") ;
+if (data.value){
 #line 255 "src/codegen.z"
+fprintf(ctx->out,"= ") ;
+#line 256 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,data.value) ;
 }
 ;
-#line 257 "src/codegen.z"
+#line 258 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 260 "src/codegen.z"
+#line 261 "src/codegen.z"
+void  _ZN4main7codegen13generate_castE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast8CastDataE data) {
+#line 263 "src/codegen.z"
+_ZN4main7codegen13generate_exprE(ctx,data.inner) ;
+}
+
+#line 266 "src/codegen.z"
 void  _ZN4main7codegen13generate_exprE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ExprE*  expr) {
-#line 261 "src/codegen.z"
+#line 267 "src/codegen.z"
 if ((expr->kind== ExprKind_Unary)){
-#line 261 "src/codegen.z"
+#line 267 "src/codegen.z"
 _ZN4main7codegen14generate_unaryE(ctx,expr->node.unary) ;
 }
 else {
-#line 262 "src/codegen.z"
+#line 268 "src/codegen.z"
 if ((expr->kind== ExprKind_Binary)){
-#line 262 "src/codegen.z"
+#line 268 "src/codegen.z"
 _ZN4main7codegen15generate_binaryE(ctx,expr->node.binary) ;
 }
 else {
-#line 263 "src/codegen.z"
+#line 269 "src/codegen.z"
 if ((expr->kind== ExprKind_Block)){
-#line 263 "src/codegen.z"
+#line 269 "src/codegen.z"
 _ZN4main7codegen14generate_blockE(ctx,expr->node.block) ;
 }
 else {
-#line 264 "src/codegen.z"
+#line 270 "src/codegen.z"
 if ((expr->kind== ExprKind_Call)){
-#line 264 "src/codegen.z"
+#line 270 "src/codegen.z"
 _ZN4main7codegen13generate_callE(ctx,expr->node.call) ;
 }
 else {
-#line 265 "src/codegen.z"
+#line 271 "src/codegen.z"
 if ((expr->kind== ExprKind_Conditional)){
-#line 265 "src/codegen.z"
+#line 271 "src/codegen.z"
 _ZN4main7codegen20generate_conditionalE(ctx,expr->node.conditional) ;
 }
 else {
-#line 266 "src/codegen.z"
+#line 272 "src/codegen.z"
 if ((expr->kind== ExprKind_While)){
-#line 266 "src/codegen.z"
+#line 272 "src/codegen.z"
 _ZN4main7codegen14generate_whileE(ctx,expr->node.whl) ;
 }
 else {
-#line 267 "src/codegen.z"
+#line 273 "src/codegen.z"
 if ((expr->kind== ExprKind_Indexing)){
-#line 267 "src/codegen.z"
+#line 273 "src/codegen.z"
 _ZN4main7codegen17generate_indexingE(ctx,expr->node.indexing) ;
 }
 else {
-#line 268 "src/codegen.z"
+#line 274 "src/codegen.z"
 if ((expr->kind== ExprKind_Field)){
-#line 268 "src/codegen.z"
+#line 274 "src/codegen.z"
 _ZN4main7codegen14generate_fieldE(ctx,expr->node.field) ;
 }
 else {
-#line 269 "src/codegen.z"
+#line 275 "src/codegen.z"
 if ((expr->kind== ExprKind_Literal)){
-#line 269 "src/codegen.z"
+#line 275 "src/codegen.z"
 _ZN4main7codegen16generate_literalE(ctx,expr->node.lit) ;
 }
 else {
-#line 270 "src/codegen.z"
+#line 276 "src/codegen.z"
 if ((expr->kind== ExprKind_Path)){
-#line 270 "src/codegen.z"
+#line 276 "src/codegen.z"
 _ZN4main7codegen11mangle_pathE(ctx,expr->node.path) ;
 }
 else {
-#line 271 "src/codegen.z"
+#line 277 "src/codegen.z"
 if ((expr->kind== ExprKind_Sizeof)){
-#line 271 "src/codegen.z"
+#line 277 "src/codegen.z"
 _ZN4main7codegen15generate_sizeofE(ctx,expr->node._sizeof) ;
 }
 else {
-#line 272 "src/codegen.z"
+#line 278 "src/codegen.z"
 if ((expr->kind== ExprKind_Assignment)){
-#line 272 "src/codegen.z"
+#line 278 "src/codegen.z"
 _ZN4main7codegen19generate_assignmentE(ctx,expr->node.assignment) ;
 }
 else {
-#line 273 "src/codegen.z"
+#line 279 "src/codegen.z"
 if ((expr->kind== ExprKind_ControlFlow)){
-#line 273 "src/codegen.z"
+#line 279 "src/codegen.z"
 _ZN4main7codegen21generate_control_flowE(ctx,expr->node.control_flow_is_continue) ;
 }
 else {
-#line 274 "src/codegen.z"
+#line 280 "src/codegen.z"
 if ((expr->kind== ExprKind_Let)){
-#line 274 "src/codegen.z"
+#line 280 "src/codegen.z"
 _ZN4main7codegen12generate_letE(ctx,expr->node._let) ;
 }
 else {
-#line 275 "src/codegen.z"
+#line 281 "src/codegen.z"
 if ((expr->kind== ExprKind_Return)){
-#line 275 "src/codegen.z"
+#line 281 "src/codegen.z"
 _ZN4main7codegen15generate_returnE(ctx,expr->node._return) ;
 }
 else {
-#line 276 "src/codegen.z"
+#line 282 "src/codegen.z"
+if ((expr->kind== ExprKind_Cast)){
+#line 282 "src/codegen.z"
+_ZN4main7codegen13generate_castE(ctx,expr->node._cast) ;
+}
+else {
+#line 283 "src/codegen.z"
 abort() ;
 }
 ;
@@ -7958,306 +8731,308 @@ abort() ;
 }
 ;
 }
+;
+}
 
-#line 279 "src/codegen.z"
+#line 286 "src/codegen.z"
 void  _ZN4main7codegen14generate_blockE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast5BlockE*  block) {
-#line 280 "src/codegen.z"
+#line 287 "src/codegen.z"
 fprintf(ctx->out,"{\n") ;
-#line 281 "src/codegen.z"
+#line 288 "src/codegen.z"
 u32 i = 0;
 ;
-#line 283 "src/codegen.z"
+#line 290 "src/codegen.z"
 while ( (i< block->num_exprs))
 {
-#line 284 "src/codegen.z"
+#line 291 "src/codegen.z"
 _ZN4main3ast4ExprE*  expr = block->exprs[i];
 ;
-#line 285 "src/codegen.z"
+#line 292 "src/codegen.z"
 _ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,expr->span) ;
-#line 286 "src/codegen.z"
+#line 293 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,expr) ;
-#line 287 "src/codegen.z"
+#line 294 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
-#line 288 "src/codegen.z"
+#line 295 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 290 "src/codegen.z"
+#line 297 "src/codegen.z"
 fprintf(ctx->out,"}\n") ;
 }
 
-#line 293 "src/codegen.z"
+#line 300 "src/codegen.z"
 void  _ZN4main7codegen17generate_variableE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 295 "src/codegen.z"
+#line 302 "src/codegen.z"
 _ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,item->span) ;
-#line 297 "src/codegen.z"
+#line 304 "src/codegen.z"
 _ZN4main7codegen13generate_typeE(ctx,item->node.variable.ast_ty) ;
-#line 299 "src/codegen.z"
+#line 306 "src/codegen.z"
 char*  var_name = _ZN4main9interning7get_strE(ctx->interner,item->ident.name) ;
 ;
-#line 301 "src/codegen.z"
+#line 308 "src/codegen.z"
 _ZN4main3ast6ModuleE*  module = ctx->current_module;
 ;
-#line 303 "src/codegen.z"
+#line 310 "src/codegen.z"
 _ZN4main6strmap13strmap_insertE(ctx->ident_is_ptr,var_name,_ZN4main7codegen11type_is_ptrE(item->node.variable.ast_ty) ) ;
-#line 304 "src/codegen.z"
+#line 311 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 305 "src/codegen.z"
+#line 312 "src/codegen.z"
 if (item->node.variable.body){
-#line 306 "src/codegen.z"
+#line 313 "src/codegen.z"
 fprintf(ctx->out,"= ") ;
-#line 307 "src/codegen.z"
+#line 314 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,item->node.variable.body) ;
 }
 ;
-#line 309 "src/codegen.z"
+#line 316 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 
-#line 312 "src/codegen.z"
+#line 319 "src/codegen.z"
 void  _ZN4main7codegen17generate_functionE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 314 "src/codegen.z"
+#line 321 "src/codegen.z"
 _ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,item->span) ;
-#line 316 "src/codegen.z"
+#line 323 "src/codegen.z"
 _ZN4main3ast12FunctionDataE func = item->node.function;
 ;
-#line 317 "src/codegen.z"
+#line 324 "src/codegen.z"
 _ZN4main3ast14FunctionHeaderE header = func.header;
 ;
-#line 318 "src/codegen.z"
-_ZN4main7codegen13generate_typeE(ctx,header.output_ast) ;
-#line 320 "src/codegen.z"
+#line 325 "src/codegen.z"
+_ZN4main7codegen13generate_typeE(ctx,header.output_ast_ty) ;
+#line 327 "src/codegen.z"
 if (item->should_mangle){
-#line 320 "src/codegen.z"
+#line 327 "src/codegen.z"
 _ZN4main7codegen20mangle_function_nameE(ctx,ctx->current_module,item->ident,header) ;
 }
 else {
-#line 321 "src/codegen.z"
+#line 328 "src/codegen.z"
 fprintf(ctx->out," %s",_ZN4main9interning7get_strE(ctx->interner,item->ident.name) ) ;
 }
 ;
-#line 322 "src/codegen.z"
+#line 329 "src/codegen.z"
 fprintf(ctx->out,"(") ;
-#line 324 "src/codegen.z"
+#line 331 "src/codegen.z"
 u32 i = 0;
 ;
-#line 325 "src/codegen.z"
+#line 332 "src/codegen.z"
 while ( (i< header.num_parameters))
 {
-#line 326 "src/codegen.z"
+#line 333 "src/codegen.z"
 _ZN4main3ast7AstTypeE*  ty = header.parameters[i].ast_ty;
 ;
-#line 327 "src/codegen.z"
+#line 334 "src/codegen.z"
 if ((ty->kind== AstTypeKind_Variadic)){
-#line 328 "src/codegen.z"
+#line 335 "src/codegen.z"
 fprintf(ctx->out,"...") ;
-#line 329 "src/codegen.z"
+#line 336 "src/codegen.z"
 break;
 ;
 }
 ;
-#line 332 "src/codegen.z"
+#line 339 "src/codegen.z"
 _ZN4main7codegen13generate_typeE(ctx,ty) ;
-#line 334 "src/codegen.z"
+#line 341 "src/codegen.z"
 char*  param_name = _ZN4main9interning7get_strE(ctx->interner,header.parameters[i].pat.ident.name) ;
 ;
-#line 335 "src/codegen.z"
+#line 342 "src/codegen.z"
 _ZN4main6strmap13strmap_insertE(ctx->ident_is_ptr,param_name,_ZN4main7codegen11type_is_ptrE(header.parameters[i].ast_ty) ) ;
-#line 336 "src/codegen.z"
+#line 343 "src/codegen.z"
 fprintf(ctx->out," %s",param_name) ;
-#line 337 "src/codegen.z"
+#line 344 "src/codegen.z"
 if ((i< (header.num_parameters- 1))){
-#line 337 "src/codegen.z"
+#line 344 "src/codegen.z"
 fprintf(ctx->out,", ") ;
 }
 ;
-#line 338 "src/codegen.z"
+#line 345 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 340 "src/codegen.z"
+#line 347 "src/codegen.z"
 fprintf(ctx->out,") ") ;
-#line 341 "src/codegen.z"
+#line 348 "src/codegen.z"
 if (func.body){
-#line 341 "src/codegen.z"
+#line 348 "src/codegen.z"
 _ZN4main7codegen13generate_exprE(ctx,func.body) ;
 }
 else {
-#line 342 "src/codegen.z"
+#line 349 "src/codegen.z"
 fprintf(ctx->out,";\n") ;
 }
 ;
 }
 
-#line 345 "src/codegen.z"
+#line 352 "src/codegen.z"
 void  _ZN4main7codegen13generate_enumE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 347 "src/codegen.z"
+#line 354 "src/codegen.z"
 char*  enum_name = _ZN4main9interning7get_strE(ctx->interner,item->ident.name) ;
 ;
-#line 348 "src/codegen.z"
+#line 355 "src/codegen.z"
 _ZN4main3ast6ModuleE*  module = ctx->current_module;
 ;
-#line 350 "src/codegen.z"
+#line 357 "src/codegen.z"
 _ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,item->span) ;
-#line 351 "src/codegen.z"
+#line 358 "src/codegen.z"
 fprintf(ctx->out,"typedef enum") ;
-#line 352 "src/codegen.z"
+#line 359 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 353 "src/codegen.z"
+#line 360 "src/codegen.z"
 fprintf(ctx->out," {\n") ;
-#line 354 "src/codegen.z"
+#line 361 "src/codegen.z"
 u32 i = 0;
 ;
-#line 356 "src/codegen.z"
+#line 363 "src/codegen.z"
 _ZN4main3ast8EnumDataE data = item->node._enum;
 ;
-#line 358 "src/codegen.z"
+#line 365 "src/codegen.z"
 while ( (i< data.num_variants))
 {
-#line 359 "src/codegen.z"
+#line 366 "src/codegen.z"
 char*  variant_name = _ZN4main9interning7get_strE(ctx->interner,data.variants[i].ident.name) ;
 ;
-#line 360 "src/codegen.z"
+#line 367 "src/codegen.z"
 fprintf(ctx->out,"%s_%s,\n",enum_name,variant_name) ;
-#line 361 "src/codegen.z"
+#line 368 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 363 "src/codegen.z"
+#line 370 "src/codegen.z"
 fprintf(ctx->out,"}") ;
-#line 364 "src/codegen.z"
+#line 371 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 365 "src/codegen.z"
+#line 372 "src/codegen.z"
 fprintf(ctx->out,";\n\n") ;
 }
 
-#line 368 "src/codegen.z"
+#line 375 "src/codegen.z"
 void  _ZN4main7codegen17generate_compoundE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 370 "src/codegen.z"
+#line 377 "src/codegen.z"
 char*  compound_kind ;
 ;
-#line 371 "src/codegen.z"
+#line 378 "src/codegen.z"
 if ((item->kind== ItemKind_Struct)){
-#line 371 "src/codegen.z"
+#line 378 "src/codegen.z"
 compound_kind = "struct";
 ;
 }
 else {
-#line 372 "src/codegen.z"
+#line 379 "src/codegen.z"
 compound_kind = "union";
 ;
 }
 ;
-#line 374 "src/codegen.z"
+#line 381 "src/codegen.z"
 _ZN4main3ast12CompoundDataE data = item->node.compound;
 ;
-#line 376 "src/codegen.z"
+#line 383 "src/codegen.z"
 _ZN4main3ast6ModuleE*  module = ctx->current_module;
 ;
-#line 378 "src/codegen.z"
-fprintf(ctx->out,"typedef %s",compound_kind) ;
-#line 379 "src/codegen.z"
-_ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 380 "src/codegen.z"
-_ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 381 "src/codegen.z"
-fprintf(ctx->out,";\n") ;
-#line 383 "src/codegen.z"
-_ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,item->span) ;
-#line 384 "src/codegen.z"
-if ((data.num_fields> 0)){
 #line 385 "src/codegen.z"
 fprintf(ctx->out,"typedef %s",compound_kind) ;
 #line 386 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
 #line 387 "src/codegen.z"
-fprintf(ctx->out," {\n") ;
+_ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
 #line 388 "src/codegen.z"
+fprintf(ctx->out,";\n") ;
+#line 390 "src/codegen.z"
+_ZN4main10source_map19emit_line_directiveE(ctx->out,ctx->source,item->span) ;
+#line 391 "src/codegen.z"
+if ((data.num_fields> 0)){
+#line 392 "src/codegen.z"
+fprintf(ctx->out,"typedef %s",compound_kind) ;
+#line 393 "src/codegen.z"
+_ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
+#line 394 "src/codegen.z"
+fprintf(ctx->out," {\n") ;
+#line 395 "src/codegen.z"
 u32 i = 0;
 ;
-#line 389 "src/codegen.z"
+#line 396 "src/codegen.z"
 while ( (i< data.num_fields))
 {
-#line 390 "src/codegen.z"
+#line 397 "src/codegen.z"
 _ZN4main7codegen13generate_typeE(ctx,data.fields[i].ast_ty) ;
-#line 392 "src/codegen.z"
+#line 399 "src/codegen.z"
 char*  field_name = _ZN4main9interning7get_strE(ctx->interner,data.fields[i].ident.name) ;
 ;
-#line 393 "src/codegen.z"
+#line 400 "src/codegen.z"
 fprintf(ctx->out," %s;\n",field_name) ;
-#line 394 "src/codegen.z"
+#line 401 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 396 "src/codegen.z"
+#line 403 "src/codegen.z"
 fprintf(ctx->out,"}") ;
-#line 397 "src/codegen.z"
+#line 404 "src/codegen.z"
 _ZN4main7codegen21mangle_path_and_identE(ctx,module->path,item->ident) ;
-#line 398 "src/codegen.z"
+#line 405 "src/codegen.z"
 fprintf(ctx->out,";\n\n") ;
 }
 ;
 }
 
-#line 402 "src/codegen.z"
+#line 409 "src/codegen.z"
 void  _ZN4main7codegen12generate_modE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast6ModuleE*  module) {
-#line 403 "src/codegen.z"
+#line 410 "src/codegen.z"
 _ZN4main3ast6ModuleE*  old_module = ctx->current_module;
 ;
-#line 404 "src/codegen.z"
+#line 411 "src/codegen.z"
 ctx->current_module = module;
 ;
-#line 405 "src/codegen.z"
+#line 412 "src/codegen.z"
 u32 i = 0;
 ;
-#line 406 "src/codegen.z"
+#line 413 "src/codegen.z"
 while ( (i< module->num_items))
 {
-#line 407 "src/codegen.z"
+#line 414 "src/codegen.z"
 _ZN4main7codegen13generate_itemE(ctx,module->items[i]) ;
-#line 408 "src/codegen.z"
+#line 415 "src/codegen.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 410 "src/codegen.z"
+#line 417 "src/codegen.z"
 ctx->current_module = old_module;
 ;
 }
 
-#line 413 "src/codegen.z"
+#line 420 "src/codegen.z"
 void  _ZN4main7codegen13generate_itemE(_ZN4main7codegen14CodegenContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 415 "src/codegen.z"
+#line 422 "src/codegen.z"
 if (((item->kind== ItemKind_Const)|| (item->kind== ItemKind_Variable))){
-#line 415 "src/codegen.z"
+#line 422 "src/codegen.z"
 _ZN4main7codegen17generate_variableE(ctx,item) ;
 }
 else {
-#line 416 "src/codegen.z"
+#line 423 "src/codegen.z"
 if ((item->kind== ItemKind_Enum)){
-#line 416 "src/codegen.z"
+#line 423 "src/codegen.z"
 _ZN4main7codegen13generate_enumE(ctx,item) ;
 }
 else {
-#line 417 "src/codegen.z"
+#line 424 "src/codegen.z"
 if ((item->kind== ItemKind_Function)){
-#line 417 "src/codegen.z"
+#line 424 "src/codegen.z"
 _ZN4main7codegen17generate_functionE(ctx,item) ;
 }
 else {
-#line 418 "src/codegen.z"
+#line 425 "src/codegen.z"
 if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
-#line 418 "src/codegen.z"
+#line 425 "src/codegen.z"
 _ZN4main7codegen17generate_compoundE(ctx,item) ;
 }
 else {
-#line 419 "src/codegen.z"
+#line 426 "src/codegen.z"
 if ((item->kind== ItemKind_Module)){
-#line 419 "src/codegen.z"
+#line 426 "src/codegen.z"
 _ZN4main7codegen12generate_modE(ctx,item->node.module) ;
 }
 ;
@@ -8269,36 +9044,36 @@ _ZN4main7codegen12generate_modE(ctx,item->node.module) ;
 ;
 }
 ;
-#line 420 "src/codegen.z"
+#line 427 "src/codegen.z"
 fprintf(ctx->out,"\n") ;
 }
 
-#line 423 "src/codegen.z"
+#line 430 "src/codegen.z"
 void  _ZN4main7codegen8generateE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE ast, char*  output_file) {
-#line 424 "src/codegen.z"
+#line 431 "src/codegen.z"
 _ZN4main7codegen14CodegenContextE ctx ;
 ;
-#line 426 "src/codegen.z"
+#line 433 "src/codegen.z"
 ctx.out = fopen(output_file,"w") ;
 ;
-#line 427 "src/codegen.z"
+#line 434 "src/codegen.z"
 ctx.ident_is_ptr = _ZN4main6strmap13strmap_createE(1024) ;
 ;
-#line 428 "src/codegen.z"
+#line 435 "src/codegen.z"
 ctx.sess = sess;
 ;
-#line 429 "src/codegen.z"
+#line 436 "src/codegen.z"
 ctx.interner = &sess->interner;
 ;
-#line 430 "src/codegen.z"
+#line 437 "src/codegen.z"
 ctx.source = &sess->source;
 ;
-#line 431 "src/codegen.z"
+#line 438 "src/codegen.z"
 ctx.ast = &ast;
 ;
-#line 433 "src/codegen.z"
+#line 440 "src/codegen.z"
 _ZN4main7codegen16generate_preludeE(&ctx) ;
-#line 435 "src/codegen.z"
+#line 442 "src/codegen.z"
 _ZN4main7codegen12generate_modE(&ctx,ast.root_module) ;
 }
 
@@ -8344,34 +9119,17 @@ char*  root_filename = basename(argv[1]) ;
 sess.root_path = dirname(argv[1]) ;
 ;
 #line 44 "src/main.z"
-char*  root_module = malloc((strlen(root_filename) + 1)) ;
-;
-#line 46 "src/main.z"
 strtok(root_filename,".z") ;
+#line 45 "src/main.z"
+_ZN4main3ast3AstE ast = _ZN4main6parser5parseE(&sess,root_filename) ;
+;
 #line 47 "src/main.z"
-char*  dot_found = strtok(_ZN4main4cstd4nullE,".") ;
-;
-#line 48 "src/main.z"
-if ((dot_found!= _ZN4main4cstd4nullE)){
-#line 49 "src/main.z"
-memcpy(root_module,root_filename,(dot_found- root_filename)) ;
-#line 50 "src/main.z"
-root_module[((dot_found- root_filename)+ 1)] = 0;
-;
-}
-else {
-#line 52 "src/main.z"
-abort() ;
-}
-;
-#line 54 "src/main.z"
-_ZN4main3ast3AstE ast = _ZN4main6parser5parseE(&sess,root_module) ;
-;
-#line 56 "src/main.z"
 _ZN4main10resolution7resolveE(&sess,&ast) ;
-#line 58 "src/main.z"
+#line 48 "src/main.z"
+_ZN4main9typecheck5checkE(&sess,&ast) ;
+#line 49 "src/main.z"
 _ZN4main7codegen8generateE(&sess,ast,argv[2]) ;
-#line 60 "src/main.z"
+#line 51 "src/main.z"
 return 0;
 ;
 }
