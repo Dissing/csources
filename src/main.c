@@ -59,15 +59,12 @@ TokenKind_Extern,
 TokenKind_Fn,
 TokenKind_For,
 TokenKind_If,
-TokenKind_Mod,
+TokenKind_Import,
 TokenKind_Return,
 TokenKind_Static,
 TokenKind_Struct,
 TokenKind_Sizeof,
 TokenKind_Union,
-TokenKind_Use,
-TokenKind_Var,
-TokenKind_Val,
 TokenKind_While,
 TokenKind_Plus,
 TokenKind_Minus,
@@ -110,7 +107,7 @@ TokenKind_True,
 TokenKind_False,
 } _ZN6tokens9TokenKindE;
 
-#line 75 "src/tokens.z"
+#line 72 "src/tokens.z"
 typedef struct _ZN6tokens5TokenE _ZN6tokens5TokenE;
 
 #line 8 "src/lexer.z"
@@ -421,7 +418,7 @@ ItemKind_Enum,
 ItemKind_Function,
 ItemKind_Struct,
 ItemKind_Union,
-ItemKind_Use,
+ItemKind_Import,
 ItemKind_Variable,
 } _ZN3ast8ItemKindE;
 
@@ -538,7 +535,7 @@ _ZN10source_map9SourceMapE source;
  char*  root_path;
 } _ZN7session7SessionE;
 
-#line 75 "src/tokens.z"
+#line 72 "src/tokens.z"
 typedef struct _ZN6tokens5TokenE {
 _ZN6tokens9TokenKindE kind;
 _ZN10source_map4SpanE span;
@@ -879,7 +876,7 @@ _ZN3ast12CompoundDataE compound;
 _ZN3ast8EnumDataE _enum;
 _ZN3ast12VariableDataE variable;
 _ZN3ast12FunctionDataE function;
-_ZN3ast4PathE _use;
+_ZN3ast4PathE _import;
 } _ZN3ast12ItemKindNodeE;
 
 #line 452 "src/ast.z"
@@ -1007,17 +1004,17 @@ _ZN3ast6ModuleE*  current_module;
 _ZN9interning8InternerE*  interner;
 } _ZN7codegen14CodegenContextE;
 
-#line 32 "src/main.z"
+#line 16 "src/main.z"
  char*  basename( char*  path) ;
-#line 33 "src/main.z"
+#line 17 "src/main.z"
  char*  dirname( char*  path) ;
-#line 35 "src/main.z"
+#line 19 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main10add_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) ;
-#line 37 "src/main.z"
+#line 21 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main11find_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) ;
-#line 49 "src/main.z"
+#line 33 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main10add_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) ;
-#line 75 "src/main.z"
+#line 59 "src/main.z"
  i32 main( i32 argc,  char* *  argv) ;
 #line 2 "src/cstd.z"
  void*  malloc( u64 size) ;
@@ -1137,17 +1134,17 @@ _ZN9interning3SidE _ZN5lexer10get_lexemeE(_ZN5lexer13LexingContextE*  ctx,  u32 
  void _ZN5lexer19single_line_commentE(_ZN5lexer13LexingContextE*  ctx) ;
 #line 97 "src/lexer.z"
 _ZN6tokens9TokenKindE _ZN5lexer10is_keywordE( char*  s) ;
-#line 125 "src/lexer.z"
+#line 122 "src/lexer.z"
  void _ZN5lexer8lex_charE(_ZN5lexer13LexingContextE*  ctx) ;
-#line 146 "src/lexer.z"
+#line 143 "src/lexer.z"
  void _ZN5lexer10lex_stringE(_ZN5lexer13LexingContextE*  ctx) ;
-#line 168 "src/lexer.z"
+#line 165 "src/lexer.z"
  void _ZN5lexer10lex_numberE(_ZN5lexer13LexingContextE*  ctx) ;
-#line 185 "src/lexer.z"
+#line 182 "src/lexer.z"
  void _ZN5lexer14lex_identifierE(_ZN5lexer13LexingContextE*  ctx) ;
-#line 197 "src/lexer.z"
+#line 194 "src/lexer.z"
  void _ZN5lexer10scan_tokenE(_ZN5lexer13LexingContextE*  ctx) ;
-#line 258 "src/lexer.z"
+#line 255 "src/lexer.z"
 _ZN6tokens5TokenE*  _ZN5lexer3lexE(_ZN7session7SessionE*  sess, _ZN10source_map10SourceFileE*  source,  u32*  num_tokens) ;
 #line 27 "src/ast.z"
  u32 _ZN3ast12integer_sizeE(_ZN3ast11IntegerSizeE size) ;
@@ -1241,19 +1238,19 @@ _ZN3ast4ExprE*  _ZN6parser10parse_stmtE(_ZN6parser14ParsingContextE*  ctx) ;
 _ZN3ast8GenericsE _ZN6parser14parse_genericsE(_ZN6parser14ParsingContextE*  ctx) ;
 #line 562 "src/parser.z"
  void _ZN6parser19parse_variable_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 576 "src/parser.z"
+#line 573 "src/parser.z"
  void _ZN6parser19parse_compound_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 608 "src/parser.z"
+#line 605 "src/parser.z"
  void _ZN6parser15parse_enum_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 629 "src/parser.z"
+#line 626 "src/parser.z"
 _ZN3ast14FunctionHeaderE _ZN6parser21parse_function_headerE(_ZN6parser14ParsingContextE*  ctx) ;
-#line 663 "src/parser.z"
+#line 660 "src/parser.z"
  void _ZN6parser19parse_function_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 680 "src/parser.z"
- void _ZN6parser9parse_useE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 690 "src/parser.z"
+#line 677 "src/parser.z"
+ void _ZN6parser12parse_importE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
+#line 687 "src/parser.z"
  void _ZN6parser10parse_itemE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) ;
-#line 717 "src/parser.z"
+#line 709 "src/parser.z"
 _ZN3ast6ModuleE*  _ZN6parser5parseE(_ZN7session7SessionE*  sess, _ZN10source_map10SourceFileE*  source, _ZN9interning3SidE name, _ZN3ast6ModuleE*  parent) ;
 #line 64 "src/resolution.z"
  void _ZN10resolution23setup_primitive_ty_sidsE(_ZN9interning8InternerE*  i, _ZN10resolution17PrimitiveTypeSidsE*  p) ;
@@ -1501,144 +1498,144 @@ _ZN3ast2TyE*  _ZN9typecheck10check_exprE(_ZN9typecheck11TypeContextE*  ctx, _ZN3
  void _ZN7codegen22generate_mod_fn_bodiesE(_ZN7codegen14CodegenContextE*  ctx, _ZN3ast6ModuleE*  module) ;
 #line 480 "src/codegen.z"
  void _ZN7codegen8generateE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target,  char*  output_file) ;
-#line 32 "src/main.z"
+#line 16 "src/main.z"
  char*  basename( char*  path) ;
-#line 33 "src/main.z"
+#line 17 "src/main.z"
  char*  dirname( char*  path) ;
-#line 35 "src/main.z"
+#line 19 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main10add_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) ;
-#line 37 "src/main.z"
+#line 21 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main11find_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) {
-#line 39 "src/main.z"
+#line 23 "src/main.z"
  i32 i = 0;
 ;
-#line 40 "src/main.z"
+#line 24 "src/main.z"
 while ( ((( u32)(i))< target->num_modules))
 {
-#line 41 "src/main.z"
+#line 25 "src/main.z"
 _ZN3ast6ModuleE*  module = target->modules[i];
 ;
-#line 42 "src/main.z"
+#line 26 "src/main.z"
 if ((module->path.segments[0].name.x== path.segments[0].name.x)){
-#line 42 "src/main.z"
+#line 26 "src/main.z"
 return module;
 ;
 }
 ;
-#line 43 "src/main.z"
+#line 27 "src/main.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 46 "src/main.z"
+#line 30 "src/main.z"
 return _ZN4main10add_moduleE(sess,target,path,parent) ;
 ;
 }
-#line 49 "src/main.z"
+#line 33 "src/main.z"
 _ZN3ast6ModuleE*  _ZN4main10add_moduleE(_ZN7session7SessionE*  sess, _ZN3ast13CompileTargetE*  target, _ZN3ast4PathE path, _ZN3ast6ModuleE*  parent) {
-#line 51 "src/main.z"
+#line 35 "src/main.z"
 _ZN10source_map10SourceFileE*  source = _ZN10source_map19source_map_new_fileE(&sess->source,sess->root_path,_ZN9interning7get_strE(&sess->interner,path.segments[0].name) ) ;
 ;
-#line 52 "src/main.z"
+#line 36 "src/main.z"
 _ZN3ast6ModuleE*  module = _ZN6parser5parseE(sess,source,path.segments[0].name,parent) ;
 ;
-#line 54 "src/main.z"
+#line 38 "src/main.z"
 target->modules[target->num_modules] = module;
 ;
-#line 55 "src/main.z"
+#line 39 "src/main.z"
 target->num_modules = ((( i32)(target->num_modules))+ 1);
 ;
-#line 57 "src/main.z"
+#line 41 "src/main.z"
  i32 i = 0;
 ;
-#line 58 "src/main.z"
+#line 42 "src/main.z"
 while ( ((( u32)(i))< module->num_items))
 {
-#line 59 "src/main.z"
+#line 43 "src/main.z"
 _ZN3ast4ItemE*  item = &module->items[i];
 ;
-#line 60 "src/main.z"
-if ((item->kind== ItemKind_Use)){
-#line 61 "src/main.z"
+#line 44 "src/main.z"
+if ((item->kind== ItemKind_Import)){
+#line 45 "src/main.z"
 _ZN3ast7BindingE binding ;
 ;
-#line 62 "src/main.z"
+#line 46 "src/main.z"
 binding.kind = BindingKind_Module;
 ;
-#line 63 "src/main.z"
-binding.node.module = _ZN4main11find_moduleE(sess,target,item->node._use,parent) ;
+#line 47 "src/main.z"
+binding.node.module = _ZN4main11find_moduleE(sess,target,item->node._import,parent) ;
 ;
-#line 64 "src/main.z"
-item->node._use.binding = binding;
+#line 48 "src/main.z"
+item->node._import.binding = binding;
 ;
 }
 ;
-#line 66 "src/main.z"
+#line 50 "src/main.z"
 i = (i+ 1);
 ;
 }
 ;
-#line 69 "src/main.z"
+#line 53 "src/main.z"
 _ZN10resolution13resolve_namesE(sess,module) ;
-#line 70 "src/main.z"
+#line 54 "src/main.z"
 _ZN9typecheck5checkE(sess,module) ;
-#line 72 "src/main.z"
+#line 56 "src/main.z"
 return module;
 ;
 }
-#line 75 "src/main.z"
+#line 59 "src/main.z"
  i32 main( i32 argc,  char* *  argv) {
-#line 76 "src/main.z"
+#line 60 "src/main.z"
 if ((argc!= 3)){
-#line 77 "src/main.z"
+#line 61 "src/main.z"
 printf((( char* )("Usage: compiler INPUT OUTPUT\n"))) ;
-#line 78 "src/main.z"
+#line 62 "src/main.z"
 abort() ;
 }
 ;
-#line 81 "src/main.z"
+#line 65 "src/main.z"
 _ZN7session7SessionE sess ;
 ;
-#line 84 "src/main.z"
+#line 68 "src/main.z"
 sess.interner = _ZN9interning15interner_createE() ;
 ;
-#line 85 "src/main.z"
+#line 69 "src/main.z"
 sess.source = _ZN10source_map17source_map_createE() ;
 ;
-#line 86 "src/main.z"
+#line 70 "src/main.z"
  char*  root_filename = basename(argv[1]) ;
 ;
-#line 87 "src/main.z"
+#line 71 "src/main.z"
 sess.root_path = dirname(argv[1]) ;
 ;
-#line 89 "src/main.z"
+#line 73 "src/main.z"
 strtok(root_filename,(( char* )(".z"))) ;
-#line 91 "src/main.z"
+#line 75 "src/main.z"
 _ZN3ast13CompileTargetE target ;
 ;
-#line 92 "src/main.z"
+#line 76 "src/main.z"
 target.modules = malloc((( u64)((8* 64)))) ;
 ;
-#line 93 "src/main.z"
+#line 77 "src/main.z"
 target.num_modules = 0;
 ;
-#line 95 "src/main.z"
+#line 79 "src/main.z"
 _ZN3ast4PathE root_path ;
 ;
-#line 96 "src/main.z"
+#line 80 "src/main.z"
 root_path.segments = malloc(sizeof(_ZN3ast5IdentE)) ;
 ;
-#line 97 "src/main.z"
+#line 81 "src/main.z"
 root_path.segments[0].name = _ZN9interning6internE(&sess.interner,root_filename) ;
 ;
-#line 98 "src/main.z"
+#line 82 "src/main.z"
 root_path.num_segments = 1;
 ;
-#line 100 "src/main.z"
+#line 84 "src/main.z"
 _ZN4main10add_moduleE(&sess,&target,root_path,((_ZN3ast6ModuleE* )(_ZN4cstd4nullE))) ;
-#line 102 "src/main.z"
+#line 86 "src/main.z"
 _ZN7codegen8generateE(&sess,&target,argv[2]) ;
-#line 104 "src/main.z"
+#line 88 "src/main.z"
 return 0;
 ;
 }
@@ -2560,380 +2557,359 @@ return TokenKind_If;
 }
 ;
 #line 112 "src/lexer.z"
-if (!(( bool)(strcmp((( char* )(s)),(( char* )("mod"))) ))){
-#line 112 "src/lexer.z"
-return TokenKind_Mod;
-;
-}
-;
-#line 113 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("return"))) ))){
-#line 113 "src/lexer.z"
+#line 112 "src/lexer.z"
 return TokenKind_Return;
 ;
 }
 ;
-#line 114 "src/lexer.z"
+#line 113 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("struct"))) ))){
-#line 114 "src/lexer.z"
+#line 113 "src/lexer.z"
 return TokenKind_Struct;
 ;
 }
 ;
-#line 115 "src/lexer.z"
+#line 114 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("sizeof"))) ))){
-#line 115 "src/lexer.z"
+#line 114 "src/lexer.z"
 return TokenKind_Sizeof;
 ;
 }
 ;
-#line 116 "src/lexer.z"
+#line 115 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("true"))) ))){
-#line 116 "src/lexer.z"
+#line 115 "src/lexer.z"
 return TokenKind_True;
 ;
 }
 ;
-#line 117 "src/lexer.z"
+#line 116 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("union"))) ))){
-#line 117 "src/lexer.z"
+#line 116 "src/lexer.z"
 return TokenKind_Union;
 ;
 }
 ;
+#line 117 "src/lexer.z"
+if (!(( bool)(strcmp((( char* )(s)),(( char* )("import"))) ))){
+#line 117 "src/lexer.z"
+return TokenKind_Import;
+;
+}
+;
 #line 118 "src/lexer.z"
-if (!(( bool)(strcmp((( char* )(s)),(( char* )("use"))) ))){
-#line 118 "src/lexer.z"
-return TokenKind_Use;
-;
-}
-;
-#line 119 "src/lexer.z"
-if (!(( bool)(strcmp((( char* )(s)),(( char* )("var"))) ))){
-#line 119 "src/lexer.z"
-return TokenKind_Var;
-;
-}
-;
-#line 120 "src/lexer.z"
-if (!(( bool)(strcmp((( char* )(s)),(( char* )("val"))) ))){
-#line 120 "src/lexer.z"
-return TokenKind_Val;
-;
-}
-;
-#line 121 "src/lexer.z"
 if (!(( bool)(strcmp((( char* )(s)),(( char* )("while"))) ))){
-#line 121 "src/lexer.z"
+#line 118 "src/lexer.z"
 return TokenKind_While;
 ;
 }
 ;
-#line 122 "src/lexer.z"
+#line 119 "src/lexer.z"
 return TokenKind_Invalid;
 ;
 }
-#line 125 "src/lexer.z"
+#line 122 "src/lexer.z"
  void _ZN5lexer8lex_charE(_ZN5lexer13LexingContextE*  ctx) {
-#line 127 "src/lexer.z"
+#line 124 "src/lexer.z"
 _ZN10source_map10SourceFileE*  source = ctx->source;
 ;
-#line 128 "src/lexer.z"
+#line 125 "src/lexer.z"
  u32 start_line = ((( i32)(source->num_lines))+ 1);
 ;
-#line 130 "src/lexer.z"
+#line 127 "src/lexer.z"
 while ( (((_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) != '\'')|| ((_ZN5lexer10peek_tokenE(ctx,(( u32)(-1))) == '\\')&& (_ZN5lexer10peek_tokenE(ctx,(( u32)(-2))) != '\\')))&& !_ZN5lexer14is_done_lexingE(ctx) ))
 {
-#line 131 "src/lexer.z"
+#line 128 "src/lexer.z"
  char c = _ZN5lexer7advanceE(ctx) ;
 ;
-#line 132 "src/lexer.z"
+#line 129 "src/lexer.z"
 if ((c== '\n')){
-#line 132 "src/lexer.z"
+#line 129 "src/lexer.z"
 _ZN5lexer12read_newlineE(ctx) ;
 }
 ;
 }
 ;
-#line 135 "src/lexer.z"
+#line 132 "src/lexer.z"
 if (_ZN5lexer14is_done_lexingE(ctx) ){
-#line 136 "src/lexer.z"
+#line 133 "src/lexer.z"
 printf((( char* )("Unterminated char starting on line %u\n")),start_line) ;
-#line 137 "src/lexer.z"
+#line 134 "src/lexer.z"
 abort() ;
 }
 ;
-#line 141 "src/lexer.z"
+#line 138 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 143 "src/lexer.z"
+#line 140 "src/lexer.z"
 _ZN5lexer9add_tokenE(ctx,TokenKind_Char,_ZN5lexer10get_lexemeE(ctx,(( u32)(1)),(( u32)(1))) ) ;
 }
-#line 146 "src/lexer.z"
+#line 143 "src/lexer.z"
  void _ZN5lexer10lex_stringE(_ZN5lexer13LexingContextE*  ctx) {
-#line 148 "src/lexer.z"
+#line 145 "src/lexer.z"
 _ZN10source_map10SourceFileE*  source = ctx->source;
 ;
-#line 150 "src/lexer.z"
+#line 147 "src/lexer.z"
  u32 start_line = ((( i32)(source->num_lines))+ 1);
 ;
-#line 152 "src/lexer.z"
+#line 149 "src/lexer.z"
 while ( (((_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) != '"')|| ((_ZN5lexer10peek_tokenE(ctx,(( u32)(-1))) == '\\')&& (_ZN5lexer10peek_tokenE(ctx,(( u32)(-2))) != '\\')))&& !_ZN5lexer14is_done_lexingE(ctx) ))
 {
-#line 153 "src/lexer.z"
+#line 150 "src/lexer.z"
  char c = _ZN5lexer7advanceE(ctx) ;
 ;
-#line 154 "src/lexer.z"
+#line 151 "src/lexer.z"
 if ((c== '\n')){
-#line 154 "src/lexer.z"
+#line 151 "src/lexer.z"
 _ZN5lexer12read_newlineE(ctx) ;
 }
 ;
 }
 ;
-#line 157 "src/lexer.z"
+#line 154 "src/lexer.z"
 if (_ZN5lexer14is_done_lexingE(ctx) ){
-#line 158 "src/lexer.z"
+#line 155 "src/lexer.z"
 printf((( char* )("Unterminated string starting on line %u\n")),start_line) ;
-#line 159 "src/lexer.z"
+#line 156 "src/lexer.z"
 abort() ;
 }
 ;
-#line 163 "src/lexer.z"
+#line 160 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 165 "src/lexer.z"
+#line 162 "src/lexer.z"
 _ZN5lexer9add_tokenE(ctx,TokenKind_String,_ZN5lexer10get_lexemeE(ctx,(( u32)(1)),(( u32)(1))) ) ;
 }
-#line 168 "src/lexer.z"
+#line 165 "src/lexer.z"
  void _ZN5lexer10lex_numberE(_ZN5lexer13LexingContextE*  ctx) {
-#line 170 "src/lexer.z"
+#line 167 "src/lexer.z"
 while ( _ZN5lexer8is_digitE(_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) ) )
 {
-#line 170 "src/lexer.z"
+#line 167 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
 }
 ;
-#line 171 "src/lexer.z"
+#line 168 "src/lexer.z"
  bool dot_encountered = false;
 ;
-#line 172 "src/lexer.z"
+#line 169 "src/lexer.z"
 if (((_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) == '.')&& _ZN5lexer8is_digitE(_ZN5lexer10peek_tokenE(ctx,(( u32)(1))) ) )){
-#line 173 "src/lexer.z"
+#line 170 "src/lexer.z"
 dot_encountered = true;
 ;
-#line 174 "src/lexer.z"
+#line 171 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 175 "src/lexer.z"
+#line 172 "src/lexer.z"
 while ( _ZN5lexer8is_digitE(_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) ) )
 {
-#line 175 "src/lexer.z"
+#line 172 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
 }
 ;
 }
 ;
-#line 178 "src/lexer.z"
+#line 175 "src/lexer.z"
 _ZN6tokens9TokenKindE t ;
 ;
-#line 179 "src/lexer.z"
+#line 176 "src/lexer.z"
 if (dot_encountered){
-#line 179 "src/lexer.z"
+#line 176 "src/lexer.z"
 t = TokenKind_Float;
 ;
 }
 else {
-#line 180 "src/lexer.z"
+#line 177 "src/lexer.z"
 t = TokenKind_Integer;
 ;
 }
 ;
-#line 182 "src/lexer.z"
+#line 179 "src/lexer.z"
 _ZN5lexer9add_tokenE(ctx,t,_ZN5lexer10get_lexemeE(ctx,(( u32)(0)),(( u32)(0))) ) ;
 }
-#line 185 "src/lexer.z"
+#line 182 "src/lexer.z"
  void _ZN5lexer14lex_identifierE(_ZN5lexer13LexingContextE*  ctx) {
-#line 186 "src/lexer.z"
+#line 183 "src/lexer.z"
 while ( (_ZN5lexer15is_alphanumericE(_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) ) || (_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) == '_')))
 {
-#line 186 "src/lexer.z"
+#line 183 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
 }
 ;
-#line 188 "src/lexer.z"
+#line 185 "src/lexer.z"
 _ZN9interning3SidE lexeme = _ZN5lexer10get_lexemeE(ctx,(( u32)(0)),(( u32)(0))) ;
 ;
-#line 190 "src/lexer.z"
+#line 187 "src/lexer.z"
 _ZN7session7SessionE*  sess = ctx->sess;
 ;
-#line 191 "src/lexer.z"
+#line 188 "src/lexer.z"
  char*  lexeme_str = _ZN9interning7get_strE(&sess->interner,lexeme) ;
 ;
-#line 192 "src/lexer.z"
+#line 189 "src/lexer.z"
 _ZN6tokens9TokenKindE keyword = _ZN5lexer10is_keywordE(lexeme_str) ;
 ;
-#line 193 "src/lexer.z"
+#line 190 "src/lexer.z"
 if ((keyword!= TokenKind_Invalid)){
-#line 193 "src/lexer.z"
+#line 190 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,keyword) ;
 }
 else {
-#line 194 "src/lexer.z"
+#line 191 "src/lexer.z"
 _ZN5lexer9add_tokenE(ctx,TokenKind_Identifier,lexeme) ;
 }
 ;
 }
-#line 197 "src/lexer.z"
+#line 194 "src/lexer.z"
  void _ZN5lexer10scan_tokenE(_ZN5lexer13LexingContextE*  ctx) {
-#line 198 "src/lexer.z"
+#line 195 "src/lexer.z"
  char c = _ZN5lexer7advanceE(ctx) ;
 ;
-#line 202 "src/lexer.z"
+#line 199 "src/lexer.z"
 if ((c== '(')){
-#line 202 "src/lexer.z"
+#line 199 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_LeftParen) ;
 }
 else {
-#line 203 "src/lexer.z"
+#line 200 "src/lexer.z"
 if ((c== ')')){
-#line 203 "src/lexer.z"
+#line 200 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_RightParen) ;
 }
 else {
-#line 204 "src/lexer.z"
+#line 201 "src/lexer.z"
 if ((c== '[')){
-#line 204 "src/lexer.z"
+#line 201 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_LeftBracket) ;
 }
 else {
-#line 205 "src/lexer.z"
+#line 202 "src/lexer.z"
 if ((c== ']')){
-#line 205 "src/lexer.z"
+#line 202 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_RightBracket) ;
 }
 else {
-#line 206 "src/lexer.z"
+#line 203 "src/lexer.z"
 if ((c== '{')){
-#line 206 "src/lexer.z"
+#line 203 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_LeftCurly) ;
 }
 else {
-#line 207 "src/lexer.z"
+#line 204 "src/lexer.z"
 if ((c== '}')){
-#line 207 "src/lexer.z"
+#line 204 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_RightCurly) ;
 }
 else {
-#line 208 "src/lexer.z"
+#line 205 "src/lexer.z"
 if ((c== '+')){
-#line 208 "src/lexer.z"
+#line 205 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Plus) ;
 }
 else {
-#line 209 "src/lexer.z"
+#line 206 "src/lexer.z"
 if ((c== '*')){
-#line 209 "src/lexer.z"
+#line 206 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Star) ;
 }
 else {
-#line 210 "src/lexer.z"
+#line 207 "src/lexer.z"
 if ((c== '%')){
-#line 210 "src/lexer.z"
+#line 207 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Percent) ;
 }
 else {
-#line 211 "src/lexer.z"
+#line 208 "src/lexer.z"
 if ((c== '^')){
-#line 211 "src/lexer.z"
+#line 208 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Hat) ;
 }
 else {
-#line 212 "src/lexer.z"
+#line 209 "src/lexer.z"
 if ((c== ';')){
-#line 212 "src/lexer.z"
+#line 209 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Semicolon) ;
 }
 else {
-#line 213 "src/lexer.z"
+#line 210 "src/lexer.z"
 if ((c== ',')){
-#line 213 "src/lexer.z"
+#line 210 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Comma) ;
 }
 else {
-#line 214 "src/lexer.z"
+#line 211 "src/lexer.z"
 if ((c== '-')){
-#line 214 "src/lexer.z"
+#line 211 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,'>',TokenKind_Arrow,TokenKind_Minus) ;
 }
 else {
-#line 215 "src/lexer.z"
+#line 212 "src/lexer.z"
 if ((c== ':')){
-#line 215 "src/lexer.z"
+#line 212 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,':',TokenKind_ColonColon,TokenKind_Colon) ;
 }
 else {
-#line 216 "src/lexer.z"
+#line 213 "src/lexer.z"
 if ((c== '=')){
-#line 216 "src/lexer.z"
+#line 213 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,'=',TokenKind_EqualEqual,TokenKind_Equal) ;
 }
 else {
-#line 217 "src/lexer.z"
+#line 214 "src/lexer.z"
 if ((c== '!')){
-#line 217 "src/lexer.z"
+#line 214 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,'=',TokenKind_BangEqual,TokenKind_Bang) ;
 }
 else {
-#line 218 "src/lexer.z"
+#line 215 "src/lexer.z"
 if ((c== '&')){
-#line 218 "src/lexer.z"
+#line 215 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,'&',TokenKind_AndAnd,TokenKind_And) ;
 }
 else {
-#line 219 "src/lexer.z"
+#line 216 "src/lexer.z"
 if ((c== '|')){
-#line 219 "src/lexer.z"
+#line 216 "src/lexer.z"
 _ZN5lexer31add_lookahead_conditional_tokenE(ctx,'|',TokenKind_OrOr,TokenKind_Or) ;
 }
 else {
-#line 220 "src/lexer.z"
+#line 217 "src/lexer.z"
 if ((c== '.')){
-#line 221 "src/lexer.z"
+#line 218 "src/lexer.z"
 if (((_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) == '.')&& (_ZN5lexer10peek_tokenE(ctx,(( u32)(1))) == '.'))){
-#line 222 "src/lexer.z"
+#line 219 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 222 "src/lexer.z"
+#line 219 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 223 "src/lexer.z"
+#line 220 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Ellipsis) ;
 }
 else {
-#line 225 "src/lexer.z"
+#line 222 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Dot) ;
 }
 ;
 }
 else {
-#line 227 "src/lexer.z"
+#line 224 "src/lexer.z"
 if ((c== '<')){
-#line 228 "src/lexer.z"
+#line 225 "src/lexer.z"
  char n1 = _ZN5lexer10peek_tokenE(ctx,(( u32)(0))) ;
 ;
-#line 229 "src/lexer.z"
+#line 226 "src/lexer.z"
 if ((n1== '<')){
-#line 229 "src/lexer.z"
+#line 226 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 229 "src/lexer.z"
+#line 226 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_LessLess) ;
 }
 else {
-#line 230 "src/lexer.z"
+#line 227 "src/lexer.z"
 if ((n1== '=')){
-#line 230 "src/lexer.z"
+#line 227 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 230 "src/lexer.z"
+#line 227 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_LessEqual) ;
 }
 else {
-#line 231 "src/lexer.z"
+#line 228 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Less) ;
 }
 ;
@@ -2941,28 +2917,28 @@ _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Less) ;
 ;
 }
 else {
-#line 233 "src/lexer.z"
+#line 230 "src/lexer.z"
 if ((c== '>')){
-#line 234 "src/lexer.z"
+#line 231 "src/lexer.z"
  char n2 = _ZN5lexer10peek_tokenE(ctx,(( u32)(0))) ;
 ;
-#line 235 "src/lexer.z"
+#line 232 "src/lexer.z"
 if ((n2== '>')){
-#line 235 "src/lexer.z"
+#line 232 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 235 "src/lexer.z"
+#line 232 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_GreaterGreater) ;
 }
 else {
-#line 236 "src/lexer.z"
+#line 233 "src/lexer.z"
 if ((n2== '=')){
-#line 236 "src/lexer.z"
+#line 233 "src/lexer.z"
 _ZN5lexer7advanceE(ctx) ;
-#line 236 "src/lexer.z"
+#line 233 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_GreaterEqual) ;
 }
 else {
-#line 237 "src/lexer.z"
+#line 234 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Greater) ;
 }
 ;
@@ -2970,60 +2946,60 @@ _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Greater) ;
 ;
 }
 else {
-#line 239 "src/lexer.z"
+#line 236 "src/lexer.z"
 if ((c== '/')){
-#line 240 "src/lexer.z"
+#line 237 "src/lexer.z"
 if ((_ZN5lexer10peek_tokenE(ctx,(( u32)(0))) == '/')){
-#line 240 "src/lexer.z"
+#line 237 "src/lexer.z"
 _ZN5lexer19single_line_commentE(ctx) ;
 }
 else {
-#line 241 "src/lexer.z"
+#line 238 "src/lexer.z"
 _ZN5lexer16add_simple_tokenE(ctx,TokenKind_Slash) ;
 }
 ;
 }
 else {
-#line 243 "src/lexer.z"
+#line 240 "src/lexer.z"
 if ((((c== ' ')|| (c== '\t'))|| (c== '\r'))){
 }
 else {
-#line 244 "src/lexer.z"
+#line 241 "src/lexer.z"
 if ((c== '\n')){
-#line 244 "src/lexer.z"
+#line 241 "src/lexer.z"
 _ZN5lexer12read_newlineE(ctx) ;
 }
 else {
-#line 245 "src/lexer.z"
+#line 242 "src/lexer.z"
 if ((c== '"')){
-#line 245 "src/lexer.z"
+#line 242 "src/lexer.z"
 _ZN5lexer10lex_stringE(ctx) ;
 }
 else {
-#line 246 "src/lexer.z"
+#line 243 "src/lexer.z"
 if ((c== '\'')){
-#line 246 "src/lexer.z"
+#line 243 "src/lexer.z"
 _ZN5lexer8lex_charE(ctx) ;
 }
 else {
-#line 248 "src/lexer.z"
+#line 245 "src/lexer.z"
 if (_ZN5lexer8is_digitE(c) ){
-#line 248 "src/lexer.z"
+#line 245 "src/lexer.z"
 _ZN5lexer10lex_numberE(ctx) ;
 }
 else {
-#line 249 "src/lexer.z"
+#line 246 "src/lexer.z"
 if ((_ZN5lexer13is_alphabeticE(c) || (c== '_'))){
-#line 249 "src/lexer.z"
+#line 246 "src/lexer.z"
 _ZN5lexer14lex_identifierE(ctx) ;
 }
 else {
-#line 251 "src/lexer.z"
+#line 248 "src/lexer.z"
 _ZN10source_map10SourceFileE*  source = ctx->source;
 ;
-#line 252 "src/lexer.z"
+#line 249 "src/lexer.z"
 printf((( char* )("Unexpected character %c = %d on line %u\n")),c,c,source->num_lines) ;
-#line 253 "src/lexer.z"
+#line 250 "src/lexer.z"
 abort() ;
 }
 ;
@@ -3082,59 +3058,59 @@ abort() ;
 }
 ;
 }
-#line 258 "src/lexer.z"
+#line 255 "src/lexer.z"
 _ZN6tokens5TokenE*  _ZN5lexer3lexE(_ZN7session7SessionE*  sess, _ZN10source_map10SourceFileE*  source,  u32*  num_tokens) {
-#line 260 "src/lexer.z"
+#line 257 "src/lexer.z"
 _ZN5lexer13LexingContextE*  ctx = malloc(sizeof(_ZN5lexer13LexingContextE)) ;
 ;
-#line 261 "src/lexer.z"
+#line 258 "src/lexer.z"
 ctx->source = source;
 ;
-#line 262 "src/lexer.z"
+#line 259 "src/lexer.z"
 ctx->file_span_offset = source->start;
 ;
-#line 263 "src/lexer.z"
+#line 260 "src/lexer.z"
 ctx->start = 0;
 ;
-#line 264 "src/lexer.z"
+#line 261 "src/lexer.z"
 ctx->current = 0;
 ;
-#line 265 "src/lexer.z"
+#line 262 "src/lexer.z"
 ctx->tokens = malloc((sizeof(_ZN6tokens5TokenE)* (( u64)(10000)))) ;
 ;
-#line 266 "src/lexer.z"
+#line 263 "src/lexer.z"
 ctx->current_token_idx = 0;
 ;
-#line 267 "src/lexer.z"
+#line 264 "src/lexer.z"
 ctx->sess = sess;
 ;
-#line 269 "src/lexer.z"
+#line 266 "src/lexer.z"
 ctx->lexeme_buffer = malloc((( u64)(1024))) ;
 ;
-#line 271 "src/lexer.z"
+#line 268 "src/lexer.z"
 while ( !_ZN5lexer14is_done_lexingE(ctx) )
 {
-#line 272 "src/lexer.z"
+#line 269 "src/lexer.z"
 ctx->start = ctx->current;
 ;
-#line 273 "src/lexer.z"
+#line 270 "src/lexer.z"
 _ZN5lexer10scan_tokenE(ctx) ;
 }
 ;
-#line 276 "src/lexer.z"
+#line 273 "src/lexer.z"
 _ZN10source_map16source_file_doneE(source,ctx->current) ;
-#line 278 "src/lexer.z"
+#line 275 "src/lexer.z"
 if (((( i32)(ctx->current_token_idx))> 10000)){
-#line 279 "src/lexer.z"
+#line 276 "src/lexer.z"
 printf((( char* )("Lexer token overflow: %u!\n")),ctx->current_token_idx) ;
-#line 280 "src/lexer.z"
+#line 277 "src/lexer.z"
 abort() ;
 }
 ;
-#line 283 "src/lexer.z"
+#line 280 "src/lexer.z"
 *num_tokens = ctx->current_token_idx;
 ;
-#line 284 "src/lexer.z"
+#line 281 "src/lexer.z"
 return ctx->tokens;
 ;
 }
@@ -4739,15 +4715,18 @@ return generics;
 #line 562 "src/parser.z"
  void _ZN6parser19parse_variable_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
 #line 564 "src/parser.z"
-if (_ZN6parser6acceptE(ctx,TokenKind_Val) ){
-#line 564 "src/parser.z"
+item->ident = _ZN6parser16parse_identifierE(ctx) ;
+;
+#line 565 "src/parser.z"
+if (_ZN6parser6acceptE(ctx,TokenKind_ColonColon) ){
+#line 565 "src/parser.z"
 item->kind = ItemKind_Const;
 ;
 }
 else {
-#line 565 "src/parser.z"
-if (_ZN6parser6acceptE(ctx,TokenKind_Var) ){
-#line 565 "src/parser.z"
+#line 566 "src/parser.z"
+if (_ZN6parser6acceptE(ctx,TokenKind_Colon) ){
+#line 566 "src/parser.z"
 item->kind = ItemKind_Variable;
 ;
 }
@@ -4755,336 +4734,297 @@ item->kind = ItemKind_Variable;
 }
 ;
 #line 567 "src/parser.z"
-item->ident = _ZN6parser16parse_identifierE(ctx) ;
-;
-#line 568 "src/parser.z"
-if (_ZN6parser6acceptE(ctx,TokenKind_ColonColon) ){
-#line 568 "src/parser.z"
-item->kind = ItemKind_Const;
-;
-}
-else {
-#line 569 "src/parser.z"
-if (_ZN6parser6acceptE(ctx,TokenKind_Colon) ){
-#line 569 "src/parser.z"
-item->kind = ItemKind_Variable;
-;
-}
-;
-}
-;
-#line 570 "src/parser.z"
 item->node.variable.ast_ty = _ZN6parser10parse_typeE(ctx) ;
 ;
-#line 572 "src/parser.z"
+#line 569 "src/parser.z"
 if (_ZN6parser6acceptE(ctx,TokenKind_Equal) ){
-#line 572 "src/parser.z"
+#line 569 "src/parser.z"
 item->node.variable.body = _ZN6parser16parse_expressionE(ctx,(( u32)(0))) ;
 ;
 }
 else {
-#line 573 "src/parser.z"
+#line 570 "src/parser.z"
 item->node.variable.body = 0;
 ;
 }
 ;
 }
-#line 576 "src/parser.z"
+#line 573 "src/parser.z"
  void _ZN6parser19parse_compound_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
-#line 578 "src/parser.z"
+#line 575 "src/parser.z"
 item->ident = _ZN6parser16parse_identifierE(ctx) ;
 ;
-#line 580 "src/parser.z"
+#line 577 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_ColonColon) ;
-#line 581 "src/parser.z"
+#line 578 "src/parser.z"
 if (_ZN6parser6acceptE(ctx,TokenKind_Struct) ){
-#line 581 "src/parser.z"
+#line 578 "src/parser.z"
 item->kind = ItemKind_Struct;
 ;
 }
 else {
-#line 582 "src/parser.z"
+#line 579 "src/parser.z"
 if (_ZN6parser6acceptE(ctx,TokenKind_Union) ){
-#line 582 "src/parser.z"
+#line 579 "src/parser.z"
 item->kind = ItemKind_Union;
 ;
 }
 else {
-#line 583 "src/parser.z"
+#line 580 "src/parser.z"
 abort() ;
 }
 ;
 }
 ;
-#line 585 "src/parser.z"
+#line 582 "src/parser.z"
 if (_ZN6parser10can_acceptE(ctx,TokenKind_Less) ){
-#line 585 "src/parser.z"
+#line 582 "src/parser.z"
 item->node.compound.generics = _ZN6parser14parse_genericsE(ctx) ;
 ;
 }
 else {
-#line 586 "src/parser.z"
+#line 583 "src/parser.z"
 item->node.compound.generics.num_parameters = 0;
 ;
 }
 ;
-#line 588 "src/parser.z"
+#line 585 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_LeftCurly) ;
-#line 590 "src/parser.z"
+#line 587 "src/parser.z"
 item->node.compound.fields = malloc((sizeof(_ZN3ast13CompoundFieldE)* (( u64)(32)))) ;
 ;
-#line 591 "src/parser.z"
+#line 588 "src/parser.z"
 item->node.compound.num_fields = 0;
 ;
-#line 593 "src/parser.z"
+#line 590 "src/parser.z"
 while ( !_ZN6parser6acceptE(ctx,TokenKind_RightCurly) )
 {
-#line 594 "src/parser.z"
+#line 591 "src/parser.z"
 _ZN6tokens5TokenE token = _ZN6parser7consumeE(ctx) ;
 ;
-#line 595 "src/parser.z"
+#line 592 "src/parser.z"
 if ((token.kind!= TokenKind_Identifier)){
-#line 595 "src/parser.z"
+#line 592 "src/parser.z"
 _ZN5error10emit_errorE(ctx->source_map,token.span,"Expected field identifier") ;
 }
 ;
-#line 597 "src/parser.z"
+#line 594 "src/parser.z"
 item->node.compound.fields[item->node.compound.num_fields].ident.name = token.lexeme;
 ;
-#line 598 "src/parser.z"
+#line 595 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_Colon) ;
-#line 600 "src/parser.z"
+#line 597 "src/parser.z"
 _ZN3ast7AstTypeE*  type = _ZN6parser10parse_typeE(ctx) ;
 ;
-#line 601 "src/parser.z"
+#line 598 "src/parser.z"
 item->node.compound.fields[item->node.compound.num_fields].ast_ty = type;
 ;
-#line 602 "src/parser.z"
+#line 599 "src/parser.z"
 item->node.compound.num_fields = ((( i32)(item->node.compound.num_fields))+ 1);
 ;
-#line 603 "src/parser.z"
+#line 600 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_Comma) ;
 }
 ;
 }
-#line 608 "src/parser.z"
+#line 605 "src/parser.z"
  void _ZN6parser15parse_enum_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
-#line 610 "src/parser.z"
+#line 607 "src/parser.z"
 item->kind = ItemKind_Enum;
 ;
-#line 611 "src/parser.z"
+#line 608 "src/parser.z"
 item->ident = _ZN6parser16parse_identifierE(ctx) ;
 ;
-#line 613 "src/parser.z"
+#line 610 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_ColonColon) ;
-#line 614 "src/parser.z"
+#line 611 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_Enum) ;
-#line 616 "src/parser.z"
+#line 613 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_LeftCurly) ;
-#line 618 "src/parser.z"
+#line 615 "src/parser.z"
 item->node._enum.variants = malloc((sizeof(_ZN3ast11EnumVariantE)* (( u64)(128)))) ;
 ;
-#line 619 "src/parser.z"
+#line 616 "src/parser.z"
 item->node._enum.num_variants = 0;
 ;
-#line 621 "src/parser.z"
+#line 618 "src/parser.z"
 while ( !_ZN6parser6acceptE(ctx,TokenKind_RightCurly) )
 {
-#line 622 "src/parser.z"
+#line 619 "src/parser.z"
 item->node._enum.variants[item->node._enum.num_variants].ident = _ZN6parser16parse_identifierE(ctx) ;
 ;
-#line 623 "src/parser.z"
+#line 620 "src/parser.z"
 item->node._enum.variants[item->node._enum.num_variants]._enum = item;
 ;
-#line 624 "src/parser.z"
+#line 621 "src/parser.z"
 item->node._enum.num_variants = ((( i32)(item->node._enum.num_variants))+ 1);
 ;
-#line 625 "src/parser.z"
+#line 622 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_Comma) ;
 }
 ;
 }
-#line 629 "src/parser.z"
+#line 626 "src/parser.z"
 _ZN3ast14FunctionHeaderE _ZN6parser21parse_function_headerE(_ZN6parser14ParsingContextE*  ctx) {
-#line 630 "src/parser.z"
+#line 627 "src/parser.z"
 _ZN3ast14FunctionHeaderE header ;
 ;
-#line 632 "src/parser.z"
+#line 629 "src/parser.z"
 header.parameters = malloc((sizeof(_ZN3ast17FunctionParameterE)* (( u64)(16)))) ;
 ;
-#line 633 "src/parser.z"
+#line 630 "src/parser.z"
 header.num_parameters = 0;
 ;
-#line 635 "src/parser.z"
+#line 632 "src/parser.z"
 if (_ZN6parser10can_acceptE(ctx,TokenKind_Less) ){
-#line 635 "src/parser.z"
+#line 632 "src/parser.z"
 header.generics = _ZN6parser14parse_genericsE(ctx) ;
 ;
 }
 else {
-#line 636 "src/parser.z"
+#line 633 "src/parser.z"
 header.generics.num_parameters = 0;
 ;
 }
 ;
-#line 638 "src/parser.z"
+#line 635 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_LeftParen) ;
-#line 640 "src/parser.z"
+#line 637 "src/parser.z"
 while ( !_ZN6parser6acceptE(ctx,TokenKind_RightParen) )
 {
-#line 642 "src/parser.z"
+#line 639 "src/parser.z"
 header.parameters[header.num_parameters].pat = _ZN6parser13parse_patternE(ctx) ;
 ;
-#line 644 "src/parser.z"
+#line 641 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_Colon) ;
-#line 645 "src/parser.z"
+#line 642 "src/parser.z"
 _ZN3ast7AstTypeE*  type = _ZN6parser10parse_typeE(ctx) ;
 ;
-#line 646 "src/parser.z"
+#line 643 "src/parser.z"
 header.parameters[header.num_parameters].ast_ty = type;
 ;
-#line 647 "src/parser.z"
+#line 644 "src/parser.z"
 header.num_parameters = ((( i32)(header.num_parameters))+ 1);
 ;
-#line 649 "src/parser.z"
+#line 646 "src/parser.z"
 _ZN6parser6acceptE(ctx,TokenKind_Comma) ;
 }
 ;
-#line 652 "src/parser.z"
+#line 649 "src/parser.z"
 if (_ZN6parser6acceptE(ctx,TokenKind_Arrow) ){
-#line 652 "src/parser.z"
+#line 649 "src/parser.z"
 header.output_ast_ty = _ZN6parser10parse_typeE(ctx) ;
 ;
 }
 else {
-#line 655 "src/parser.z"
+#line 652 "src/parser.z"
 _ZN3ast7AstTypeE*  output = malloc(sizeof(_ZN3ast7AstTypeE)) ;
 ;
-#line 656 "src/parser.z"
+#line 653 "src/parser.z"
 output->kind = AstTypeKind_Void;
 ;
-#line 657 "src/parser.z"
+#line 654 "src/parser.z"
 header.output_ast_ty = output;
 ;
 }
 ;
-#line 660 "src/parser.z"
+#line 657 "src/parser.z"
 return header;
 ;
 }
-#line 663 "src/parser.z"
+#line 660 "src/parser.z"
  void _ZN6parser19parse_function_declE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
-#line 665 "src/parser.z"
+#line 662 "src/parser.z"
 item->kind = ItemKind_Function;
 ;
-#line 667 "src/parser.z"
+#line 664 "src/parser.z"
 item->ident = _ZN6parser16parse_identifierE(ctx) ;
 ;
-#line 669 "src/parser.z"
+#line 666 "src/parser.z"
 _ZN6parser6expectE(ctx,TokenKind_ColonColon) ;
-#line 671 "src/parser.z"
+#line 668 "src/parser.z"
 _ZN7session7SessionE*  sess = ctx->sess;
 ;
-#line 672 "src/parser.z"
+#line 669 "src/parser.z"
 if ((item->ident.name.x== _ZN9interning6internE(&sess->interner,"main") .x)){
-#line 672 "src/parser.z"
+#line 669 "src/parser.z"
 item->should_mangle = false;
 ;
 }
 ;
-#line 674 "src/parser.z"
+#line 671 "src/parser.z"
 item->node.function.header = _ZN6parser21parse_function_headerE(ctx) ;
 ;
-#line 676 "src/parser.z"
+#line 673 "src/parser.z"
 if ((_ZN6parser10look_aheadE(ctx,(( u64)(0))) .kind== TokenKind_LeftCurly)){
-#line 676 "src/parser.z"
+#line 673 "src/parser.z"
 item->node.function.body = _ZN6parser16parse_expressionE(ctx,(( u32)(0))) ;
 ;
 }
 else {
-#line 677 "src/parser.z"
+#line 674 "src/parser.z"
 item->node.function.body = 0;
 ;
 }
 ;
 }
+#line 677 "src/parser.z"
+ void _ZN6parser12parse_importE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
+#line 678 "src/parser.z"
+_ZN6parser6expectE(ctx,TokenKind_Import) ;
 #line 680 "src/parser.z"
- void _ZN6parser9parse_useE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
+item->kind = ItemKind_Import;
+;
 #line 681 "src/parser.z"
-_ZN6parser6expectE(ctx,TokenKind_Use) ;
-#line 683 "src/parser.z"
-item->kind = ItemKind_Use;
+item->node._import = _ZN6parser10parse_pathE(ctx) ;
 ;
-#line 684 "src/parser.z"
-item->node._use = _ZN6parser10parse_pathE(ctx) ;
-;
-#line 685 "src/parser.z"
+#line 682 "src/parser.z"
 item->ident.name.x = 0;
 ;
-#line 687 "src/parser.z"
+#line 684 "src/parser.z"
 _ZN6parser6acceptE(ctx,TokenKind_Semicolon) ;
 }
-#line 690 "src/parser.z"
+#line 687 "src/parser.z"
  void _ZN6parser10parse_itemE(_ZN6parser14ParsingContextE*  ctx, _ZN3ast4ItemE*  item) {
-#line 692 "src/parser.z"
+#line 689 "src/parser.z"
 item->span.from = _ZN6parser10span_startE(ctx) ;
 ;
-#line 693 "src/parser.z"
+#line 690 "src/parser.z"
 item->should_mangle = !_ZN6parser6acceptE(ctx,TokenKind_Extern) ;
 ;
-#line 695 "src/parser.z"
+#line 692 "src/parser.z"
 _ZN6tokens5TokenE tok = _ZN6parser10look_aheadE(ctx,(( u64)(0))) ;
 ;
-#line 696 "src/parser.z"
-while ( (tok.kind== TokenKind_Mod))
-{
-#line 697 "src/parser.z"
-_ZN6parser7consumeE(ctx) ;
-#line 697 "src/parser.z"
-_ZN6parser7consumeE(ctx) ;
-#line 697 "src/parser.z"
-_ZN6parser7consumeE(ctx) ;
-#line 698 "src/parser.z"
-tok = _ZN6parser10look_aheadE(ctx,(( u64)(0))) ;
-;
-}
-;
-#line 701 "src/parser.z"
-if (((tok.kind== TokenKind_Var)|| (tok.kind== TokenKind_Val))){
-#line 701 "src/parser.z"
-_ZN6parser19parse_variable_declE(ctx,item) ;
+#line 694 "src/parser.z"
+if ((tok.kind== TokenKind_Import)){
+#line 694 "src/parser.z"
+_ZN6parser12parse_importE(ctx,item) ;
 }
 else {
-#line 702 "src/parser.z"
-if ((tok.kind== TokenKind_Use)){
-#line 702 "src/parser.z"
-_ZN6parser9parse_useE(ctx,item) ;
-}
-else {
-#line 703 "src/parser.z"
+#line 695 "src/parser.z"
 if ((tok.kind== TokenKind_Identifier)){
-#line 704 "src/parser.z"
+#line 696 "src/parser.z"
 _ZN6tokens5TokenE next = _ZN6parser10look_aheadE(ctx,(( u64)(2))) ;
 ;
-#line 705 "src/parser.z"
+#line 697 "src/parser.z"
 if (((next.kind== TokenKind_Struct)|| (next.kind== TokenKind_Union))){
-#line 705 "src/parser.z"
+#line 697 "src/parser.z"
 _ZN6parser19parse_compound_declE(ctx,item) ;
 }
 else {
-#line 706 "src/parser.z"
+#line 698 "src/parser.z"
 if ((next.kind== TokenKind_Enum)){
-#line 706 "src/parser.z"
+#line 698 "src/parser.z"
 _ZN6parser15parse_enum_declE(ctx,item) ;
 }
 else {
-#line 707 "src/parser.z"
+#line 699 "src/parser.z"
 if ((next.kind== TokenKind_LeftParen)){
-#line 707 "src/parser.z"
+#line 699 "src/parser.z"
 _ZN6parser19parse_function_declE(ctx,item) ;
 }
 else {
-#line 708 "src/parser.z"
+#line 700 "src/parser.z"
 _ZN6parser19parse_variable_declE(ctx,item) ;
 }
 ;
@@ -5094,108 +5034,106 @@ _ZN6parser19parse_variable_declE(ctx,item) ;
 ;
 }
 else {
-#line 710 "src/parser.z"
+#line 702 "src/parser.z"
 _ZN5error10emit_errorE(ctx->source_map,tok.span,"Unexpected token on top-level") ;
 }
 ;
 }
 ;
-}
-;
-#line 712 "src/parser.z"
+#line 704 "src/parser.z"
 _ZN6parser6acceptE(ctx,TokenKind_Semicolon) ;
-#line 714 "src/parser.z"
+#line 706 "src/parser.z"
 item->span.to = _ZN6parser8span_endE(ctx) ;
 ;
 }
-#line 717 "src/parser.z"
+#line 709 "src/parser.z"
 _ZN3ast6ModuleE*  _ZN6parser5parseE(_ZN7session7SessionE*  sess, _ZN10source_map10SourceFileE*  source, _ZN9interning3SidE name, _ZN3ast6ModuleE*  parent) {
-#line 719 "src/parser.z"
+#line 711 "src/parser.z"
 _ZN3ast6ModuleE*  module = malloc(sizeof(_ZN3ast6ModuleE)) ;
 ;
-#line 720 "src/parser.z"
+#line 712 "src/parser.z"
 module->items = malloc((sizeof(_ZN3ast4ItemE)* (( u64)(2048)))) ;
 ;
-#line 721 "src/parser.z"
+#line 713 "src/parser.z"
 module->num_items = 0;
 ;
-#line 722 "src/parser.z"
+#line 714 "src/parser.z"
 module->parent = _ZN4cstd4nullE;
 ;
-#line 724 "src/parser.z"
+#line 716 "src/parser.z"
 if ((( bool)(parent))){
-#line 724 "src/parser.z"
+#line 716 "src/parser.z"
 module->path.num_segments = ((( i32)(parent->path.num_segments))+ 1);
 ;
 }
 else {
-#line 725 "src/parser.z"
+#line 717 "src/parser.z"
 module->path.num_segments = 1;
 ;
 }
 ;
-#line 727 "src/parser.z"
+#line 719 "src/parser.z"
 module->path.segments = malloc((sizeof(_ZN3ast5IdentE)* (( u64)(module->path.num_segments)))) ;
 ;
-#line 728 "src/parser.z"
+#line 720 "src/parser.z"
 if ((( bool)(parent))){
-#line 728 "src/parser.z"
+#line 720 "src/parser.z"
 memcpy((( void* )(module->path.segments)),(( void* )(parent->path.segments)),(( u64)(((( u64)(parent->path.num_segments))* sizeof(_ZN3ast5IdentE))))) ;
 }
 ;
-#line 729 "src/parser.z"
+#line 721 "src/parser.z"
 module->path.segments[((( i32)(module->path.num_segments))- 1)].name = name;
 ;
-#line 731 "src/parser.z"
+#line 723 "src/parser.z"
 module->path.binding.node.module = module;
 ;
-#line 733 "src/parser.z"
+#line 725 "src/parser.z"
  u32 num_tokens ;
 ;
-#line 734 "src/parser.z"
+#line 726 "src/parser.z"
 _ZN6tokens5TokenE*  tokens = _ZN5lexer3lexE(sess,source,&num_tokens) ;
 ;
-#line 736 "src/parser.z"
+#line 728 "src/parser.z"
 _ZN6parser14ParsingContextE ctx ;
 ;
-#line 737 "src/parser.z"
+#line 729 "src/parser.z"
 ctx.current_token = 0;
 ;
-#line 738 "src/parser.z"
+#line 730 "src/parser.z"
 ctx.tokens = tokens;
 ;
-#line 739 "src/parser.z"
+#line 731 "src/parser.z"
 ctx.num_tokens = num_tokens;
 ;
-#line 740 "src/parser.z"
+#line 732 "src/parser.z"
 ctx.source_map = &sess->source;
 ;
-#line 741 "src/parser.z"
+#line 733 "src/parser.z"
 ctx.interner = &sess->interner;
 ;
-#line 742 "src/parser.z"
+#line 734 "src/parser.z"
 ctx.sess = sess;
 ;
-#line 743 "src/parser.z"
+#line 735 "src/parser.z"
 ctx.module = module;
 ;
-#line 745 "src/parser.z"
+#line 737 "src/parser.z"
 module->span.from = _ZN6parser10span_startE(&ctx) ;
 ;
-#line 747 "src/parser.z"
+#line 739 "src/parser.z"
 while ( (!_ZN6parser6acceptE(&ctx,TokenKind_RightCurly) && !_ZN6parser15is_done_parsingE(&ctx) ))
 {
-#line 748 "src/parser.z"
+#line 740 "src/parser.z"
 _ZN6parser10parse_itemE(&ctx,&module->items[module->num_items]) ;
-#line 749 "src/parser.z"
+#line 741 "src/parser.z"
 module->num_items = ((( i32)(module->num_items))+ 1);
 ;
 }
 ;
-#line 752 "src/parser.z"
+#line 744 "src/parser.z"
 module->span.to = _ZN6parser8span_endE(&ctx) ;
 ;
-#line 754 "src/parser.z"
+#line 746 "src/parser.z"
 return module;
 ;
 }
@@ -5447,7 +5385,7 @@ while ( (i< module->num_items))
 _ZN3ast4ItemE*  item = &module->items[i];
 ;
 #line 176 "src/resolution.z"
-if ((item->kind!= ItemKind_Use)){
+if ((item->kind!= ItemKind_Import)){
 #line 176 "src/resolution.z"
 _ZN10resolution8add_itemE(ctx,module,item) ;
 }
@@ -5470,9 +5408,9 @@ while ( (i< module->num_items))
 _ZN3ast4ItemE*  item = &module->items[i];
 ;
 #line 187 "src/resolution.z"
-if ((item->kind== ItemKind_Use)){
+if ((item->kind== ItemKind_Import)){
 #line 187 "src/resolution.z"
-_ZN10resolution15import_wildcardE(ctx,item->node._use) ;
+_ZN10resolution15import_wildcardE(ctx,item->node._import) ;
 }
 else {
 #line 188 "src/resolution.z"
@@ -7625,7 +7563,7 @@ if (((item->kind== ItemKind_Struct)|| (item->kind== ItemKind_Union))){
 }
 else {
 #line 531 "src/typecheck.z"
-if ((item->kind== ItemKind_Use)){
+if ((item->kind== ItemKind_Import)){
 }
 else {
 #line 532 "src/typecheck.z"
