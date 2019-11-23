@@ -4052,373 +4052,415 @@ return generics;
 #line 542 "src/parser.z"
  void _ZN4main6parser19parse_variable_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
 #line 544 "src/parser.z"
-_ZN4main6tokens5TokenE keyword = _ZN4main6parser7consumeE(ctx) ;
-;
-#line 545 "src/parser.z"
-if ((keyword.kind== TokenKind_Val)){
-#line 545 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_Val) ){
+#line 544 "src/parser.z"
 item->kind = ItemKind_Const;
 ;
 }
 else {
-#line 546 "src/parser.z"
-if ((keyword.kind== TokenKind_Var)){
-#line 546 "src/parser.z"
+#line 545 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_Var) ){
+#line 545 "src/parser.z"
 item->kind = ItemKind_Variable;
 ;
 }
-else {
+;
+}
+;
 #line 547 "src/parser.z"
-abort() ;
-}
-;
-}
-;
-#line 549 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
+#line 548 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_ColonColon) ){
+#line 548 "src/parser.z"
+item->kind = ItemKind_Const;
+;
+}
+else {
+#line 549 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_Colon) ){
+#line 549 "src/parser.z"
+item->kind = ItemKind_Variable;
+;
+}
+;
+}
+;
 #line 550 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
-#line 551 "src/parser.z"
 item->node.variable.ast_ty = _ZN4main6parser10parse_typeE(ctx) ;
 ;
-#line 553 "src/parser.z"
+#line 552 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_Equal) ){
-#line 553 "src/parser.z"
+#line 552 "src/parser.z"
 item->node.variable.body = _ZN4main6parser16parse_expressionE(ctx,(( u32)(0))) ;
 ;
 }
 else {
-#line 554 "src/parser.z"
+#line 553 "src/parser.z"
 item->node.variable.body = 0;
 ;
 }
 ;
 }
 
-#line 557 "src/parser.z"
+#line 556 "src/parser.z"
  void _ZN4main6parser19parse_compound_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 559 "src/parser.z"
+#line 558 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_Struct) ){
-#line 559 "src/parser.z"
+#line 558 "src/parser.z"
 item->kind = ItemKind_Struct;
 ;
 }
 else {
-#line 560 "src/parser.z"
+#line 559 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_Union) ){
-#line 560 "src/parser.z"
+#line 559 "src/parser.z"
 item->kind = ItemKind_Union;
 ;
 }
-else {
+;
+}
+;
 #line 561 "src/parser.z"
-abort() ;
-}
-;
-}
-;
-#line 563 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
+#line 563 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_ColonColon) ;
+#line 564 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_Struct) ){
+#line 564 "src/parser.z"
+item->kind = ItemKind_Struct;
+;
+}
+else {
 #line 565 "src/parser.z"
+if (_ZN4main6parser6acceptE(ctx,TokenKind_Union) ){
+#line 565 "src/parser.z"
+item->kind = ItemKind_Union;
+;
+}
+;
+}
+;
+#line 567 "src/parser.z"
 if (_ZN4main6parser10can_acceptE(ctx,TokenKind_Less) ){
-#line 565 "src/parser.z"
+#line 567 "src/parser.z"
 item->node.compound.generics = _ZN4main6parser14parse_genericsE(ctx) ;
 ;
 }
 else {
-#line 566 "src/parser.z"
+#line 568 "src/parser.z"
 item->node.compound.generics.num_parameters = 0;
 ;
 }
 ;
-#line 568 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_LeftCurly) ;
 #line 570 "src/parser.z"
+_ZN4main6parser6expectE(ctx,TokenKind_LeftCurly) ;
+#line 572 "src/parser.z"
 item->node.compound.fields = malloc((sizeof(_ZN4main3ast13CompoundFieldE)* (( u64)(16)))) ;
 ;
-#line 571 "src/parser.z"
+#line 573 "src/parser.z"
 item->node.compound.num_fields = 0;
 ;
-#line 573 "src/parser.z"
+#line 575 "src/parser.z"
 while ( !_ZN4main6parser6acceptE(ctx,TokenKind_RightCurly) )
 {
-#line 574 "src/parser.z"
+#line 576 "src/parser.z"
 _ZN4main6tokens5TokenE token = _ZN4main6parser7consumeE(ctx) ;
 ;
-#line 575 "src/parser.z"
+#line 577 "src/parser.z"
 if ((token.kind!= TokenKind_Identifier)){
-#line 575 "src/parser.z"
+#line 577 "src/parser.z"
 _ZN4main5error10emit_errorE(ctx->source_map,token.span,"Expected field identifier") ;
 }
 ;
-#line 577 "src/parser.z"
+#line 579 "src/parser.z"
 item->node.compound.fields[item->node.compound.num_fields].ident.name = token.lexeme;
 ;
-#line 578 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
 #line 580 "src/parser.z"
+_ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
+#line 582 "src/parser.z"
 _ZN4main3ast7AstTypeE*  type = _ZN4main6parser10parse_typeE(ctx) ;
 ;
-#line 581 "src/parser.z"
+#line 583 "src/parser.z"
 item->node.compound.fields[item->node.compound.num_fields].ast_ty = type;
 ;
-#line 582 "src/parser.z"
+#line 584 "src/parser.z"
 item->node.compound.num_fields = ((( i32)(item->node.compound.num_fields))+ 1);
 ;
-#line 583 "src/parser.z"
+#line 585 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Comma) ;
 }
 ;
 }
 
-#line 588 "src/parser.z"
- void _ZN4main6parser15parse_enum_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
 #line 590 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Enum) ;
-#line 591 "src/parser.z"
+ void _ZN4main6parser15parse_enum_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
+#line 592 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_Enum) ;
+#line 593 "src/parser.z"
 item->kind = ItemKind_Enum;
 ;
-#line 593 "src/parser.z"
+#line 595 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 595 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_LeftCurly) ;
 #line 597 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_ColonColon) ;
+#line 598 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_Enum) ;
+#line 600 "src/parser.z"
+_ZN4main6parser6expectE(ctx,TokenKind_LeftCurly) ;
+#line 602 "src/parser.z"
 item->node._enum.variants = malloc((sizeof(_ZN4main3ast11EnumVariantE)* (( u64)(128)))) ;
 ;
-#line 598 "src/parser.z"
+#line 603 "src/parser.z"
 item->node._enum.num_variants = 0;
 ;
-#line 600 "src/parser.z"
+#line 605 "src/parser.z"
 while ( !_ZN4main6parser6acceptE(ctx,TokenKind_RightCurly) )
 {
-#line 601 "src/parser.z"
+#line 606 "src/parser.z"
 item->node._enum.variants[item->node._enum.num_variants].ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 602 "src/parser.z"
+#line 607 "src/parser.z"
 item->node._enum.variants[item->node._enum.num_variants]._enum = item;
 ;
-#line 603 "src/parser.z"
+#line 608 "src/parser.z"
 item->node._enum.num_variants = ((( i32)(item->node._enum.num_variants))+ 1);
 ;
-#line 604 "src/parser.z"
+#line 609 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Comma) ;
 }
 ;
 }
 
-#line 608 "src/parser.z"
+#line 613 "src/parser.z"
 _ZN4main3ast14FunctionHeaderE _ZN4main6parser21parse_function_headerE(_ZN4main6parser14ParsingContextE*  ctx) {
-#line 609 "src/parser.z"
+#line 614 "src/parser.z"
 _ZN4main3ast14FunctionHeaderE header ;
 ;
-#line 611 "src/parser.z"
+#line 616 "src/parser.z"
 header.parameters = malloc((sizeof(_ZN4main3ast17FunctionParameterE)* (( u64)(16)))) ;
 ;
-#line 612 "src/parser.z"
+#line 617 "src/parser.z"
 header.num_parameters = 0;
 ;
-#line 614 "src/parser.z"
+#line 619 "src/parser.z"
 if (_ZN4main6parser10can_acceptE(ctx,TokenKind_Less) ){
-#line 614 "src/parser.z"
+#line 619 "src/parser.z"
 header.generics = _ZN4main6parser14parse_genericsE(ctx) ;
 ;
 }
 else {
-#line 615 "src/parser.z"
+#line 620 "src/parser.z"
 header.generics.num_parameters = 0;
 ;
 }
 ;
-#line 617 "src/parser.z"
+#line 622 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_LeftParen) ;
-#line 619 "src/parser.z"
+#line 624 "src/parser.z"
 while ( !_ZN4main6parser6acceptE(ctx,TokenKind_RightParen) )
 {
-#line 621 "src/parser.z"
+#line 626 "src/parser.z"
 header.parameters[header.num_parameters].pat = _ZN4main6parser13parse_patternE(ctx) ;
 ;
-#line 623 "src/parser.z"
+#line 628 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Colon) ;
-#line 624 "src/parser.z"
+#line 629 "src/parser.z"
 _ZN4main3ast7AstTypeE*  type = _ZN4main6parser10parse_typeE(ctx) ;
 ;
-#line 625 "src/parser.z"
+#line 630 "src/parser.z"
 header.parameters[header.num_parameters].ast_ty = type;
 ;
-#line 626 "src/parser.z"
+#line 631 "src/parser.z"
 header.num_parameters = ((( i32)(header.num_parameters))+ 1);
 ;
-#line 628 "src/parser.z"
+#line 633 "src/parser.z"
 _ZN4main6parser6acceptE(ctx,TokenKind_Comma) ;
 }
 ;
-#line 631 "src/parser.z"
+#line 636 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_Arrow) ){
-#line 631 "src/parser.z"
+#line 636 "src/parser.z"
 header.output_ast_ty = _ZN4main6parser10parse_typeE(ctx) ;
 ;
 }
 else {
-#line 634 "src/parser.z"
+#line 639 "src/parser.z"
 _ZN4main3ast7AstTypeE*  output = malloc(sizeof(_ZN4main3ast7AstTypeE)) ;
 ;
-#line 635 "src/parser.z"
+#line 640 "src/parser.z"
 output->kind = AstTypeKind_Void;
 ;
-#line 636 "src/parser.z"
+#line 641 "src/parser.z"
 header.output_ast_ty = output;
 ;
 }
 ;
-#line 639 "src/parser.z"
+#line 644 "src/parser.z"
 return header;
 ;
 }
 
-#line 642 "src/parser.z"
+#line 647 "src/parser.z"
  void _ZN4main6parser19parse_function_declE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 644 "src/parser.z"
+#line 649 "src/parser.z"
 item->kind = ItemKind_Function;
 ;
-#line 646 "src/parser.z"
-_ZN4main6parser6expectE(ctx,TokenKind_Fn) ;
-#line 648 "src/parser.z"
+#line 651 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_Fn) ;
+#line 653 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 650 "src/parser.z"
+#line 655 "src/parser.z"
+_ZN4main6parser6acceptE(ctx,TokenKind_ColonColon) ;
+#line 657 "src/parser.z"
 _ZN4main7session7SessionE*  sess = ctx->sess;
 ;
-#line 651 "src/parser.z"
+#line 658 "src/parser.z"
 if ((item->ident.name.x== _ZN4main9interning6internE(&sess->interner,"main") .x)){
-#line 651 "src/parser.z"
+#line 658 "src/parser.z"
 item->should_mangle = false;
 ;
 }
 ;
-#line 653 "src/parser.z"
+#line 660 "src/parser.z"
 item->node.function.header = _ZN4main6parser21parse_function_headerE(ctx) ;
 ;
-#line 655 "src/parser.z"
+#line 662 "src/parser.z"
 if ((_ZN4main6parser10look_aheadE(ctx,(( u64)(0))) .kind== TokenKind_LeftCurly)){
-#line 655 "src/parser.z"
+#line 662 "src/parser.z"
 item->node.function.body = _ZN4main6parser16parse_expressionE(ctx,(( u32)(0))) ;
 ;
 }
 else {
-#line 656 "src/parser.z"
+#line 663 "src/parser.z"
 item->node.function.body = 0;
 ;
 }
 ;
 }
 
-#line 659 "src/parser.z"
+#line 666 "src/parser.z"
  void _ZN4main6parser9parse_useE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 660 "src/parser.z"
+#line 667 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Use) ;
-#line 662 "src/parser.z"
+#line 669 "src/parser.z"
 item->kind = ItemKind_Use;
 ;
-#line 663 "src/parser.z"
+#line 670 "src/parser.z"
 item->node._use = _ZN4main6parser10parse_pathE(ctx) ;
 ;
-#line 664 "src/parser.z"
+#line 671 "src/parser.z"
 item->ident.name.x = 0;
 ;
-#line 666 "src/parser.z"
+#line 673 "src/parser.z"
 _ZN4main6parser6acceptE(ctx,TokenKind_Semicolon) ;
 }
 
-#line 669 "src/parser.z"
+#line 676 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser15parse_mod_innerE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast5IdentE name) ;
 
-#line 670 "src/parser.z"
+#line 677 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser18parse_mod_externalE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast,  char*  path, _ZN4main3ast6ModuleE*  parent) ;
 
-#line 672 "src/parser.z"
+#line 679 "src/parser.z"
  void _ZN4main6parser9parse_modE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast4ItemE*  item) {
-#line 673 "src/parser.z"
+#line 680 "src/parser.z"
 _ZN4main6parser6expectE(ctx,TokenKind_Mod) ;
-#line 675 "src/parser.z"
+#line 682 "src/parser.z"
 item->ident = _ZN4main6parser16parse_identifierE(ctx) ;
 ;
-#line 676 "src/parser.z"
+#line 683 "src/parser.z"
 item->kind = ItemKind_Module;
 ;
-#line 678 "src/parser.z"
+#line 685 "src/parser.z"
 if (_ZN4main6parser6acceptE(ctx,TokenKind_LeftCurly) ){
-#line 678 "src/parser.z"
+#line 685 "src/parser.z"
 item->node.module = _ZN4main6parser15parse_mod_innerE(ctx,item->ident) ;
 ;
 }
 else {
-#line 680 "src/parser.z"
+#line 687 "src/parser.z"
 _ZN4main7session7SessionE*  sess = ctx->sess;
 ;
-#line 681 "src/parser.z"
+#line 688 "src/parser.z"
  char*  path = _ZN4main9interning7get_strE(&sess->interner,item->ident.name) ;
 ;
-#line 682 "src/parser.z"
+#line 689 "src/parser.z"
 item->node.module = _ZN4main6parser18parse_mod_externalE(ctx->sess,ctx->ast,path,ctx->current_module) ;
 ;
 }
 ;
 }
 
-#line 687 "src/parser.z"
+#line 694 "src/parser.z"
 _ZN4main3ast4ItemE*  _ZN4main6parser10parse_itemE(_ZN4main6parser14ParsingContextE*  ctx) {
-#line 689 "src/parser.z"
+#line 696 "src/parser.z"
 _ZN4main3ast4ItemE*  item = _ZN4main3ast15ast_create_itemE(ctx->ast) ;
 ;
-#line 690 "src/parser.z"
+#line 697 "src/parser.z"
 item->span.from = _ZN4main6parser10span_startE(ctx) ;
 ;
-#line 691 "src/parser.z"
+#line 698 "src/parser.z"
 item->should_mangle = !_ZN4main6parser6acceptE(ctx,TokenKind_Extern) ;
 ;
-#line 693 "src/parser.z"
+#line 700 "src/parser.z"
 _ZN4main6tokens5TokenE tok = _ZN4main6parser10look_aheadE(ctx,(( u64)(0))) ;
 ;
-#line 695 "src/parser.z"
-if ((tok.kind== TokenKind_Fn)){
-#line 695 "src/parser.z"
-_ZN4main6parser19parse_function_declE(ctx,item) ;
-}
-else {
-#line 696 "src/parser.z"
-if (((tok.kind== TokenKind_Struct)|| (tok.kind== TokenKind_Union))){
-#line 696 "src/parser.z"
-_ZN4main6parser19parse_compound_declE(ctx,item) ;
-}
-else {
-#line 697 "src/parser.z"
-if ((tok.kind== TokenKind_Enum)){
-#line 697 "src/parser.z"
-_ZN4main6parser15parse_enum_declE(ctx,item) ;
-}
-else {
-#line 698 "src/parser.z"
+#line 702 "src/parser.z"
 if (((tok.kind== TokenKind_Var)|| (tok.kind== TokenKind_Val))){
-#line 698 "src/parser.z"
+#line 702 "src/parser.z"
 _ZN4main6parser19parse_variable_declE(ctx,item) ;
 }
 else {
-#line 699 "src/parser.z"
+#line 703 "src/parser.z"
 if ((tok.kind== TokenKind_Use)){
-#line 699 "src/parser.z"
+#line 703 "src/parser.z"
 _ZN4main6parser9parse_useE(ctx,item) ;
 }
 else {
-#line 700 "src/parser.z"
+#line 704 "src/parser.z"
 if ((tok.kind== TokenKind_Mod)){
-#line 700 "src/parser.z"
+#line 704 "src/parser.z"
 _ZN4main6parser9parse_modE(ctx,item) ;
 }
 else {
-#line 701 "src/parser.z"
+#line 705 "src/parser.z"
+if ((tok.kind== TokenKind_Identifier)){
+#line 706 "src/parser.z"
+_ZN4main6tokens5TokenE next = _ZN4main6parser10look_aheadE(ctx,(( u64)(2))) ;
+;
+#line 707 "src/parser.z"
+if (((next.kind== TokenKind_Struct)|| (next.kind== TokenKind_Union))){
+#line 707 "src/parser.z"
+_ZN4main6parser19parse_compound_declE(ctx,item) ;
+}
+else {
+#line 708 "src/parser.z"
+if ((next.kind== TokenKind_Enum)){
+#line 708 "src/parser.z"
+_ZN4main6parser15parse_enum_declE(ctx,item) ;
+}
+else {
+#line 709 "src/parser.z"
+if ((next.kind== TokenKind_LeftParen)){
+#line 709 "src/parser.z"
+_ZN4main6parser19parse_function_declE(ctx,item) ;
+}
+else {
+#line 710 "src/parser.z"
+_ZN4main6parser19parse_variable_declE(ctx,item) ;
+}
+;
+}
+;
+}
+;
+}
+else {
+#line 712 "src/parser.z"
 _ZN4main5error10emit_errorE(ctx->source_map,tok.span,"Unexpected token on top-level") ;
 }
 ;
@@ -4428,223 +4470,219 @@ _ZN4main5error10emit_errorE(ctx->source_map,tok.span,"Unexpected token on top-le
 ;
 }
 ;
-}
-;
-}
-;
-#line 703 "src/parser.z"
+#line 714 "src/parser.z"
 _ZN4main6parser6acceptE(ctx,TokenKind_Semicolon) ;
-#line 705 "src/parser.z"
+#line 716 "src/parser.z"
 item->span.to = _ZN4main6parser8span_endE(ctx) ;
 ;
-#line 706 "src/parser.z"
+#line 717 "src/parser.z"
 return item;
 ;
 }
 
-#line 709 "src/parser.z"
+#line 720 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser15parse_mod_innerE(_ZN4main6parser14ParsingContextE*  ctx, _ZN4main3ast5IdentE name) {
-#line 710 "src/parser.z"
+#line 721 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = malloc(sizeof(_ZN4main3ast6ModuleE)) ;
 ;
-#line 711 "src/parser.z"
+#line 722 "src/parser.z"
 module->span.from = _ZN4main6parser10span_startE(ctx) ;
 ;
-#line 712 "src/parser.z"
+#line 723 "src/parser.z"
 module->items = malloc((( u64)((8* 2048)))) ;
 ;
-#line 713 "src/parser.z"
+#line 724 "src/parser.z"
 module->num_items = 0;
 ;
-#line 714 "src/parser.z"
+#line 725 "src/parser.z"
 module->index_lookup = _ZN4main6intmap13intmap_createE((( u64)(2048))) ;
 ;
-#line 715 "src/parser.z"
+#line 726 "src/parser.z"
 module->index = malloc((sizeof(_ZN4main3ast10IndexEntryE)* (( u64)(2048)))) ;
 ;
-#line 716 "src/parser.z"
+#line 727 "src/parser.z"
 module->num_indices = 1;
 ;
-#line 717 "src/parser.z"
+#line 728 "src/parser.z"
 module->parent = ctx->current_module;
 ;
-#line 719 "src/parser.z"
+#line 730 "src/parser.z"
 _ZN4main3ast6ModuleE*  parent = module->parent;
 ;
-#line 721 "src/parser.z"
+#line 732 "src/parser.z"
 if ((( bool)(parent))){
-#line 721 "src/parser.z"
+#line 732 "src/parser.z"
 module->path.num_segments = ((( i32)(parent->path.num_segments))+ 1);
 ;
 }
 else {
-#line 722 "src/parser.z"
+#line 733 "src/parser.z"
 module->path.num_segments = 1;
 ;
 }
 ;
-#line 724 "src/parser.z"
+#line 735 "src/parser.z"
 module->path.segments = malloc((sizeof(_ZN4main3ast5IdentE)* (( u64)(module->path.num_segments)))) ;
 ;
-#line 725 "src/parser.z"
+#line 736 "src/parser.z"
 if ((( bool)(parent))){
-#line 725 "src/parser.z"
+#line 736 "src/parser.z"
 memcpy((( void* )(module->path.segments)),(( void* )(parent->path.segments)),(( u64)(((( u64)(parent->path.num_segments))* sizeof(_ZN4main3ast5IdentE))))) ;
 }
 ;
-#line 726 "src/parser.z"
+#line 737 "src/parser.z"
 module->path.segments[((( i32)(module->path.num_segments))- 1)] = name;
 ;
-#line 728 "src/parser.z"
+#line 739 "src/parser.z"
 ctx->current_module = module;
 ;
-#line 730 "src/parser.z"
+#line 741 "src/parser.z"
 while ( (!_ZN4main6parser6acceptE(ctx,TokenKind_RightCurly) && !_ZN4main6parser15is_done_parsingE(ctx) ))
 {
-#line 731 "src/parser.z"
+#line 742 "src/parser.z"
 module->items[module->num_items] = _ZN4main6parser10parse_itemE(ctx) ;
 ;
-#line 732 "src/parser.z"
+#line 743 "src/parser.z"
 module->num_items = ((( i32)(module->num_items))+ 1);
 ;
 }
 ;
-#line 735 "src/parser.z"
+#line 746 "src/parser.z"
 module->span.to = _ZN4main6parser8span_endE(ctx) ;
 ;
-#line 737 "src/parser.z"
+#line 748 "src/parser.z"
 ctx->current_module = module->parent;
 ;
-#line 739 "src/parser.z"
+#line 750 "src/parser.z"
 return module;
 ;
 }
 
-#line 742 "src/parser.z"
+#line 753 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser18parse_mod_externalE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast,  char*  path, _ZN4main3ast6ModuleE*  parent) {
-#line 744 "src/parser.z"
+#line 755 "src/parser.z"
 _ZN4main10source_map10SourceFileE*  source_file = _ZN4main10source_map19source_map_new_fileE(&sess->source,sess->root_path,path) ;
 ;
-#line 746 "src/parser.z"
+#line 757 "src/parser.z"
  u32 num_tokens ;
 ;
-#line 747 "src/parser.z"
+#line 758 "src/parser.z"
 _ZN4main6tokens5TokenE*  tokens = _ZN4main5lexer3lexE(sess,source_file,&num_tokens) ;
 ;
-#line 749 "src/parser.z"
+#line 760 "src/parser.z"
 _ZN4main6parser14ParsingContextE ctx ;
 ;
-#line 750 "src/parser.z"
+#line 761 "src/parser.z"
 ctx.current_token = 0;
 ;
-#line 751 "src/parser.z"
+#line 762 "src/parser.z"
 ctx.tokens = tokens;
 ;
-#line 752 "src/parser.z"
+#line 763 "src/parser.z"
 ctx.num_tokens = num_tokens;
 ;
-#line 753 "src/parser.z"
+#line 764 "src/parser.z"
 ctx.source_map = &sess->source;
 ;
-#line 754 "src/parser.z"
+#line 765 "src/parser.z"
 ctx.sess = sess;
 ;
-#line 755 "src/parser.z"
+#line 766 "src/parser.z"
 ctx.ast = ast;
 ;
-#line 756 "src/parser.z"
+#line 767 "src/parser.z"
 ctx.current_module = parent;
 ;
-#line 758 "src/parser.z"
+#line 769 "src/parser.z"
 _ZN4main3ast5IdentE name_ident ;
 ;
-#line 759 "src/parser.z"
+#line 770 "src/parser.z"
 name_ident.name = _ZN4main9interning6internE(&sess->interner,path) ;
 ;
-#line 760 "src/parser.z"
+#line 771 "src/parser.z"
 name_ident.span.from = 0;
 ;
-#line 761 "src/parser.z"
+#line 772 "src/parser.z"
 name_ident.span.to = 0;
 ;
-#line 763 "src/parser.z"
+#line 774 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = _ZN4main6parser15parse_mod_innerE(&ctx,name_ident) ;
 ;
-#line 765 "src/parser.z"
+#line 776 "src/parser.z"
 return module;
 ;
 }
 
-#line 768 "src/parser.z"
+#line 779 "src/parser.z"
 _ZN4main3ast6ModuleE*  _ZN4main6parser18create_root_moduleE(_ZN4main7session7SessionE*  sess, _ZN4main3ast3AstE*  ast,  char*  path) {
-#line 770 "src/parser.z"
+#line 781 "src/parser.z"
 _ZN4main3ast6ModuleE*  module = malloc(sizeof(_ZN4main3ast6ModuleE)) ;
 ;
-#line 771 "src/parser.z"
+#line 782 "src/parser.z"
 module->items = malloc((( u64)((8* 2048)))) ;
 ;
-#line 772 "src/parser.z"
+#line 783 "src/parser.z"
 module->index_lookup = _ZN4main6intmap13intmap_createE((( u64)(2048))) ;
 ;
-#line 773 "src/parser.z"
+#line 784 "src/parser.z"
 module->index = malloc((sizeof(_ZN4main3ast10IndexEntryE)* (( u64)(2048)))) ;
 ;
-#line 774 "src/parser.z"
+#line 785 "src/parser.z"
 module->num_indices = 1;
 ;
-#line 775 "src/parser.z"
+#line 786 "src/parser.z"
 module->parent = _ZN4main4cstd4nullE;
 ;
-#line 776 "src/parser.z"
+#line 787 "src/parser.z"
 module->path.num_segments = 0;
 ;
-#line 778 "src/parser.z"
+#line 789 "src/parser.z"
 _ZN4main3ast4ItemE*  main_item = _ZN4main3ast15ast_create_itemE(ast) ;
 ;
-#line 779 "src/parser.z"
+#line 790 "src/parser.z"
 main_item->kind = ItemKind_Module;
 ;
-#line 780 "src/parser.z"
+#line 791 "src/parser.z"
 main_item->ident.name = _ZN4main9interning6internE(&sess->interner,path) ;
 ;
-#line 782 "src/parser.z"
+#line 793 "src/parser.z"
 _ZN4main3ast6ModuleE*  main_module = _ZN4main6parser18parse_mod_externalE(sess,ast,path,module) ;
 ;
-#line 783 "src/parser.z"
+#line 794 "src/parser.z"
 main_item->span.from = main_module->span.from;
 ;
-#line 784 "src/parser.z"
+#line 795 "src/parser.z"
 main_item->span.to = main_module->span.to;
 ;
-#line 785 "src/parser.z"
+#line 796 "src/parser.z"
 main_item->node.module = main_module;
 ;
-#line 786 "src/parser.z"
+#line 797 "src/parser.z"
 module->items[0] = main_item;
 ;
-#line 787 "src/parser.z"
+#line 798 "src/parser.z"
 module->num_items = 1;
 ;
-#line 789 "src/parser.z"
+#line 800 "src/parser.z"
 return module;
 ;
 }
 
-#line 792 "src/parser.z"
+#line 803 "src/parser.z"
 _ZN4main3ast3AstE _ZN4main6parser5parseE(_ZN4main7session7SessionE*  sess,  char*  root_module_name) {
-#line 794 "src/parser.z"
+#line 805 "src/parser.z"
 _ZN4main3ast3AstE ast ;
 ;
-#line 796 "src/parser.z"
+#line 807 "src/parser.z"
 ast.items = malloc((sizeof(_ZN4main3ast4ItemE)* (( u64)(2048)))) ;
 ;
-#line 797 "src/parser.z"
+#line 808 "src/parser.z"
 ast.num_items = 1;
 ;
-#line 799 "src/parser.z"
+#line 810 "src/parser.z"
 ast.root_module = _ZN4main6parser18create_root_moduleE(sess,&ast,root_module_name) ;
 ;
-#line 801 "src/parser.z"
+#line 812 "src/parser.z"
 return ast;
 ;
 }
