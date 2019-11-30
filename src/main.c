@@ -1609,7 +1609,7 @@ sess.source = _ZN10source_map17source_map_createE() ;
 sess.root_path = dirname(argv[1]) ;
 ;
 #line 73 "src/main.z"
-strtok(root_filename,(( char* )(".z"))) ;
+strtok(root_filename,(( char* )(".stx"))) ;
 #line 75 "src/main.z"
 _ZN3ast13CompileTargetE target ;
 ;
@@ -2053,7 +2053,7 @@ map->num_files = ((( i32)(map->num_files))+ 1);
  char*  name_buffer = malloc((( u64)(needed_length))) ;
 ;
 #line 51 "src/source_map.z"
-sprintf(name_buffer,(( char* )("%s/%s.z")),path,filename) ;
+sprintf(name_buffer,(( char* )("%s/%s.stx")),path,filename) ;
 #line 53 "src/source_map.z"
 file->name = name_buffer;
 ;
